@@ -40,4 +40,16 @@ module.exports = class DBManager {
         if (!cache) throw new Error(`[DB] Could not find type ${type}.`);
         return filter ? cache.filter(filter) : cache;
     }
+
+    delete(type, filter, all) {
+        const cache = this.#cache[type];
+        if (!cache) throw new Error(`[DB] Could not find type ${type}.`);
+
+        if (all) {
+            cache.filter(filter).forEach(value => {
+            
+                cache.splice(cache.indexOf(value), 1);
+            });
+        } else cache.splice(cache.findIndex(filter), 1);
+    }
 }
