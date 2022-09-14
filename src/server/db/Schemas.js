@@ -6,4 +6,9 @@ const Users = new Schema({
     elo: Number, // ranking based off wins/losses
 });
 
-module.exports = { Users };
+const Ban = new Schema({
+    ip: String,
+    reason: String,
+});
+
+module.exports = { Users, Ban };
