@@ -1,5 +1,5 @@
-const IncomingMessageHandler = require('./IncomingMessageHandler'),
-    { Incoming, Outgoing } = require('../enum/Payloads');
+const { IncomingMessageHandler, OutgoingMessageHandler } = require('./MessageHandler'),
+    { Incoming } = require('../enum/Payloads');
 
 module.exports = class SocketManager {
     constructor(server, socket, request) {
@@ -17,9 +17,10 @@ module.exports = class SocketManager {
         this.server = server, this.socket = socket, this.request = request;
 
         this.ip = request.headers['x-forwarded-for'].split(',').at(-1) || request.socket.remoteAddress;
-        if (this.ip === '::1') console.log('Socket is connected to LOCALHOST.');
+        if (this.ip === '::1') this.local = true, console.log('Socket is connected to LOCALHOST. Bans will not be administered.');
 
-        this.messageHandler = new IncomingMessageHandler(this);
+        this.incomingMsgHandler = new IncomingMessageHandler(this),
+            this.outgoingMsgHandler = new OutgoingMessageHandler(this);
         this._attachHandlers();
     }
 
@@ -28,12 +29,12 @@ module.exports = class SocketManager {
 
         this.socket.on('message', function({ data }) {
             if (!Incoming[data[0]]) return this.remove(true, 'Invalid packet header was sent during connection.');
-            this.messageHandler[Incoming[data[0]]]?.(data.splice(1));
+            this.incomingMsgHandler[Incoming[data[0]]]?.(data.slice(1));
         });
     }
 
     remove(ban, reason) {
-        ban ? this.socket.terminate(reason) : this.socket.close();
+        (ban && !this.local) ? this.socket.terminate(reason) : this.socket.close();
         this.server.sockets.remove(socket);
     }
 }

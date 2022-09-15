@@ -2,7 +2,6 @@ require('dotenv').config();
 
 // Set up external database (MongoDB):
 const mongoose = require('mongoose'),
-    { Users, Ban } = require('./db/Schemas'),
     DBManager = require('./db/DBManager'); // A wrapper for Mongoose (which wraps around MongoDB lmao) because AFAIK mongoose doesn't do it's own caching.
 
 mongoose.connect(process.env.MONGODB_URI)
