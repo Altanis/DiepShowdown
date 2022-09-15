@@ -16,6 +16,8 @@ module.exports = class SocketManager {
 
         this.server = server, this.socket = socket, this.request = request;
 
+        this.user = null;
+
         this.ip = request.headers['x-forwarded-for'].split(',').at(-1) || request.socket.remoteAddress;
         if (this.ip === '::1') this.local = true, console.log('Socket is connected to LOCALHOST. Bans will not be administered.');
 
