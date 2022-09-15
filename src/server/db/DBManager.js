@@ -41,15 +41,24 @@ module.exports = class DBManager {
         return filter ? cache.filter(filter) : cache;
     }
 
-    delete(type, filter, all) {
-        const cache = this.#cache[type];
+    delete(type, filter) {
+        let cache = this.#cache[type];
         if (!cache) throw new Error(`[DB] Could not find type ${type}.`);
 
-        if (all) {
-            cache.filter(filter).forEach(value => {
-            
-                cache.splice(cache.indexOf(value), 1);
-            });
-        } else cache.splice(cache.findIndex(filter), 1);
+        this.#cache[type] = cache.filter(document => {
+            for (const [key, value] of Object.entries(filter)) {
+                console.log(document, key, value);
+                if (document[key] === value) return false;
+            }
+        });
+
+        console.log(this.#cache);
+
+        if (type === 'Users') {
+            Users.deleteMany(filter)
+                .then(console.log('done?'))
+                .catch(console.error);
+        }
+        else if (type === 'Ban') Ban.deleteMany(filter);
     }
 }

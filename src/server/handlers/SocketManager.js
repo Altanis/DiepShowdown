@@ -1,5 +1,5 @@
 const IncomingMessageHandler = require('./IncomingMessageHandler'),
-    { Payloads: { Incoming, Outgoing } } = require('../enum/Payloads');
+    { Incoming, Outgoing } = require('../enum/Payloads');
 
 module.exports = class SocketManager {
     constructor(server, socket, request) {
@@ -24,7 +24,7 @@ module.exports = class SocketManager {
     }
 
     _attachHandlers() {
-        this.socket.on('close', () => socket.remove());
+        this.socket.on('close', () => this.remove());
 
         this.socket.on('message', function({ data }) {
             if (!Incoming[data[0]]) return this.remove(true, 'Invalid packet header was sent during connection.');

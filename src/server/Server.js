@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 // Set up external database (MongoDB):
 const mongoose = require('mongoose'),
     { Users, Ban } = require('./db/Schemas'),
@@ -6,6 +8,7 @@ const mongoose = require('mongoose'),
 mongoose.connect(process.env.MONGODB_URI)
     .then(console.log('[DB] Connected to MongoDB successfully.'))
     .catch(err => console.error('[DB] Failed to connect to MongoDB:', err));
+
 
 const { WebSocketServer: Server } = require('ws'),
     URL = require('node:url');
@@ -16,9 +19,15 @@ const server = new Server({ port: 3000 });
 server.sockets = new Set();
 server.database = new DBManager(300000);
 
-server.on('listening', console.log('[WS] Running on PORT 3000.'));
+// Testing wrapper...
+setTimeout(async () => {
+    console.log('Testing wrapper...');
+    await server.database.delete('Users', { username: 'oitanis' });
+}, 5000);
+
+server.on('listening', () => console.log('[WS] Running on PORT 3000.'));
+server.on('close', () => console.log('[WS] Server closed prematurely.'));
 server.on('error', console.error);
-server.on('close', console.log('[WS] Server closed prematurely.'));
 
 server.on('connection', function(socket, request) {
     // Attach things to socket 
@@ -26,7 +35,7 @@ server.on('connection', function(socket, request) {
         server.database.create('Ban', { ip: socket.ip, reason });
         socket.close();
     };
-    socket.
+    socket.ip = request.headers['x-forwarded-for'].split(',').at(-1) || request.address.remoteAddress;
 
     server.sockets.add(new SocketManager(server, socket, request));
 });

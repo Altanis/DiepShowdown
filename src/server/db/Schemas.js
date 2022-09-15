@@ -1,14 +1,14 @@
-const { Schema } = require('mongoose');
+const { Schema, model } = require('mongoose');
 
-const Users = new Schema({
+const Users = model('Users', new Schema({
     username: String,
     password: String, // hashed
     elo: Number, // ranking based off wins/losses
-});
+}));
 
-const Ban = new Schema({
+const Ban = model('Ban', new Schema({
     ip: String,
     reason: String,
-});
+}));
 
 module.exports = { Users, Ban };
