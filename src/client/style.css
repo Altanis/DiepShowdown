@@ -3,11 +3,18 @@
 body, html {
     height: 100%;
     margin: 0;
+    /*overflow: hidden;*/
 }
 
 * {
     box-sizing: border-box;
     font-family: Ubuntu, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+input, button {
+    text-align: center;
+    outline: none;
+    margin: 10px;
 }
 
 .backgroundImage {
@@ -37,9 +44,11 @@ body, html {
     background-color: rgba(0, 0, 0, 0.2);
     border-radius: 20px;
     padding: 10px;
+    border: 2px solid rgba(0, 0, 0, 0.2);
 }
 
-#formatSelector {
+.bigButton {
+    float: left;
     width: 100%;
     height: 50px;
     background: linear-gradient(to bottom,#edf2f8,#d7e3ec);
@@ -47,9 +56,26 @@ body, html {
     border-radius: 20px;
 }
 
-.login {
-    position: inherit;
-    top: 50%;
-    bottom: 50%;
-    transform: translate(-50%, -50%);
+.smallButton {
+    float: left;
+    width: 25%;
+    height: 50px;
+    background: linear-gradient(to bottom,#edf2f8,#d7e3ec);
+    border: none;
+    border-radius: 20px;
+    align-content: center;
+}
+
+.globalChat {
+    border-radius: 20px;
+    background: linear-gradient(to bottom,#edf2f8,#d7e3ec);
+    opacity: 0.5;
+    width: 100%;
+    height: 95%;
+}
+
+#battle {
+    background: linear-gradient(to bottom,  hsl(260.4651162790697,59.44700460829492%,72%),  hsl(260.4651162790697,59.44700460829492%,52%));
+    border-color: hsl(260.4651162790697,59.44700460829492%,40%);
+    color: white;
 }

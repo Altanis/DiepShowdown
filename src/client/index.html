@@ -1,33 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	
+	<title>DiepShowdown</title>
+	
+	<link rel="stylesheet" href="style.css">
+	<link rel="icon" href="img/favicon.png">
+</head>
+<body>
+	<div class="backgroundImage"></div>
+	<div class="container">
+		<div class="column">
+			<div class="battleMenu">
+				<form>
+					<p>Format:</p>
+					<button id="formatSelector" class="bigButton">[BETA] OverUsed (OU)</button>
+					<p>Team:</p>
+					<button id="teamSelector" class="bigButton" onclick="()=>{}">No teams created. Go to <b>Teambuilder</b>.</button>
+					<button id="battle" class="bigButton"><b>BATTLE!</b></button>
+				</form>
+			</div>
+			<div class="teambuilder" style="padding-top: 50%;">
+				<button id="teambuilder" class="bigButton">Teambuilder</button>
+			</div>
+		</div>
+		<div class="column">
+			<div class="loginMenu" style="display: flex; align-items: center; justify-content: center;">
+				<form>
+					<p>Account:</p>
+					<input placeholder="Username" id="username" class="bigButton"></input>
+					<input placeholder="Password" id="password" class="bigButton"></input>
 
-    <title>HTML 5 Boilerplate</title>
+					<div class="buttonActions" style="display: flex; align-items: center; justify-content: center; width: 100%;">
+						<button id="login" class="smallButton">Login</button>
+						<button id="register" class="smallButton">Register</button>
+						<button id="changePW" class="smallButton">Change Password</button>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="column">
+			Global Chat:
+			<div class="globalChat">
+			</div>
+		</div>
+	</div>
+</div>
 
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="img/favicon.png">
-  </head>
-  <body>
-    <div class="backgroundImage"></div>
-    <div class="container">
-      <div class="column">
-        <div class="battleMenu">
-          <form>
-            <p>Format:</p>
-            <button id="formatSelector">[BETA] OverUsed (OU)</button>
-          </form>
-        </div>
-      </div>
-      <div class="column">
-        <div class="login">
-          hi
-        </div>
-      </div>
-    </div>
-  </div>
-	<script src="bundle.js"></script>
-  </body>
+<script src="bundle.js"></script>
+</body>
 </html>
