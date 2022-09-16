@@ -23,6 +23,7 @@ const IncomingMessageHandler = class {
                 if (!bcrypt.compareSync(password, user.password)) return this.manager.outgoingMsgHandler.error('Could not login: invalid password.');
 
                 this.manager.user = user;
+                this.manager.outgoingMsgHandler.accepted(username);
                 break;
             }
             case 0x01: { // REGISTER
@@ -48,9 +49,9 @@ const IncomingMessageHandler = class {
                 const [oldPassword, newPassword] = password.split(' + ');
                 if (!bcrypt.compareSync(oldPassword, user.password)) return this.manager.outgoingMsgHandler.error('Could not change password: Old password is invalid.');
 
-                //    edit(type, filter, prop, value) {
-                database.edit('Users', document => document.username === username, 'password', bcrypt.hashSync(newPassword, 10));
-                // ad response later gtg
+                database.edit('Users', document => document.username === username, 'password', bcrypt.hashSync(newPassword, 10))
+                    .then(() => this.manager.outgoingMsgHandler.accepted(username))
+                    .catch(er => console.error(er), this.manager.outgoingMsgHandler.error('Could not change password. Please try again later.'));
             }
         }
     }

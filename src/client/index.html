@@ -12,7 +12,7 @@
 </head>
 <body>
 	<div class="backgroundImage"></div>
-	<div class="container">
+	<div id="mainMenu" class="container">
 		<div class="column">
 			<div class="battleMenu">
 				<form>
@@ -41,11 +41,21 @@
 					</div>
 				</form>
 			</div>
+			<div class="accountInfo" style="background: linear-gradient(to bottom,#edf2f8,#d7e3ec); border-radius: 20px; height: 40%;">
+				<img src="img/avatars/Overlord.png" align="right">
+				<form>
+					<p style="text-align: center; font-size: 48px;">Trainer Card</p>
+					<p id="trainerID" class="trainerInfo">Trainer ID: ???</p>
+					<p id="hoursPlayed" class="trainerInfo">Hours Played: ???</p>
+					<p id="favoriteTank" class="trainerInfo">Favorite Tank: ???</p>
+					<p id="joinDate" class="trainerInfo">Joined At: ???</p>
+				</form>
+			</div>
 		</div>
 		<div class="column">
-			Global Chat:
-			<div class="globalChat">
-			</div>
+			<p>Global Chat:</p>
+			<div id="chat" class="globalChat"></div>
+			<input placeholder="Logging in..." id="chatBox" class="bigButton" disabled></input>
 		</div>
 	</div>
 </div>
