@@ -1,0 +1,55 @@
+@import url('http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin');
+
+body, html {
+    height: 100%;
+    margin: 0;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: Ubuntu, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.backgroundImage {
+    background-image: url("img/background.png");
+    filter: blur(4px);
+    -webkit-filter: blur(4px);
+    height: 100%; 
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.column {
+    float: left;
+    width: 33.33%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    padding: 10px;
+}
+
+#formatSelector {
+    width: 100%;
+    height: 50px;
+    background: linear-gradient(to bottom,#edf2f8,#d7e3ec);
+    border: none;
+    border-radius: 20px;
+}
+
+.login {
+    position: inherit;
+    top: 50%;
+    bottom: 50%;
+    transform: translate(-50%, -50%);
+}

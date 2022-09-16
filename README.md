@@ -9,8 +9,9 @@ Diep.io is a 2D realtime game where you try getting high scores by farming or ki
 WIP.
 
 ## To-do list:
-- [ ] Create a WebSocket server and a database system.
-- [ ] Implement a login system (just registration with a desired username and password).
+- [x] Create a WebSocket server and a database system.
+- [x] Implement a login system (just registration with a desired username and password).
+- [ ] UI for creating an account.
 - [ ] UI for battling/teambuilding.
 - [ ] Creating sprites, movesets, abilities, etc. for tanks.
 - [ ] Create a battle system.

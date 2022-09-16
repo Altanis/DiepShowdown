@@ -18,12 +18,6 @@ const server = new Server({ port: 3000 });
 server.sockets = new Set();
 server.database = new DBManager(300000);
 
-// Testing wrapper...
-setTimeout(async () => {
-    console.log('Testing wrapper...');
-    await server.database.delete('Users', { username: 'oitanis' });
-}, 5000);
-
 server.on('listening', () => console.log('[WS] Running on PORT 3000.'));
 server.on('close', () => console.log('[WS] Server closed prematurely.'));
 server.on('error', console.error);
