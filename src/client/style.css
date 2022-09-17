@@ -109,6 +109,16 @@ input:placeholder-shown {
     align-content: center;
 }
 
+.miniButton {
+    display: block;
+    width: 10%;
+    height: 50px;
+    background: linear-gradient(to bottom,#edf2f8,#d7e3ec);
+    border: none;
+    border-radius: 20px;
+    align-content: center;
+}
+
 .globalChat {
     padding: 10%;
     border-radius: 20px;
@@ -124,7 +134,7 @@ input:placeholder-shown {
 }
 
 .trainerInfo {
-    font-size: 24px;
+    font-size: 18px;
     padding-left: 10px;
 }
 

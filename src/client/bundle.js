@@ -22,8 +22,7 @@
     
     // Main Menu:
         // Column 1
-        const format = document.getElementById('formatSelector'),
-            teamSelector = document.getElementById('teamSelector'),
+        const teamSelector = document.getElementById('teamSelector'),
             battle = document.getElementById('battle'),
             teamBuilder = document.getElementById('teambuilder');
         // Column 2
@@ -47,7 +46,8 @@
             elo = document.getElementById('elo');
 
     // Team Builder:
-        const createTeam = document.getElementById('createTeam');
+         const back = document.getElementById('back'), 
+            createTeam = document.getElementById('createTeam');
 
     // -- FUNCTIONS -- //
     function accountAction(type, pressedEnter) {
@@ -86,11 +86,16 @@
         }
     });
 
+    createTeam.addEventListener('click', function() {
+
+    });
+
     login.onclick = () => loggedIn ? (loggedIn = false, delete localStorage.username, delete localStorage.password, picker.style.display = 'block', login.innerText = 'Log In') : accountAction(0);
     register.onclick = () => accountAction(1);
     changePW.onclick = () => accountAction(2);
     
     teamBuilder.onclick = () => (MainMenu.style.display = 'none', TeamBuilder.style.display = 'block');
+    back.onclick = () => (MainMenu.style.display = 'block', TeamBuilder.style.display = 'none');
 
     const socket = new WebSocket(SERVER_URL);
     socket.binaryType = 'arraybuffer';

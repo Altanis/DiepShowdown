@@ -15,6 +15,8 @@ const IncomingMessageHandler = class {
             type = buffer.i8(),
             [r, g, b] = [buffer.i8(), buffer.i8(), buffer.i8()];
 
+        if (username.length < 2 || username.length > 32) return this.manager.outgoingMsgHandler.error('Could not perform action: Username must be within bounds of 2-32.');
+
         switch (type) {
             case 0x00: { // LOGIN
                 const user = database.retreive('Users', document => document.username === username)?.[0];
