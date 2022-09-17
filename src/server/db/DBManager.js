@@ -36,15 +36,15 @@ module.exports = class DBManager {
     }
 
     edit(type, filter, prop, value) {
-        return new Promise((resolve) => {
+        return new Promise(async (resolve) => {
             const cache = this.#cache[type];
             if (!cache) throw new Error(`[DB] Could not find type ${type}.`);
     
             const document = cache.find(filter);
-            let realDoc = null;
+            let realDoc;
     
-            if (type === 'Users') realDoc = Users.findOne({ username: document.username }) 
-            else if (type === 'Ban') realDoc = Ban.findOne({ ip: document.ip });
+            if (type === 'Users') realDoc = await Users.findOne({ username: document.username }) 
+            else if (type === 'Ban') realDoc = await Ban.findOne({ ip: document.ip });
     
             realDoc[prop] = value, document[prop] = value;
             realDoc.save()

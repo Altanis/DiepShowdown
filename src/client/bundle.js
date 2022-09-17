@@ -20,28 +20,34 @@
     const MainMenu = document.getElementById('mainMenu'),
         TeamBuilder = document.getElementById('teamBuilder');
     
-    // Column 1
-    const format = document.getElementById('formatSelector'),
-        teamSelector = document.getElementById('teamSelector'),
-        battle = document.getElementById('battle'),
-        teamBuilder = document.getElementById('teambuilder');
-    // Column 2
-    const username = document.getElementById('username'),
-        password = document.getElementById('password'),
-        changePassword = document.getElementById('changePassword'),
-        login = document.getElementById('login'),
-        register = document.getElementById('register'),
-        changePW = document.getElementById('changePW');
-    // Column 3
-    const globalChat = document.getElementById('chat'),
-        chatBox = document.getElementById('chatBox');
+    // Main Menu:
+        // Column 1
+        const format = document.getElementById('formatSelector'),
+            teamSelector = document.getElementById('teamSelector'),
+            battle = document.getElementById('battle'),
+            teamBuilder = document.getElementById('teambuilder');
+        // Column 2
+        const username = document.getElementById('username'),
+            password = document.getElementById('password'),
+            changePassword = document.getElementById('changePassword'),
+            login = document.getElementById('login'),
+            register = document.getElementById('register'),
+            changePW = document.getElementById('changePW'),
+            picker = document.getElementById('picker'),
+            colorPicker = document.getElementById('colorpicker');
+        // Column 3
+        const globalChat = document.getElementById('chat'),
+            chatBox = document.getElementById('chatBox');
 
-    // Trainer Card
-    const trainerID = document.getElementById('trainerID'),
-        hoursPlayed = document.getElementById('hoursPlayed'),
-        joinDate = document.getElementById('joinDate'),
-        playerAvatar = document.getElementById('playerAvatar'),
-        elo = document.getElementById('elo');
+        // Trainer Card
+        const trainerID = document.getElementById('trainerID'),
+            hoursPlayed = document.getElementById('hoursPlayed'),
+            joinDate = document.getElementById('joinDate'),
+            playerAvatar = document.getElementById('playerAvatar'),
+            elo = document.getElementById('elo');
+
+    // Team Builder:
+        const createTeam = document.getElementById('createTeam');
 
     // -- FUNCTIONS -- //
     function accountAction(type, pressedEnter) {
@@ -50,13 +56,17 @@
         localStorage.username = username.value,
             localStorage.password = password.value;
 
-        (localStorage.username && localStorage.password) && 
-            socket.send(new Writer()
+        const packet = new Writer()
             .i8(0x00)
             .string(localStorage.username)
             .string(`${localStorage.password}${type === 2 && changePassword.value ? ` + ${changePassword.value}` : ''}`)
-            .i8(type)
-            .out());
+            .i8(type);
+        if (type === 1) {
+            colorPicker.value.slice(1).split(/(?<=^(?:.{2})+)(?!$)/).forEach(hex => packet.i8(parseInt(hex, 16)));
+        }
+
+        (localStorage.username && localStorage.password)
+            && socket.send(packet.out());
     }
 
     function chatAction() {
@@ -76,7 +86,7 @@
         }
     });
 
-    login.onclick = () => accountAction(0);
+    login.onclick = () => loggedIn ? (loggedIn = false, delete localStorage.username, delete localStorage.password, picker.style.display = 'block', login.innerText = 'Log In') : accountAction(0);
     register.onclick = () => accountAction(1);
     changePW.onclick = () => accountAction(2);
     
@@ -85,8 +95,16 @@
     const socket = new WebSocket(SERVER_URL);
     socket.binaryType = 'arraybuffer';
     socket.addEventListener('error', console.error);
-    socket.addEventListener('close', () => console.log('Socket closed prematurely.'));
+    socket.addEventListener('close', () => {
+        console.log('Socket closed prematurely.');
+        document.getElementById('overlay').style.display = '';
+        document.getElementById('modal').innerHTML = `
+        <p style="color: red; font-size: 48px;">💀Disconnected💀</p>
+        <p style="color: red; font-size: 24px;">The server may be down, you have no connection, or you went AFK.</p>
+        `;
+    });
     socket.addEventListener('open', () => {
+        document.getElementById('overlay').style.display = 'none';
         if (localStorage.username && localStorage.password) {
             socket.send(new Writer().i8(0x00).string(localStorage.username).string(localStorage.password).i8(0).out());
         }
@@ -106,15 +124,17 @@
                     elo: data.f32(),
                 } 
 
-                console.log(playerData.avatar);
-
                 loggedIn = true;
 
                 chatBox.disabled = false;
                 chatBox.placeholder = 'Send a message...';
 
                 document.getElementById('placeholder').style.display = 'none';
+                picker.style.display = 'none';
 
+                login.innerText = 'Log Out';
+
+                document.getElementById('usernameInfo').innerText = 'Username: ' + localStorage.username;
                 trainerID.innerText = 'Trainer ID: ' + playerData.trainerID;
                 hoursPlayed.innerText = 'Hours Online: ' + playerData.hoursPlayed;
                 joinDate.innerText = 'Joined At: ' + playerData.joinDate;
@@ -131,9 +151,10 @@
             }
             case 0x03: {
                 const username = data.string(),
+                    [r, g, b] = [data.i8(), data.i8(), data.i8()],
                     content = data.string();
 
-                globalChat.innerHTML += `<div class="padding: 5px;"><b style="${localStorage.username === username && 'color: red'}">${sanitizeHTML(username)}:</b> ${sanitizeHTML(content)}</div>`;
+                globalChat.innerHTML += `<div class="padding: 5px;"><b style="color: rgba(${r}, ${g}, ${b});">${sanitizeHTML(username)}:</b> ${sanitizeHTML(content)}</div>`;
                 globalChat.scrollTop = globalChat.scrollHeight;
             }
         }

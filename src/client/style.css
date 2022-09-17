@@ -50,6 +50,17 @@ input:placeholder-shown {
     background-size: cover;
 }
 
+.overlay {
+    outline: none;
+    overflow: visible;
+    text-align: center;
+    top: 60px;
+    z-index: 10;
+    background-color: rgba(68, 68, 68, 0.5);
+    display: grid;
+    place-items: center;
+}
+
 .container {
     position: absolute;
     width: 100%;
@@ -114,7 +125,7 @@ input:placeholder-shown {
 
 .trainerInfo {
     font-size: 24px;
-    padding: 5px;
+    padding-left: 10px;
 }
 
 #battle {

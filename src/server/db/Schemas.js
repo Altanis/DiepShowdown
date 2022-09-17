@@ -8,6 +8,7 @@ const Users = model('Users', new Schema({
     joinedAt: String,
     avatar: String,
     elo: Number, // ranking based off wins/losses
+    color: [Number],
 }));
 
 const Ban = model('Ban', new Schema({

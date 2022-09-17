@@ -57,11 +57,14 @@
 			<div class="loginMenu" style="display: flex; align-items: center; justify-content: center;">
 				<form>
 					<p>Account:</p>
-					<input placeholder="Username" id="username" class="bigButton"></input>
-					<input type="password" placeholder="Password" id="password" class="bigButton"></input>
+					<input placeholder="Username" id="username" class="bigButton">
+					<input type="password" placeholder="Password" id="password" class="bigButton">
+					<div id="picker">
+						Username Color: <input type="color" id="colorpicker" value="#000000">
+					</div>
 
 					<div class="buttonActions" style="display: flex; align-items: center; justify-content: center; width: 100%;">
-						<button type="button"  id="login" class="smallButton">Login</button>
+						<button type="button"  id="login" class="smallButton">Log In</button>
 						<button type="button"  id="register" class="smallButton">Register</button>
 						<button type="button"  id="changePW" class="smallButton">Change Password</button>
 					</div>
@@ -73,6 +76,7 @@
 				<form>
 					<p style="text-align: center; font-size: 48px;">Trainer Card</p>
           			<p id="placeholder" style="text-align: center; font-style: italic;">Please log in to get your account data.</p>
+					<p id="usernameInfo" class="trainerInfo"></p>
 					<p id="trainerID" class="trainerInfo"></p>
 					<p id="hoursPlayed" class="trainerInfo"></p>
 					<p id="joinDate" class="trainerInfo"></p>
@@ -93,6 +97,12 @@
 			<p>All teams:</p>
 			<button type="button" id="createTeam" class="smallButton"><i class="material-icons">&#xe147;</i> New Team</button>
 		</form>
+	</div>
+	<div id="overlay" class="overlay container">
+		<div id="modal" style="background-color: #FFFFFF; border-radius: 20px; height: 50%; width: 50%; z-index: 11;">
+			<p style="color: black; font-size: 48px;">Connecting...</p>
+			<p style="color: black; font-size: 24px;">Please wait as we connect to our servers...</p>
+		</div>
 	</div>
 </div>
 

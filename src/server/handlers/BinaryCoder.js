@@ -1,11 +1,11 @@
 const base = new ArrayBuffer(4),
-    i8 = new Int8Array(base),
+    i8 = new Uint8Array(base),
     u32 = new Int32Array(base),
     f32 = new Float32Array(base);
 
 const Writer = class {
     constructor(length = 4096) {
-        this.at = 0, this.buffer = new Int8Array(length);
+        this.at = 0, this.buffer = new Uint8Array(length);
         this.UTF8Encoder = new TextEncoder();
     }
 

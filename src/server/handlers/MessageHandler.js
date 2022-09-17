@@ -12,7 +12,8 @@ const IncomingMessageHandler = class {
 
         const username = buffer.string(),
             password = buffer.string(),
-            type = buffer.i8();
+            type = buffer.i8(),
+            [r, g, b] = [buffer.i8(), buffer.i8(), buffer.i8()];
 
         switch (type) {
             case 0x00: { // LOGIN
@@ -45,9 +46,10 @@ const IncomingMessageHandler = class {
                     }),
                     avatar: 'Overlord',
                     elo: 1000,
+                    color: [r, g, b],
                 })
-                    .then(user => this.manager.outgoingMsgHandler.accepted(user.trainerID, user.hoursPlayed, user.joinedAt, user.avatar, user.elo))
-                    .catch(er => console.error(er), this.manager.outgoingMsgHandler.error('Could not create account. Please try again later.'));
+                    .then(user => (this.manager.user = user, this.manager.outgoingMsgHandler.accepted(user.trainerID, user.hoursPlayed, user.joinedAt, user.avatar, user.elo)))
+                    .catch(er => (console.error(er), this.manager.outgoingMsgHandler.error('Could not create account. Please try again later.')));
                 break;
             }
             case 0x02: { // CHANGE_PASSWORD
@@ -60,13 +62,13 @@ const IncomingMessageHandler = class {
 
                 database.edit('Users', document => document.username === username, 'password', bcrypt.hashSync(newPassword, 10))
                     .then(() => this.manager.outgoingMsgHandler.accepted(user.trainerID, user.hoursPlayed, user.joinedAt, user.avatar, user.elo))
-                    .catch(er => console.error(er), this.manager.outgoingMsgHandler.error('Could not change password. Please try again later.'));
+                    .catch(er => (console.error(er), this.manager.outgoingMsgHandler.error('Could not change password. Please try again later.')));
             }
         }
     }
 
     chat(buffer) {
-        if (!this.manager.user) return this.manager.remove(true, 'Sent a CHAT packet before logging in.');
+        if (!this.manager.user) return (console.log('WTF?'), this.manager.remove(true, 'Sent a CHAT packet before logging in.'));
         if (Date.now() - this.manager.lastMessageSent < 1000) return this.manager.outgoingMsgHandler.error('Could not send message: Spam was detected.');
 
         buffer = new Reader(buffer);
@@ -81,7 +83,7 @@ const IncomingMessageHandler = class {
         this.manager.lastMessageSent = Date.now();
     
         for (const socket of this.manager.server.sockets) {
-            socket.outgoingMsgHandler.chat(this.manager.user.username, content);
+            socket.outgoingMsgHandler.chat(this.manager.user.username, this.manager.user.color, content);
         }
     }
 };
@@ -96,8 +98,8 @@ const OutgoingMessageHandler = class {
         this.manager.socket.send(new Writer().i8(0x02).string(error).out());
     }
 
-    chat(username, message) {
-        this.manager.socket.send(new Writer().i8(0x03).string(username).string(message).out());
+    chat(username, [r, g, b], message) {
+        this.manager.socket.send(new Writer().i8(0x03).string(username).i8(r).i8(g).i8(b).string(message).out());
     }
 };
 
