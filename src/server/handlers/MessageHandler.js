@@ -67,6 +67,7 @@ const IncomingMessageHandler = class {
 
     chat(buffer) {
         if (!this.manager.user) return this.manager.remove(true, 'Sent a CHAT packet before logging in.');
+        if (Date.now() - this.manager.lastMessageSent < 1000) return this.manager.outgoingMsgHandler.error('Could not send message: Spam was detected.');
 
         buffer = new Reader(buffer);
         const content = buffer.string();
@@ -76,7 +77,9 @@ const IncomingMessageHandler = class {
             if (['fag', 'faggot', 'nig', 'nigger', 'nigga', 'retard', 'chink', 'tranny'].includes(word)) return (slur = true, this.manager.outgoingMsgHandler.error('Could not send message: Message contained a blocked word.')); 
         });
         if (slur) return;
-        
+
+        this.manager.lastMessageSent = Date.now();
+    
         for (const socket of this.manager.server.sockets) {
             socket.outgoingMsgHandler.chat(this.manager.user.username, content);
         }

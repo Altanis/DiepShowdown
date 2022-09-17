@@ -60,6 +60,15 @@ input:placeholder-shown {
     transform: translate(-50%, -50%);
 }
 
+#teamBuilder {
+    float: left;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    padding: 20px;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+}
+
 .column {
     float: left;
     width: 33.33%;

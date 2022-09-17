@@ -17,12 +17,14 @@
     // -- ELEMENTS -- //
     
     // Views
-    const MainMenu = document.getElementById('mainMenu');
+    const MainMenu = document.getElementById('mainMenu'),
+        TeamBuilder = document.getElementById('teamBuilder');
     
     // Column 1
     const format = document.getElementById('formatSelector'),
         teamSelector = document.getElementById('teamSelector'),
-        battle = document.getElementById('battle');
+        battle = document.getElementById('battle'),
+        teamBuilder = document.getElementById('teambuilder');
     // Column 2
     const username = document.getElementById('username'),
         password = document.getElementById('password'),
@@ -77,6 +79,8 @@
     login.onclick = () => accountAction(0);
     register.onclick = () => accountAction(1);
     changePW.onclick = () => accountAction(2);
+    
+    teamBuilder.onclick = () => (MainMenu.style.display = 'none', TeamBuilder.style.display = 'block');
 
     const socket = new WebSocket(SERVER_URL);
     socket.binaryType = 'arraybuffer';
@@ -129,7 +133,7 @@
                 const username = data.string(),
                     content = data.string();
 
-                globalChat.innerHTML += `<b>${sanitizeHTML(username)}:</b> ${sanitizeHTML(content)}`;
+                globalChat.innerHTML += `<div class="padding: 5px;"><b style="${localStorage.username === username && 'color: red'}">${sanitizeHTML(username)}:</b> ${sanitizeHTML(content)}</div>`;
                 globalChat.scrollTop = globalChat.scrollHeight;
             }
         }
