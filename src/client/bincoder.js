@@ -3,7 +3,7 @@ const base = new ArrayBuffer(4),
     u32 = new Int32Array(base),
     f32 = new Float32Array(base);
 
-const Writer = class {
+window.Writer = class {
     constructor(length = 4096) {
         this.at = 0, this.buffer = new Int8Array(length);
         this.UTF8Encoder = new TextEncoder();
@@ -46,7 +46,7 @@ const Writer = class {
     }
 }
 
-const Reader = class  {
+window.Reader = class  {
     constructor(buffer) {
         this.at = 0, this.buffer = buffer;
         this.UTF8Decoder = new TextDecoder();
@@ -70,5 +70,3 @@ const Reader = class  {
         return f32[0];
     }
 }
-
-module.exports = { Reader, Writer };

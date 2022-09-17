@@ -18,8 +18,7 @@ module.exports = class SocketManager {
 
         this.user = null;
 
-        this.ip = request.headers['x-forwarded-for'].split(',').at(-1) || request.socket.remoteAddress;
-        if (this.ip === '::1') this.local = true, console.log('Socket is connected to LOCALHOST. Bans will not be administered.');
+        if (socket.ip === '::1') this.local = true, console.log('Socket is connected to LOCALHOST. Bans will not be administered.');
 
         this.incomingMsgHandler = new IncomingMessageHandler(this),
             this.outgoingMsgHandler = new OutgoingMessageHandler(this);
@@ -29,7 +28,9 @@ module.exports = class SocketManager {
     _attachHandlers() {
         this.socket.on('close', () => this.remove());
 
-        this.socket.on('message', function({ data }) {
+        this.socket.on('message', (data) => {
+            console.log(data);
+
             if (!Incoming[data[0]]) return this.remove(true, 'Invalid packet header was sent during connection.');
             this.incomingMsgHandler[Incoming[data[0]]]?.(data.slice(1));
         });
@@ -37,6 +38,6 @@ module.exports = class SocketManager {
 
     remove(ban, reason) {
         (ban && !this.local) ? this.socket.terminate(reason) : this.socket.close();
-        this.server.sockets.remove(socket);
+        this.server.sockets.delete(this.socket);
     }
 }

@@ -25,10 +25,10 @@ server.on('error', console.error);
 server.on('connection', function(socket, request) {
     // Attach things to socket 
     socket.terminate = function(reason) {
-        server.database.create('Ban', { ip: socket.ip, reason });
+        if (socket.ip) server.database.create('Ban', { ip: socket.ip, reason });
         socket.close();
     };
-    socket.ip = request.headers['x-forwarded-for'].split(',').at(-1) || request.address.remoteAddress;
+    socket.ip = request.headers['x-forwarded-for']?.split(',').at(-1) || request.address?.remoteAddress;
 
     server.sockets.add(new SocketManager(server, socket, request));
 });

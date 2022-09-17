@@ -7,6 +7,7 @@
 	
 	<title>DiepShowdown</title>
 	
+  <script src="bincoder.js"></script>
 	<link rel="stylesheet" href="style.css">
 	<link rel="icon" href="img/favicon.png">
 </head>
@@ -17,9 +18,9 @@
 			<div class="battleMenu">
 				<form>
 					<p>Format:</p>
-					<button id="formatSelector" class="bigButton">[BETA] OverUsed (OU)</button>
+					<button type="button" id="formatSelector" class="bigButton">[BETA] OverUsed (OU)</button>
 					<p>Team:</p>
-					<button id="teamSelector" class="bigButton" onclick="()=>{}">No teams created. Go to <b>Teambuilder</b>.</button>
+					<button type="button" id="teamSelector" class="bigButton" onclick="()=>{}">No teams created. Go to <b>Teambuilder</b>.</button>
 					<button id="battle" class="bigButton"><b>BATTLE!</b></button>
 				</form>
 			</div>
@@ -32,30 +33,34 @@
 				<form>
 					<p>Account:</p>
 					<input placeholder="Username" id="username" class="bigButton"></input>
-					<input placeholder="Password" id="password" class="bigButton"></input>
+					<input type="password" placeholder="Password" id="password" class="bigButton"></input>
 
 					<div class="buttonActions" style="display: flex; align-items: center; justify-content: center; width: 100%;">
-						<button id="login" class="smallButton">Login</button>
-						<button id="register" class="smallButton">Register</button>
-						<button id="changePW" class="smallButton">Change Password</button>
+						<button type="button"  id="login" class="smallButton">Login</button>
+						<button type="button"  id="register" class="smallButton">Register</button>
+						<button type="button"  id="changePW" class="smallButton">Change Password</button>
 					</div>
+          <input type="password" placeholder="Change Password" id="changePassword" class="bigButton"></input>
 				</form>
 			</div>
 			<div class="accountInfo" style="background: linear-gradient(to bottom,#edf2f8,#d7e3ec); border-radius: 20px; height: 40%;">
-				<img src="img/avatars/Overlord.png" align="right">
+				<img id="playerAvatar" src="img/avatars/Overlord.png" align="right" style="display: none;">
 				<form>
 					<p style="text-align: center; font-size: 48px;">Trainer Card</p>
-					<p id="trainerID" class="trainerInfo">Trainer ID: ???</p>
-					<p id="hoursPlayed" class="trainerInfo">Hours Played: ???</p>
-					<p id="favoriteTank" class="trainerInfo">Favorite Tank: ???</p>
-					<p id="joinDate" class="trainerInfo">Joined At: ???</p>
+          			<p id="placeholder" style="text-align: center; font-style: italic;">Please log in to get your account data.</p>
+					<p id="trainerID" class="trainerInfo"></p>
+					<p id="hoursPlayed" class="trainerInfo"></p>
+					<p id="joinDate" class="trainerInfo"></p>
+          <p id="elo" class="trainerInfo"></p>
 				</form>
 			</div>
 		</div>
 		<div class="column">
 			<p>Global Chat:</p>
-			<div id="chat" class="globalChat"></div>
-			<input placeholder="Logging in..." id="chatBox" class="bigButton" disabled></input>
+			<div id="chat" class="globalChat">
+				<p style="font-size: 24px; font-weight: bold; text-align: center;">Please be respectful.</p>
+			</div>
+			<input placeholder="Please log in to send messages!" id="chatBox" class="bigButton" disabled></input>
 		</div>
 	</div>
 </div>
