@@ -7,9 +7,7 @@
         temp.textContent = str;
         return temp.innerHTML;
     };
-    
     const SERVER_URL = 'ws://localhost:3000/';
-
     let loggedIn = false, playerData = {};
     
     // -- CACHED INTERNAL FUNCTIONS -- //
@@ -46,7 +44,9 @@
             elo = document.getElementById('elo');
 
     // Team Builder:
-         const back = document.getElementById('back'), 
+        const allTeams = document.getElementById('allTeams'),
+            teamBuild = document.getElementById('teamBuild'),
+            back = document.getElementById('back'), 
             createTeam = document.getElementById('createTeam');
 
     // -- FUNCTIONS -- //
@@ -86,16 +86,15 @@
         }
     });
 
-    createTeam.addEventListener('click', function() {
-
-    });
-
-    login.onclick = () => loggedIn ? (loggedIn = false, delete localStorage.username, delete localStorage.password, picker.style.display = 'block', login.innerText = 'Log In') : accountAction(0);
+    login.onclick = () => loggedIn ? (loggedIn = false, delete localStorage.username, delete localStorage.password, picker.style.display = 'block', login.innerText = 'Log In', socket.close()) : accountAction(0);
     register.onclick = () => accountAction(1);
     changePW.onclick = () => accountAction(2);
     
     teamBuilder.onclick = () => (MainMenu.style.display = 'none', TeamBuilder.style.display = 'block');
     back.onclick = () => (MainMenu.style.display = 'block', TeamBuilder.style.display = 'none');
+    createTeam.onclick = () => allTeams.style.display === 'block' ? 
+    (allTeams.style.display = 'none', teamBuild.style.display = 'block', createTeam.innerHTML = '<i class="material-icons">&#xe317;</i> Back') 
+    : (allTeams.style.display = 'block', teamBuild.style.display = 'none', createTeam.innerHTML = '<i class="material-icons">&#xe147;</i> New Team');
 
     const socket = new WebSocket(SERVER_URL);
     socket.binaryType = 'arraybuffer';
