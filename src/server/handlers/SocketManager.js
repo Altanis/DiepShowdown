@@ -19,7 +19,7 @@ module.exports = class SocketManager {
         this.user = null;
         this.lastMessageSent = 0;
 
-        if (socket.ip === '::1') (this.local = true, console.log('Socket is connected to LOCALHOST. Bans will not be administered.'));
+        if (!socket.ip || socket.ip === '::1') (this.local = true, console.log('Socket is connected to LOCALHOST. Bans will not be administered.'));
 
         this.incomingMsgHandler = new IncomingMessageHandler(this),
             this.outgoingMsgHandler = new OutgoingMessageHandler(this);
