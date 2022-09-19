@@ -11,11 +11,12 @@
 */
 
 const Tanks = {
-    Tank: {
-        Tier: 1,
-        Types: ["Bullet"],
-        Ability: "N/A",
-        Stats: {
+    0: {
+        name: 'Tank',
+        tier: 1,
+        types: ["Bullet"],
+        ability: "N/A",
+        stats: {
             HP: 100,
             Resistance: 0,
             Damage: 10,
@@ -25,7 +26,7 @@ const Tanks = {
             Reload: 1,
             Speed: 1
         },
-        Moveset: [
+        moveset: [
             "Protect",
             "Decoy",
         ]

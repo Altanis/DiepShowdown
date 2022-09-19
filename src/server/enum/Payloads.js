@@ -2,6 +2,7 @@ module.exports = {
     Incoming: {
         0x00: 'login',
         0x01: 'chat',
+        0x02: 'battle'
     }, 
     Outgoing: {
         0x00: 'antibot',

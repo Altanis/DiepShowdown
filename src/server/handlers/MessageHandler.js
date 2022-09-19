@@ -1,14 +1,16 @@
-const { Reader, Writer } = require('./BinaryCoder');
-
 const bcrypt = require('bcrypt'),
     { randomUUID } = require('node:crypto');
+
+const { Writer } = require('./BinaryCoder'),
+    Tanks = require('../../data/Tanks'),
+    Moves = require('../../data/Moves'),
+    Abilities = require('../../data/Abilities');
 
 const IncomingMessageHandler = class {
     constructor(manager) { this.manager = manager; }
 
     login(buffer) {
         const database = this.manager.server.database;
-        buffer = new Reader(buffer);
 
         const username = buffer.string(),
             password = buffer.string(),
@@ -73,7 +75,6 @@ const IncomingMessageHandler = class {
         if (!this.manager.user) return (console.log('WTF?'), this.manager.remove(true, 'Sent a CHAT packet before logging in.'));
         if (Date.now() - this.manager.lastMessageSent < 1000) return this.manager.outgoingMsgHandler.error('Could not send message: Spam was detected.');
 
-        buffer = new Reader(buffer);
         const content = buffer.string();
 
         let slur;
@@ -88,7 +89,43 @@ const IncomingMessageHandler = class {
             socket.outgoingMsgHandler.chat(this.manager.user.username, this.manager.user.color, content);
         }
     }
+
+    battle(buffer) {
+        const team = {};
+
+        let teamSize = 6,
+            moveSize = 4;
+
+        while (teamSize--) {
+            const tankID = buffer.i8();
+            if (!Tanks[tankID]) return this.manager.remove(true, 'Provided an invalid Tank ID.');
+
+            const abilityID = buffer.i8();
+            if (!Abilities[abilityID]) return this.manager.remove(true, 'Provided an invalid Ability ID.');
+
+            const key = team[tankID] ? `${tankID}+${Math.random()}` : tankID;
+            team[key] = {
+                ability: abilityID,
+                moveset: [],
+            };
+
+            while (moveSize--) {
+                const moveID = buffer.i8();
+                if (!Moves[moveID] || !Tanks[tankID].moveset.includes(Moves[moveID].name)) return this.manager.remove(true, 'Provided an invalid Move ID.');
+                team[key].moveset.push(moveID);
+            }
+
+            if (buffer.i8() !== 0) return this.manager.remove(true, 'Provided a malformed team packet.');
+        }
+
+        for (const socket of this.manager.server.sockets) {
+            if (socket.waitingForBattle) {
+                // Initiate battling
+            } else this.manager.waitingForBattle = true;
+        }
+    }
 };
+
 const OutgoingMessageHandler = class {
     constructor(manager) { this.manager = manager; }
 

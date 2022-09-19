@@ -15,7 +15,11 @@ const { WebSocketServer: Server } = require('ws'),
 const SocketManager = require('./handlers/SocketManager');
 
 const server = new Server({ port: 3000 });
+
+server.ticks = 0;
 server.sockets = new Set();
+server.battles = new Set();
+
 server.database = new DBManager(300000);
 
 server.on('listening', () => console.log('[WS] Running on PORT 3000.'));
@@ -32,3 +36,22 @@ server.on('connection', function(socket, request) {
 
     server.sockets.add(new SocketManager(server, socket, request));
 });
+
+setInterval(() => {
+    server.ticks++;
+
+    const socketsToBattle = [...server.sockets].filter(socket => socket.user && socket.waitingForBattle);
+    
+    if (socketsToBattle.length >= 2) {
+        for (let i = 0; i < socketsToBattle.length; i++) {
+            const players = [socketsToBattle[i], socketsToBattle[i + 1]];
+            if (!players[1]) break;
+            
+            // Initiate battling
+        }
+    }
+    
+    for (const socket of server.sockets) {
+        socket.tick(server.ticks);
+    }
+}, 1000 / 5); // 5 TPS

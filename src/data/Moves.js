@@ -1,5 +1,6 @@
 const Moves = {
-    Protect: {
+    0: {
+        name: 'Protect',
         type: 'Status',
         description: 'Protects the user from a hit. Cannot be used twice in a row.',
         power: null,
@@ -8,7 +9,8 @@ const Moves = {
             immunity: { rounds: 1 },
         }
     },
-    Decoy: {
+    1: {
+        name: 'Decoy',
         type: 'Status',
         description: 'Creates a decoy using 25% of the user\'s max HP. Fails if user\'s HP is not greater than 25%.',
         power: null,
@@ -23,7 +25,6 @@ const Moves = {
             },
         },
     },
-
 }
 
 if (globalThis.process) module.exports = Moves;

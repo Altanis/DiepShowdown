@@ -1,5 +1,6 @@
 const { IncomingMessageHandler, OutgoingMessageHandler } = require('./MessageHandler'),
-    { Incoming } = require('../enum/Payloads');
+    { Incoming } = require('../enum/Payloads'),
+    { Reader } = require('./BinaryCoder');
 
 module.exports = class SocketManager {
     constructor(server, socket, request) {
@@ -33,12 +34,15 @@ module.exports = class SocketManager {
             console.log(data);
 
             if (!Incoming[data[0]]) return this.remove(true, 'Invalid packet header was sent during connection.');
-            this.incomingMsgHandler[Incoming[data[0]]]?.(data.slice(1));
+            this.incomingMsgHandler[Incoming[data[0]]]?.(new Reader(data.slice(1)));
         });
     }
 
     remove(ban, reason) {
+        console.log(`Socket is being ${ban ? 'banned' : 'disconnected'} for: ${reason || 'an unspecified reason.'}.`);
         (ban && !this.local) ? this.socket.terminate(reason) : this.socket.close();
         this.server.sockets.delete(this.socket);
     }
+
+    tick(ticks) {} // idk what to put here yet
 }
