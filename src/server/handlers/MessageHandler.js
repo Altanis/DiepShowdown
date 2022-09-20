@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt'),
     { randomUUID } = require('node:crypto');
+const BattleManager = require('./BattleManager');
 
 const { Writer } = require('./BinaryCoder'),
     Tanks = require('../../data/Tanks'),
@@ -120,7 +121,10 @@ const IncomingMessageHandler = class {
 
         for (const socket of this.manager.server.sockets) {
             if (socket.waitingForBattle) {
-                // Initiate battling
+                this.manager.server.battles.add(new BattleManager(this.manager.server, this.manager, socket));
+                
+                (this.manager.waitingForBattle = socket.waitingForBattle = false, this.manager.battle = socket.battle = this.manager.server.battles.last);
+                (this.manager.outgoingMsgHandler.battle(socket), socket.outgoingMsgHandler.battle(this.manager));
             } else this.manager.waitingForBattle = true;
         }
     }

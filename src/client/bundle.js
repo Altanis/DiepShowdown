@@ -47,7 +47,8 @@
         const allTeams = document.getElementById('allTeams'),
             teamBuild = document.getElementById('teamBuild'),
             back = document.getElementById('back'), 
-            createTeam = document.getElementById('createTeam');
+            createTeam = document.getElementById('createTeam'),
+            addTank = document.getElementById('addTank');
 
     // -- FUNCTIONS -- //
     function accountAction(type, pressedEnter) {

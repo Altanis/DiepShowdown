@@ -12,7 +12,16 @@ mongoose.connect(process.env.MONGODB_URI)
 const { WebSocketServer: Server } = require('ws'),
     URL = require('node:url');
 
-const SocketManager = require('./handlers/SocketManager');
+const BattleManager = require('./handlers/BattleManager'),
+    SocketManager = require('./handlers/SocketManager');
+
+// Editing internal object, deal with it.
+Set = class extends Set {
+    add(value) {
+        super.add(value);
+        this.last = value;
+    }
+}
 
 const server = new Server({ port: 3000 });
 
@@ -47,7 +56,11 @@ setInterval(() => {
             const players = [socketsToBattle[i], socketsToBattle[i + 1]];
             if (!players[1]) break;
             
-            // Initiate battling
+            server.battles.add(new BattleManager(server, players[0], players[1]));
+            for (const player of players) {
+                player.waitingForBattle = false;
+                player.battle = server.battles.last;
+            }
         }
     }
     
