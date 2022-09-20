@@ -40,6 +40,7 @@ const IncomingMessageHandler = class {
                     password: bcrypt.hashSync(password, 10),
                     trainerID: randomUUID(),
                     hoursPlayed: 0,
+                    lastTick: 0,
                     joinedAt: new Date().toLocaleString('en-US', {
                         hour12: false,
                         year: 'numeric',
@@ -65,7 +66,7 @@ const IncomingMessageHandler = class {
                 const [oldPassword, newPassword] = password.split(' + ');
                 if (!bcrypt.compareSync(oldPassword, user.password)) return this.manager.outgoingMsgHandler.error('Could not change password: Old password is invalid.');
 
-                database.edit('Users', document => document.username === username, 'password', bcrypt.hashSync(newPassword, 10))
+                database.edit('Users', document => document.username === username, { password: bcrypt.hashSync(newPassword, 10) })
                     .then(() => this.manager.outgoingMsgHandler.accepted(user.trainerID, user.hoursPlayed, user.joinedAt, user.avatar, user.elo))
                     .catch(er => (console.error(er), this.manager.outgoingMsgHandler.error('Could not change password. Please try again later.')));
             }

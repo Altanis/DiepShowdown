@@ -48,7 +48,8 @@
             teamBuild = document.getElementById('teamBuild'),
             back = document.getElementById('back'), 
             createTeam = document.getElementById('createTeam'),
-            addTank = document.getElementById('addTank');
+            addTank = document.getElementById('addTank'),
+            allPokemon = document.getElementById('allPokemon');
 
     // -- FUNCTIONS -- //
     function accountAction(type, pressedEnter) {
@@ -93,9 +94,12 @@
     
     teamBuilder.onclick = () => (MainMenu.style.display = 'none', TeamBuilder.style.display = 'block');
     back.onclick = () => (MainMenu.style.display = 'block', TeamBuilder.style.display = 'none');
+
     createTeam.onclick = () => allTeams.style.display === 'block' ? 
-    (allTeams.style.display = 'none', teamBuild.style.display = 'block', createTeam.innerHTML = '<i class="material-icons">&#xe317;</i> Back') 
-    : (allTeams.style.display = 'block', teamBuild.style.display = 'none', createTeam.innerHTML = '<i class="material-icons">&#xe147;</i> New Team');
+    (allTeams.style.display = 'none', teamBuild.style.display = 'block', back.style.display = 'none', createTeam.innerHTML = '<i class="material-icons">&#xe317;</i> Back') 
+    : (allTeams.style.display = 'block', teamBuild.style.display = 'none', back.style.display = 'block', allPokemon.style.display = 'none', createTeam.innerHTML = '<i class="material-icons">&#xe147;</i> New Team');
+
+    addTank.onclick = () => (allPokemon.style.display = 'block', createTeam.style.display = 'block', addTank.innerHTML = '<i class="material-icons">&#xe147;</i> Add Tank');
 
     const socket = new WebSocket(SERVER_URL);
     socket.binaryType = 'arraybuffer';

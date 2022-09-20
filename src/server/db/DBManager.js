@@ -35,7 +35,7 @@ module.exports = class DBManager {
         });
     }
 
-    edit(type, filter, prop, value) {
+    edit(type, filter, object) {
         return new Promise(async (resolve) => {
             const cache = this.#cache[type];
             if (!cache) throw new Error(`[DB] Could not find type ${type}.`);
@@ -46,10 +46,13 @@ module.exports = class DBManager {
             if (type === 'Users') realDoc = await Users.findOne({ username: document.username }) 
             else if (type === 'Ban') realDoc = await Ban.findOne({ ip: document.ip });
     
-            realDoc[prop] = value, document[prop] = value;
+            for (const [prop, value] of Object.entries(object)) {
+                realDoc[prop] = value, document[prop] = value;
+            }
+
             realDoc.save()
                 .then(resolve)
-                .catch(err => console.error('Could not modify document:', err))
+                .catch(err => console.error('Could not modify document:', err));
         });
     }
 

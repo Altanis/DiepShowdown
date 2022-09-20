@@ -18,6 +18,7 @@ module.exports = class SocketManager {
         this.server = server, this.socket = socket, this.request = request;
 
         this.user = null;
+        this.ticks = 0;
         this.lastMessageSent = 0;
 
         if (!socket.ip || socket.ip === '::1') (this.local = true, console.log('Socket is connected to LOCALHOST. Bans will not be administered.'));
@@ -28,7 +29,18 @@ module.exports = class SocketManager {
     }
 
     _attachHandlers() {
-        this.socket.on('close', () => this.remove());
+        this.socket.on('close', () => {
+            this.remove();
+
+            // Update hours played
+            if (this.user) {
+                console.log(this.server);
+                this.server.database.edit('Users', document => document.id === this.user.id, { 
+                    hoursPlayed: Math.round(this.user.hoursPlayed + (this.ticks - this.user.lastTick) / 3600 * 5), // 5 ticks per second, 
+                    lastTick: this.ticks
+                });
+            }
+        });
 
         this.socket.on('message', (data) => {
             console.log(data);
@@ -44,5 +56,7 @@ module.exports = class SocketManager {
         this.server.sockets.delete(this.socket);
     }
 
-    tick(ticks) {} // idk what to put here yet
+    tick(ticks) {
+        this.ticks = ticks;
+    }
 }

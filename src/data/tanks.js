@@ -10,6 +10,11 @@
 *  - Speed: Speed
 */
 
+const Moves = {
+    Protect: 0,
+    Decoy: 1,
+}
+
 const Tanks = {
     0: {
         name: 'Tank',
@@ -26,10 +31,7 @@ const Tanks = {
             Reload: 1,
             Speed: 1
         },
-        moveset: [
-            "Protect",
-            "Decoy",
-        ]
+        moveset: [Moves.Protect, Moves.Decoy],
     }
 }
 

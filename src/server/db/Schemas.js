@@ -5,6 +5,7 @@ const Users = model('Users', new Schema({
     password: String, // hashed
     trainerID: String,
     hoursPlayed: Number,
+    lastTick: Number,
     joinedAt: String,
     avatar: String,
     elo: Number, // ranking based off wins/losses
