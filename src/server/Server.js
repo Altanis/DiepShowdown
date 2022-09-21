@@ -15,19 +15,18 @@ const { WebSocketServer: Server } = require('ws'),
 const BattleManager = require('./handlers/BattleManager'),
     SocketManager = require('./handlers/SocketManager');
 
-// Editing internal object, deal with it.
-Set = class extends Set {
+// Editing internal object, deal with it. (realized .last would be useless, so I removed it)
+/*Set = class extends Set {
     add(value) {
         super.add(value);
         this.last = value;
     }
-}
+}*/
 
 const server = new Server({ port: 3000 });
 
 server.ticks = 0;
 server.sockets = new Set();
-server.battles = new Set();
 
 server.database = new DBManager(300000);
 
@@ -55,12 +54,15 @@ setInterval(() => {
         for (let i = 0; i < socketsToBattle.length; i++) {
             const players = [socketsToBattle[i], socketsToBattle[i + 1]];
             if (!players[1]) break;
-            
-            server.battles.add(new BattleManager(server, players[0], players[1]));
-            for (const player of players) {
-                player.waitingForBattle = false;
-                player.battle = server.battles.last;
-            }
+
+            // [WARNING XD MOMENT XD WARNING WARRENING]: This is a very bad way of doing this, but it works for now.
+
+            players[0].waitingForBattle = players[1].waitingForBattle = false;
+            players[0].battle = new BattleManager(server, players[0], players[1]);
+            players[1].battle = new BattleManager(server, players[1], players[0]);
+
+            players[0].outgoingMsgHandler.battle(players[1]);
+            players[1].outgoingMsgHandler.battle(players[0]);
         }
     }
     

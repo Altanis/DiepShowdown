@@ -126,10 +126,13 @@ const IncomingMessageHandler = class {
 
         for (const socket of this.manager.server.sockets) {
             if (socket.waitingForBattle) {
-                this.manager.server.battles.add(new BattleManager(this.manager.server, this.manager, socket));
-                
-                (this.manager.waitingForBattle = socket.waitingForBattle = false, this.manager.battle = socket.battle = this.manager.server.battles.last);
-                (this.manager.outgoingMsgHandler.battle(socket), socket.outgoingMsgHandler.battle(this.manager));
+                this.manager.waitingForBattle = socket.waitingForBattle = false;
+                // [WARNING XD MOMENT XD WARNING WARRENING]: This is a very bad way of doing this, but it works for now.
+                this.manager.battle = new BattleManager(this.manager.server, this.manager, socket);
+                socket.battle = new BattleManager(this.manager.server, socket, this.manager);
+
+                this.manager.outgoingMsgHandler.battle(socket);
+                socket.outgoingMsgHandler.battle(this.manager);
             } else this.manager.waitingForBattle = true;
         }
     }
