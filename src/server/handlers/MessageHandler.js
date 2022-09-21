@@ -95,11 +95,12 @@ const IncomingMessageHandler = class {
     battle(buffer) {
         const team = {};
 
-        let teamSize = 6,
+        const teamSize = 6,
             moveSize = 4;
 
         while (teamSize--) {
             const tankID = buffer.i8();
+            if (tankID === 0) break;
             if (!Tanks[tankID]) return this.manager.remove(true, 'Provided an invalid Tank ID.');
 
             const abilityID = buffer.i8();
@@ -113,12 +114,15 @@ const IncomingMessageHandler = class {
 
             while (moveSize--) {
                 const moveID = buffer.i8();
+                if (moveID === 0) break;
                 if (!Moves[moveID] || !Tanks[tankID].moveset.includes(Moves[moveID].name)) return this.manager.remove(true, 'Provided an invalid Move ID.');
                 team[key].moveset.push(moveID);
             }
 
             if (buffer.i8() !== 0) return this.manager.remove(true, 'Provided a malformed team packet.');
         }
+
+        this.manager.team = team;
 
         for (const socket of this.manager.server.sockets) {
             if (socket.waitingForBattle) {
@@ -144,6 +148,21 @@ const OutgoingMessageHandler = class {
 
     chat(username, [r, g, b], message) {
         this.manager.socket.send(new Writer().i8(0x03).string(username).i8(r).i8(g).i8(b).string(message).out());
+    }
+
+    battle(socket) {
+        // Copilot literally auto made all this code v
+        const team = socket.team;
+        const buffer = new Writer().i8(0x04).i8(team.length);
+
+        for (const [key, value] of Object.entries(team)) {
+            const tankID = key.includes('+') ? key.split('+')[0] : key;
+            buffer.i8(tankID).i8(value.ability).i8(value.moveset.length);
+            for (const moveID of value.moveset) buffer.i8(moveID);
+            buffer.i8(0);
+        }
+
+        this.manager.socket.send(buffer.out());
     }
 };
 

@@ -11,12 +11,12 @@
 */
 
 const Moves = {
-    Protect: 0,
-    Decoy: 1,
+    Protect: 1,
+    Decoy: 2,
 }
 
 const Tanks = {
-    0: {
+    1: {
         name: 'Tank',
         tier: 1,
         types: ["Bullet"],
