@@ -147,7 +147,7 @@
                 trainerID.innerText = 'Trainer ID: ' + playerData.trainerID;
                 hoursPlayed.innerText = 'Hours Online: ' + playerData.hoursPlayed;
                 joinDate.innerText = 'Joined At: ' + playerData.joinDate;
-                playerAvatar.src = `img/avatars/${playerData.avatar}.png`;
+                playerAvatar.src = `img/assets/huge/blue/${playerData.avatar?.toLowerCase()}.png`;
                 elo.innerText = 'ELO: ' + playerData.elo;
 
                 playerAvatar.style.display = 'block';

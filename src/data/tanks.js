@@ -10,7 +10,7 @@
 *  - Speed: Speed
 */
 
-const Moves = {
+const MoveToID = {
     Protect: 0,
     Decoy: 1,
 }
@@ -31,7 +31,7 @@ const Tanks = {
             Reload: 1,
             Speed: 1
         },
-        moveset: [Moves.Protect, Moves.Decoy],
+        moveset: [MoveToID.Protect, MoveToID.Decoy],
     }
 }
 

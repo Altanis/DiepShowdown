@@ -33,7 +33,12 @@
 		}
 	</style>
 	
-  <script src="bincoder.js"></script>
+  	<script src="bincoder.js"></script>
+
+	<script src="../data/Tanks.js"></script>
+	<script src="../data/Moves.js"></script>
+	<script src="../data/Abilities.js"></script>
+
 	<link rel="stylesheet" href="style.css">
 	<link rel="icon" href="img/favicon.png">
 </head>
@@ -71,7 +76,7 @@
 				</form>
 			</div>
 			<div class="accountInfo" style="background: linear-gradient(to bottom,#edf2f8,#d7e3ec); border-radius: 20px; height: 40%;">
-				<img id="playerAvatar" src="img/avatars/Overlord.png" align="right" style="display: none;">
+				<img id="playerAvatar" src="img/avatars/Overlord.png" width="50%" height="50%" align="right" style="display: none; transform: rotate(45deg); object-fit: contain;">
 				<form>
 					<p style="text-align: center; font-size: 48px;">Trainer Card</p>
           			<p id="placeholder" style="text-align: center; font-style: italic;">Please log in to get your account data.</p>
@@ -100,8 +105,10 @@
 		<div id="teamBuild" style="display: none;">
 			<button type="button" id="addTank" class="miniButton"><i class="material-icons">&#xe147;</i> Add Tank</button>
 		</div>
-		<div id="allPokemon" style="display: none;">
-			<p>hi</p>
+		<div id="allPokemon" class="globalChat" style="display: none;">
+			<div id="pokemon">
+				<img src="img/assets"
+			</div>
 		</div>
 	<div id="overlay" class="overlay container">
 		<div id="modal" style="background-color: #FFFFFF; border-radius: 20px; height: 50%; width: 50%; z-index: 11;">
