@@ -88,6 +88,8 @@
         }
     });
 
+    localStorage.noOverlay && (document.getElementById('overlay').style.display = 'none');
+
     login.onclick = () => loggedIn ? (loggedIn = false, delete localStorage.username, delete localStorage.password, picker.style.display = 'block', login.innerText = 'Log In', socket.close()) : accountAction(0);
     register.onclick = () => accountAction(1);
     changePW.onclick = () => accountAction(2);
@@ -106,6 +108,7 @@
     socket.addEventListener('error', console.error);
     socket.addEventListener('close', () => {
         console.log('Socket closed prematurely.');
+        if (localStorage.noOverlay) return;
         document.getElementById('overlay').style.display = '';
         document.getElementById('modal').innerHTML = `
         <p style="color: red; font-size: 48px;">💀Disconnected💀</p>
@@ -165,6 +168,26 @@
 
                 globalChat.innerHTML += `<div class="padding: 5px;"><b style="color: rgba(${r}, ${g}, ${b});">${sanitizeHTML(username)}:</b> ${sanitizeHTML(content)}</div>`;
                 globalChat.scrollTop = globalChat.scrollHeight;
+                break;
+            }
+            case 0x04: {
+                const opponentTeam = {};
+
+                const teamLength = data.i8();
+                while (teamLength--) {
+                    const tankID = data.i8(),
+                        abilityID = data.i8(),
+                        movesetLength = data.i8(); 
+
+                    opponentTeam[tankID] = { ability: abilityID, moveset: [] };
+
+                    while (movesetLength--) {
+                        const moveID = data.i8();
+                        opponentTeam[tankID].moveset.push(moveID);
+                    }
+                }
+            
+                break;
             }
         }
     });

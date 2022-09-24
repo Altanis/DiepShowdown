@@ -1,5 +1,5 @@
 const Moves = {
-    0: {
+    1: {
         name: 'Protect',
         type: 'Status',
         description: 'Protects the user from a hit. Cannot be used twice in a row.',
@@ -9,7 +9,7 @@ const Moves = {
             immunity: { rounds: 1 },
         }
     },
-    1: {
+    2: {
         name: 'Decoy',
         type: 'Status',
         description: 'Creates a decoy using 25% of the user\'s max HP. Fails if user\'s HP is not greater than 25%.',

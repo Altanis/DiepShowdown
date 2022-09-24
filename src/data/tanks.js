@@ -10,13 +10,13 @@
 *  - Speed: Speed
 */
 
-const MoveToID = {
-    Protect: 0,
-    Decoy: 1,
+const Moves = {
+    Protect: 1,
+    Decoy: 2,
 }
 
 const Tanks = {
-    0: {
+    1: {
         name: 'Tank',
         tier: 1,
         types: ["Bullet"],
@@ -31,7 +31,7 @@ const Tanks = {
             Reload: 1,
             Speed: 1
         },
-        moveset: [MoveToID.Protect, MoveToID.Decoy],
+        moveset: [Moves.Protect, Moves.Decoy],
     }
 }
 

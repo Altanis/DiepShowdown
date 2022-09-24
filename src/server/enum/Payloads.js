@@ -9,5 +9,6 @@ module.exports = {
         0x01: 'accepted',
         0x02: 'error',
         0x03: 'chat',
+        0x04: 'battle'
     }
 }
