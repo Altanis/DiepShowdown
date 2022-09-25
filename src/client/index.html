@@ -35,7 +35,6 @@
 	
   	<script src="bincoder.js"></script>
 
-	<script src="../data/Tanks.js"></script>
 	<script src="../data/Moves.js"></script>
 	<script src="../data/Abilities.js"></script>
 
@@ -84,7 +83,7 @@
 					<p id="trainerID" class="trainerInfo"></p>
 					<p id="hoursPlayed" class="trainerInfo"></p>
 					<p id="joinDate" class="trainerInfo"></p>
-          <p id="elo" class="trainerInfo"></p>
+          			<p id="elo" class="trainerInfo"></p>
 				</form>
 			</div>
 		</div>
@@ -102,15 +101,22 @@
 		<div id="allTeams" style="display: block;">
 			<p>All teams:</p>
 		</div>
+
 		<div id="teamBuild" style="display: none;">
 			<button type="button" id="addTank" class="miniButton"><i class="material-icons">&#xe147;</i> Add Tank</button>
+			<div id="currentTanks">
+				<i>you have no tanks in your team git gud lol</i>
+			</div>
 		</div>
-		<div id="allPokemon" class="globalChat" style="display: none;">
-			<div id="pokemon">
-				<img src="img/assets"
+
+		<div id="allTanks" class="allTanks" style="display: none;">
+			<div id="tanks">
+				<img src="img/assets/tanks/small/blue/tank.png" align="left" style="position: absolute;">
+				<img src="img/assets/tanks/small/blue/annihilator.png" align="left" style="position: absolute;">
 			</div>
 		</div>
 	</div>
+
 	<div id="overlay" class="overlay container">
 		<div id="modal" style="background-color: #FFFFFF; border-radius: 20px; height: 50%; width: 50%; z-index: 11;">
 			<p style="color: black; font-size: 48px;">Connecting...</p>
@@ -118,5 +124,6 @@
 		</div>
 	</div>
 	<script src="bundle.js"></script>
+	<script src="../data/Tanks.js" defer></script> <!-- Low priority execution. Loads after every other script tag.-->
 </body>
 </html>

@@ -28,4 +28,4 @@ const Moves = {
 }
 
 if (globalThis.process) module.exports = Moves;
-else window.Tanks = Moves;
+else window.Moves = Moves;

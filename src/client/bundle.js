@@ -49,7 +49,8 @@
             back = document.getElementById('back'), 
             createTeam = document.getElementById('createTeam'),
             addTank = document.getElementById('addTank'),
-            allPokemon = document.getElementById('allPokemon');
+            currentTanks = document.getElementById('currentTanks'),
+            allTanks = document.getElementById('allTanks');
 
     // -- FUNCTIONS -- //
     function accountAction(type, pressedEnter) {
@@ -99,9 +100,9 @@
 
     createTeam.onclick = () => allTeams.style.display === 'block' ? 
     (allTeams.style.display = 'none', teamBuild.style.display = 'block', back.style.display = 'none', createTeam.innerHTML = '<i class="material-icons">&#xe317;</i> Back') 
-    : (allTeams.style.display = 'block', teamBuild.style.display = 'none', back.style.display = 'block', allPokemon.style.display = 'none', createTeam.innerHTML = '<i class="material-icons">&#xe147;</i> New Team');
+    : (allTeams.style.display = 'block', teamBuild.style.display = 'none', back.style.display = 'block', allTanks.style.display = 'none', createTeam.innerHTML = '<i class="material-icons">&#xe147;</i> New Team');
 
-    addTank.onclick = () => (allPokemon.style.display = 'block', createTeam.style.display = 'block', addTank.innerHTML = '<i class="material-icons">&#xe147;</i> Add Tank');
+    addTank.onclick = () => (allTanks.style.display = 'block', createTeam.style.display = 'block', currentTanks.style.display = 'none');
 
     const socket = new WebSocket(SERVER_URL);
     socket.binaryType = 'arraybuffer';

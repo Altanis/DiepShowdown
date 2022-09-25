@@ -10,17 +10,18 @@
 *  - Speed: Speed
 */
 
-const Moves = {
-    Protect: 1,
-    Decoy: 2,
-}
+const MoveEnum = {};
+const AbilityEnum = {};
+
+for (const [key, value] of Object.entries(window.Moves)) MoveEnum[value.name] = key;
+for (const [key, value] of Object.entries(window.Abilities)) AbilityEnum[value.name] = key;
 
 const Tanks = {
     1: {
         name: 'Tank',
         tier: 1,
         types: ["Bullet"],
-        ability: "N/A",
+        ability: AbilityEnum.None,
         stats: {
             HP: 100,
             Resistance: 0,
@@ -31,7 +32,7 @@ const Tanks = {
             Reload: 1,
             Speed: 1
         },
-        moveset: [Moves.Protect, Moves.Decoy],
+        moveset: [MoveEnum.Protect, MoveEnum.Decoy],
     }
 }
 

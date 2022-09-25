@@ -120,7 +120,6 @@ input:placeholder-shown {
 }
 
 .globalChat {
-    padding: 10%;
     border-radius: 20px;
     background: linear-gradient(to bottom,#edf2f8,#d7e3ec);
     opacity: 0.5;
@@ -131,6 +130,21 @@ input:placeholder-shown {
     flex-direction: column; 
     word-wrap: break-word;
     overflow: scroll;
+}
+
+.allTanks {
+    padding: 5px;
+    border-radius: 20px;
+    background: linear-gradient(to bottom,#edf2f8,#d7e3ec);
+    opacity: 0.5;
+    width: 100%;
+    height: max-content;
+    flex-direction: column; 
+    word-wrap: break-word;
+    overflow: scroll;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .trainerInfo {
