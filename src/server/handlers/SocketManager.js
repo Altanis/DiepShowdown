@@ -34,9 +34,9 @@ module.exports = class SocketManager {
 
             // Update hours played
             if (this.user) {
-                console.log(this.server);
+                console.log(this.user.hoursPlayed, (this.ticks + this.user.lastTick) / (3600 * 5));
                 this.server.database.edit('Users', document => document.id === this.user.id, { 
-                    hoursPlayed: Math.round(this.user.hoursPlayed + (this.ticks - this.user.lastTick) / 3600 * 5), // 5 ticks per second, 
+                    hoursPlayed: Math.round(this.user.hoursPlayed + (this.ticks + this.user.lastTick) / (3600 * 5)), // 5 ticks per second, 
                     lastTick: this.ticks
                 });
             }
