@@ -50,7 +50,29 @@
             createTeam = document.getElementById('createTeam'),
             addTank = document.getElementById('addTank'),
             currentTanks = document.getElementById('currentTanks'),
-            allTanks = document.getElementById('allTanks');
+            allTanks = document.getElementById('allTanks'),
+            tanks = document.getElementById('tanks');
+
+    // -- UPLOAD IMAGES -- //
+    for (const tank of Object.values(window.Tanks)) {
+        const { name } = tank; // More will be referenced as time comes.
+
+        const li = document.createElement('li');
+        li.classList.add('li');
+
+        const img = document.createElement('img');
+        img.src = `img/assets/tanks/${name}.png`;
+        img.classList.add('img-tiny');
+
+        const span = document.createElement('span');
+        span.classList.add('name');
+        span.textContent = name;
+
+        li.appendChild(img);
+        li.appendChild(span);
+
+        tanks.appendChild(li);
+    }
 
     // -- FUNCTIONS -- //
     function accountAction(type, pressedEnter) {
@@ -135,7 +157,7 @@
                     joinDate: data.string(),
                     avatar: data.string(),
                     elo: data.f32(),
-                } 
+                };
 
                 loggedIn = true;
 

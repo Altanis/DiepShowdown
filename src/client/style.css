@@ -137,7 +137,7 @@ input:placeholder-shown {
     max-height: 50px;
     height: max-content;
     list-style: none;
- }
+}
 
 .allTanks {
     padding: 5px;
@@ -153,6 +153,22 @@ input:placeholder-shown {
 .trainerInfo {
     font-size: 18px;
     padding-left: 10px;
+}
+
+.li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 10px;
+    padding-bottom: 20px;
+}
+
+.img-tiny {
+    flex-basis: 20px;
+}
+
+.name {
+    padding-left: 20px;
 }
 
 #battle {
