@@ -61,7 +61,7 @@
         li.classList.add('li');
 
         const img = document.createElement('img');
-        img.src = `img/assets/tanks/${name}.png`;
+        img.src = `img/assets/tanks/${name.toLowerCase()}.png`;
         img.classList.add('img-tiny');
 
         const span = document.createElement('span');
