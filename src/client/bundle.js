@@ -20,9 +20,7 @@
     
     // Main Menu:
         // Column 1
-        const teamSelector = document.getElementById('teamSelector'),
-            battle = document.getElementById('battle'),
-            teamBuilder = document.getElementById('teambuilder');
+        const teamBuilder = document.getElementById('teambuilder');
         // Column 2
         const username = document.getElementById('username'),
             password = document.getElementById('password'),
@@ -56,6 +54,8 @@
             tanks = document.getElementById('tanks'),
             tankBuild = document.getElementById('tankBuild');
 
+        const tankNickname = document.getElementById('tankNickname');
+
     // -- UPLOAD IMAGES -- //
     for (const tank of Object.values(window.Tanks)) {
         const { name } = tank; // More will be referenced as time comes.
@@ -76,7 +76,9 @@
         li.onclick = function() {
             tankBuild.style.display = 'block';
             chooseTank.style.display = 'none';
-        }
+
+            tankNickname.placeholder = name;
+        };
 
         tanks.appendChild(li);
     }
