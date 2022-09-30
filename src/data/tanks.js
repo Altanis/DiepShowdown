@@ -41,7 +41,10 @@ const Tanks = {
             Speed: 1
         },
         moveset: [MoveEnum.Protect, MoveEnum.Decoy],
-    }
+    },
+    2: { name: 'Y' },
+    3: { name: 'X' },
+    4: { name: 'TankWiiXiiO' },
 }
 
 globalThis.process ? module.exports = Tanks : window.Tanks = Tanks;

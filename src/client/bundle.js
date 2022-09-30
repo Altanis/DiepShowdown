@@ -46,12 +46,15 @@
     // Team Builder:
         const allTeams = document.getElementById('allTeams'),
             teamBuild = document.getElementById('teamBuild'),
-            back = document.getElementById('back'), 
+            allTeamsBack = document.getElementById('allTeamsBack'), 
+            teamBuildBack = document.getElementById('teamBuildBack'),
+            chooseTankBack = document.getElementById('chooseTankBack'),
+            tankBuildBack = document.getElementById('tankBuildBack'),
             createTeam = document.getElementById('createTeam'),
             addTank = document.getElementById('addTank'),
-            currentTanks = document.getElementById('currentTanks'),
-            allTanks = document.getElementById('allTanks'),
-            tanks = document.getElementById('tanks');
+            chooseTank = document.getElementById('chooseTank'),
+            tanks = document.getElementById('tanks'),
+            tankBuild = document.getElementById('tankBuild');
 
     // -- UPLOAD IMAGES -- //
     for (const tank of Object.values(window.Tanks)) {
@@ -70,6 +73,10 @@
 
         li.appendChild(img);
         li.appendChild(span);
+        li.onclick = function() {
+            tankBuild.style.display = 'block';
+            chooseTank.style.display = 'none';
+        }
 
         tanks.appendChild(li);
     }
@@ -86,9 +93,8 @@
             .string(localStorage.username)
             .string(`${localStorage.password}${type === 2 && changePassword.value ? ` + ${changePassword.value}` : ''}`)
             .i8(type);
-        if (type === 1) {
-            colorPicker.value.slice(1).split(/(?<=^(?:.{2})+)(?!$)/).forEach(hex => packet.i8(parseInt(hex, 16)));
-        }
+
+        if (type === 1) colorPicker.value.slice(1).split(/(?<=^(?:.{2})+)(?!$)/).forEach(hex => packet.i8(parseInt(hex, 16)));
 
         (localStorage.username && localStorage.password)
             && socket.send(packet.out());
@@ -115,17 +121,17 @@
 
     login.onclick = () => loggedIn ? (loggedIn = false, delete localStorage.username, delete localStorage.password, picker.style.display = 'block', login.innerText = 'Log In', socket.close()) : accountAction(0);
     register.onclick = () => accountAction(1);
-    changePW.onclick = () => accountAction(2);
-    
+    changePW.onclick = () => accountAction(2);    
     teamBuilder.onclick = () => (MainMenu.style.display = 'none', TeamBuilder.style.display = 'block');
-    back.onclick = () => (MainMenu.style.display = 'block', TeamBuilder.style.display = 'none');
+    createTeam.onclick = () => (allTeams.style.display = 'none', teamBuild.style.display = 'block');
+    addTank.onclick = () => (chooseTank.style.display = 'block', teamBuild.style.display = 'none');
+    
+    allTeamsBack.onclick = () => (MainMenu.style.display = 'block', TeamBuilder.style.display = 'none');
+    teamBuildBack.onclick = () => (allTeams.style.display = 'block', teamBuild.style.display = 'none');
+    chooseTankBack.onclick = () => (chooseTank.style.display = 'none', teamBuild.style.display = 'block');
+    tankBuildBack.onclick = () => (chooseTank.style.display = 'block', tankBuild.style.display = 'none');
 
-    createTeam.onclick = () => allTeams.style.display === 'block' ? 
-    (allTeams.style.display = 'none', teamBuild.style.display = 'block', back.style.display = 'none', createTeam.innerHTML = '<i class="material-icons">&#xe317;</i> Back') 
-    : (allTeams.style.display = 'block', teamBuild.style.display = 'none', back.style.display = 'block', allTanks.style.display = 'none', createTeam.innerHTML = '<i class="material-icons">&#xe147;</i> New Team');
-
-    addTank.onclick = () => (allTanks.style.display = 'block', createTeam.style.display = 'block', currentTanks.style.display = 'none');
-
+    // -- SOCKET -- //
     const socket = new WebSocket(SERVER_URL);
     socket.binaryType = 'arraybuffer';
     socket.addEventListener('error', console.error);

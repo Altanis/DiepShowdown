@@ -96,21 +96,30 @@
 		</div>
 	</div>
 	<div id="teamBuilder" class="container" style="display: none;">
-		<button type="button" id="back" class="miniButton"><i class="material-icons">&#xe317;</i> Back</button>
-		<button type="button" id="createTeam" class="miniButton"><i class="material-icons">&#xe147;</i> New Team</button>
-		<div id="allTeams" style="display: block;">
+		<div id="allTeams">
+			<button type="button" id="allTeamsBack" class="miniButton"><i class="material-icons">&#xe317;</i> Back</button>
+			<button type="button" id="createTeam" class="miniButton"><i class="material-icons">&#xe147;</i> New Team</button>
 			<p>All teams:</p>
 		</div>
 
 		<div id="teamBuild" style="display: none;">
+			<button type="button" id="teamBuildBack" class="miniButton"><i class="material-icons">&#xe317;</i> Back</button>
 			<button type="button" id="addTank" class="miniButton"><i class="material-icons">&#xe147;</i> Add Tank</button>
 			<div id="currentTanks">
 				<i>you have no tanks in your team git gud lol</i>
 			</div>
 		</div>
 
-		<div id="allTanks" class="allTanks" style="display: none;">
-			<ul id="tanks"></ul>
+		<div id="chooseTank" style="display: none;">
+			<button type="button" id="chooseTankBack" class="miniButton"><i class="material-icons">&#xe317;</i> Back</button><br>
+			<div class="allTanks" id="allTanks">
+				<ul id="tanks" style="display: inline-block;"></ul>
+			</div>
+		</div>
+
+		<div id="tankBuild" style="display: none;">
+			<button type="button" id="tankBuildBack" class="miniButton"><i class="material-icons">&#xe317;</i> Back</button>
+			<div id="tankInfo" class="allTanks" style="display: inline-block; width: 100%;">
 			</div>
 		</div>
 	</div>
@@ -120,6 +129,7 @@
 			<p style="color: black; font-size: 24px;">Please wait as we connect to our servers...</p>
 		</div>
 	</div>
+	
 	<script src="../data/Tanks.js" defer></script> <!-- Low priority execution. Loads after every other script tag.-->
 	<script src="bundle.js" defer></script>
 </body>

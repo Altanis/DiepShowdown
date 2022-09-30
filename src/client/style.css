@@ -156,7 +156,7 @@ input:placeholder-shown {
 }
 
 .li {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     padding-left: 10px;
