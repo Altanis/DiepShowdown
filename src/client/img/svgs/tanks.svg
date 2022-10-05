@@ -1,0 +1,649 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This work is licensed under a Creative Commons Attribution 4.0 International License.
+http://creativecommons.org/licenses/by/4.0/
+by www.spade-squad.com
+-->
+<svg version="1.1" id="diep-io_tanks" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"	xml:space="preserve" x="0px" y="0px" viewBox="0 0 256 256" preserveAspectRatio="xMidYMid meet">
+<title>diep.io Tank Sprites</title>
+<defs>
+	<style>
+	    .sprite {
+	      	display: none;
+	    }
+	    <!-- Reveals entities with a matching fragment identifier -->
+	    .sprite:target {
+	      	display: inline;
+	    }		
+		.tank {
+			stroke-width: 7.5;
+			stroke-linecap: round;
+			stroke-linejoin: round;
+			stroke-miterlimit: 10;
+		}
+		.tank-weapon {
+			fill: #999999;
+			stroke: #727272;
+		}
+		.tank-body {
+			fill: #00B2E1;
+			stroke: #0085A8;
+		}
+		<!-- Outer body used by smasher, landmine, auto smasher, spike -->
+		.tank-hull {
+			fill :#555555;
+			stroke: #3f3f3f;
+		}
+ 	</style>
+ 	<!-- Body used by most tanks -->
+	<g id="body-circ">
+		<title>Circular Tank Body</title>
+		<circle cx="128" cy="128" r="50"/>
+	</g>
+	<!-- Body used by factroy and necromancer -->
+	<g id="body-rect">
+		<title>Rectangular Tank Body</title>
+		<rect x="82" y="82" width="92" height="92"/>
+	</g>
+	<!-- Hull used by smasher, landmine, auto smasher -->
+	<g id="hull-hexa">
+		<title>Hexagonal Tank Hull</title>
+		<polygon points="178,157 128,186 78,157 78,99 128,70 178,99"/>
+	</g>
+	<!-- Hull used by spike -->
+	<g id="hull-tria">
+		<title>Triangular Tank Hull</title>
+		<polygon points="72,160 128,63 184,160"/>
+	</g>
+	<!-- Barrels used by most tanks-->
+	<g id="barr-norm-w68">
+		<title>Normal Barrel Type 68x42</title>
+		<rect x="128" y="107" width="68" height="42"/>
+	</g>
+	<g id="barr-norm-w80">
+		<title>Normal Barrel Type 80x42</title>
+		<rect x="128" y="107" width="80" height="42"/>
+	</g>
+	<g id="barr-norm-w90">
+		<title>Normal Barrel Type 90x42</title>
+		<rect x="128" y="107" width="90" height="42"/>
+	</g>
+	<g id="barr-norm-w94">
+		<title>Normal Barrel Type 94x42</title>
+		<rect x="128" y="107" width="94" height="42"/>
+	</g>
+	<g id="barr-norm-w100">
+		<title>Normal Barrel Type 100x42</title>
+		<rect x="128" y="107" width="90" height="42"/>
+	</g>
+	<g id="barr-norm-w110">
+		<title>Normal Barrel Type 110x42</title>
+		<rect x="128" y="107" width="110" height="42"/>
+	</g>
+	<g id="barr-norm-w120">
+		<title>Normal Barrel Type 120x42</title>
+		<rect x="128" y="107" width="120" height="42"/>
+	</g>
+	<!-- Gunner barrels used by gunner and auto gunner -->
+	<g id="barr-gunn">
+		<title>Gunner Barrels</title>
+		<rect x="128" y="148" width="64" height="25"/>
+		<rect x="128" y="133" width="84" height="25"/>
+		<rect x="128" y="83" width="64" height="25"/>
+		<rect x="128" y="98" width="84" height="25"/>
+	</g>
+	<!-- Gunner trapper barrel used by gunner trapper -->
+	<g id="barr-gutr">
+		<title>Gunner Trapper Barrels</title>
+		<rect x="128" y="102" width="74" height="21"/>
+		<rect x="128" y="133" width="74" height="21"/>
+	</g>
+	<!-- Turret used by tanks with auto guns -->
+	<g id="turret">
+		<title>Auto Turret</title>
+		<rect x="128" y="114" width="54" height="28"/>
+		<circle cx="128" cy="128" r="25"/>
+	</g>
+	<!-- Launchers used by tanks launching traps -->
+	<g id="laun-s">
+		<title>Small Launcher</title>
+		<polygon points="188,107 208,91 208,165 188,149"/>
+		<rect x="128" y="107" width="60" height="42"/>
+	</g>
+	<g id="laun-m">
+		<title>Medium Launcher</title>
+		<polygon points="68,155 68,101 42,81 42,175"/>
+		<rect x="68" y="101" width="60" height="54"/>
+	</g>
+	<g id="laun-xl">
+		<title>Mega Launcher</title>
+		<polygon points="188,156 188,100 214,80 214,176"/>
+		<rect x="128" y="100" width="60" height="56"/>
+	</g>
+	<!-- Spawner used by tanks spawning drones -->
+	<g id="spaw-norm">
+		<title>Normal Spawner</title>
+		<polygon points="198,91 128,107 128,149 198,165"/>
+	</g>
+	<!-- Batttleship spawner used by battleship -->
+	<g id="spaw-bs">
+		<title>Battleship Spawner</title>
+		<polygon points="102,128 113,202 143,202 154,128"/>
+	</g>
+	<!-- Deployer used by skimmer and rocketeer -->
+	<g id="barr-depl">
+		<title>Deployer</title>
+		<polygon points="220,99 128,111 128,145 220,157"/>
+	</g>
+	<!-- Destroyer barrel used by destroyer and hybrid -->
+	<g id="barr-dest">
+		<title>Destroyer Barrel</title>
+		<rect x="128" y="93" width="94" height="70"/>
+	</g>
+	<!-- Machine Gun barrel used by machine gun and sprayer -->
+	<g id="barr-mg">
+		<title>Machine Gun Barrel</title>
+		<polygon points="222,164 222,92 128,108 128,148"/>
+	</g>	
+	<!-- Rocketeer barrel used by rocketeer -->
+	<g id="barr-rock">
+		<title>Rocketeer Barrel</title>
+		<polygon points="208,154 208,102 128,82 128,174"/>
+	</g>
+	<!-- Hunter barrel used by hunter and predator -->
+	<g id="barr-hunt">
+		<title>Hunter Barrel</title>
+		<rect x="128" y="100" width="94" height="56"/>
+	</g>
+	<!-- Unique barrels -->
+	<!-- Annihilator barrel used by annihilator -->
+	<g id="barr-anni">
+		<title>Annihilator Barrel</title>
+		<rect x="128" y="80" width="94" height="96"/>
+	</g>
+	<!-- Predator barrel used by predator -->
+	<g id="barr-pred">
+		<title>Predator Barrel</title>
+		<rect x="128" y="92" width="80" height="72"/>
+	</g>
+	<!-- Sprayer barrel-s used by sprayer -->
+	<g id="barr-spra">
+		<title>Sprayer Small Barrel</title>
+		<rect x="128" y="108" width="110" height="40"/>
+	</g>
+	<!-- Stalker barrel used by stalker -->
+	<g id="barr-stal">
+		<title>Stalker Barrel</title>
+		<polygon points="248,149 248,107 128,91 128,165"/>
+	</g>
+	<!-- Ranger barrel used by ranger -->
+	<g id="barr-rang">
+		<title>Ranger Barrel</title>
+		<polygon points="193,107 143,91 143,165 193,149"/>
+	</g>
+	<!-- Spread shot barrels used by spread shot -->
+	<g id="barr-spre-w88">
+		<title>Spread Shot Barrel Type 88x28</title>
+		<rect x="128" y="114" width="88" height="28"/>
+	</g>
+	<g id="barr-spre-w82">
+		<title>Spread Shot Barrel Type 82x28</title>
+		<rect x="128" y="114" width="82" height="28"/>
+	</g>
+	<g id="barr-spre-w76">
+		<title>Spread Shot Barrel Type 76x28</title>
+		<rect x="128" y="114" width="76" height="28"/>
+	</g>
+	<g id="barr-spre-w70">
+		<title>Spread Shot Barrel Type 70x28</title>
+		<rect x="128" y="114" width="70" height="28"/>
+	</g>
+	<g id="barr-spre-w64">
+		<title>Spread Shot Barrel Type 64x28</title>
+		<rect x="128" y="114" width="64" height="28"/>
+	</g>
+</defs>
+	<g id="basic_tank" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#barr-norm-w94"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+
+	<g id="quad_tank" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#barr-norm-w94" transform="rotate(270, 128, 128)"/>
+			<use xlink:href="#barr-norm-w94" transform="rotate(180, 128, 128)"/>
+			<use xlink:href="#barr-norm-w94" transform="rotate( 90, 128, 128)"/>
+			<use xlink:href="#barr-norm-w94"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+
+	<g id="flank_guard" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#barr-norm-w80" transform="rotate(180, 128, 128)"/>
+			<use xlink:href="#barr-norm-w94"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+
+	<g id="assasin" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#barr-norm-w120"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="sniper" class="sprite tank">
+		<g class="tank-weapon">	
+			<use xlink:href="#barr-norm-w110"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="tri-angle" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#barr-norm-w80" transform="rotate(-150, 128, 128)"/>
+			<use xlink:href="#barr-norm-w80" transform="rotate( 150, 128, 128)"/>
+			<use xlink:href="#barr-norm-w94"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="twin" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#barr-norm-w94" transform="translate(0, -26)"/>
+			<use xlink:href="#barr-norm-w94" transform="translate(0,  26)"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="triplet" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#barr-norm-w80" transform="translate(0, -26)"/>
+			<use xlink:href="#barr-norm-w80" transform="translate(0,  26)"/>
+			<use xlink:href="#barr-norm-w94"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="twin_flank" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#barr-norm-w94" transform="translate(0, -26) rotate(-180, 128, 128)"/>
+			<use xlink:href="#barr-norm-w94" transform="translate(0,  26) rotate( 180, 128, 128)"/>
+			<use xlink:href="#barr-norm-w94" transform="translate(0, -26)"/>
+			<use xlink:href="#barr-norm-w94" transform="translate(0,  26)"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="triple_shot" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#barr-norm-w94" transform="rotate(-45, 128, 128)"/>
+			<use xlink:href="#barr-norm-w94" transform="rotate( 45, 128, 128)"/>
+			<use xlink:href="#barr-norm-w94"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="octo_tank" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#barr-norm-w94" transform="rotate(315, 128, 128)"/>
+			<use xlink:href="#barr-norm-w94" transform="rotate(225, 128, 128)"/>
+			<use xlink:href="#barr-norm-w94" transform="rotate(135, 128, 128)"/>
+			<use xlink:href="#barr-norm-w94" transform="rotate( 45, 128, 128)"/>
+			<use xlink:href="#barr-norm-w94" transform="rotate(270, 128, 128)"/>
+			<use xlink:href="#barr-norm-w94" transform="rotate(180, 128, 128)"/>
+			<use xlink:href="#barr-norm-w94" transform="rotate( 90, 128, 128)"/>
+			<use xlink:href="#barr-norm-w94"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="penta_shot" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#barr-norm-w80" transform="rotate(-45,   128, 128)"/>
+			<use xlink:href="#barr-norm-w80" transform="rotate( 45,   128, 128)"/>
+			<use xlink:href="#barr-norm-w94" transform="rotate(-22.5, 128, 128)"/>
+			<use xlink:href="#barr-norm-w94" transform="rotate( 22.5, 128, 128)"/>
+			<use xlink:href="#barr-norm-w110"/>
+		</g>
+	<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="fighter" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#barr-norm-w80" transform="rotate(-150, 128, 128)"/>
+			<use xlink:href="#barr-norm-w80" transform="rotate( -90, 128, 128)"/>
+			<use xlink:href="#barr-norm-w80" transform="rotate( 150, 128, 128)"/>
+			<use xlink:href="#barr-norm-w80" transform="rotate(  90, 128, 128)"/>
+			<use xlink:href="#barr-norm-w94"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="booster" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#barr-norm-w68" transform="rotate(-135, 128, 128)"/>
+			<use xlink:href="#barr-norm-w80" transform="rotate(-150, 128, 128)"/>
+			<use xlink:href="#barr-norm-w68" transform="rotate( 135, 128, 128)"/>
+			<use xlink:href="#barr-norm-w80" transform="rotate( 150, 128, 128)"/>
+			<use xlink:href="#barr-norm-w94"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="annihilator" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#barr-anni"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="destroyer" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#barr-dest"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="machine_gun" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#barr-mg"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="sprayer" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#barr-spra"/>
+			<use xlink:href="#barr-mg"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="predator" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#barr-norm-w110"/>
+			<use xlink:href="#barr-hunt"/>
+			<use xlink:href="#barr-pred"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="stalker" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#barr-stal"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="skimmer" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#barr-depl"/>
+			<use xlink:href="#barr-pred"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="skimmer_v2" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#barr-depl"/>
+			<use xlink:href="#barr-pred"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="rocketeer" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#barr-depl"/>
+			<use xlink:href="#barr-rock"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="battleship" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#spaw-bs" transform="translate(-20) rotate(180, 128, 128)"/>
+			<use xlink:href="#spaw-bs" transform="translate( 20) rotate(180, 128, 128)"/>
+			<use xlink:href="#spaw-bs" transform="translate(-20)"/>
+			<use xlink:href="#spaw-bs" transform="translate( 20)"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="streamliner" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#barr-norm-w110"/>
+			<use xlink:href="#barr-norm-w100"/>
+			<use xlink:href="#barr-norm-w90"/>
+			<use xlink:href="#barr-norm-w80"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="triple_twin" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#barr-norm-w94" transform="translate(0, -26)"/>
+			<use xlink:href="#barr-norm-w94" transform="translate(0,  26)"/>
+			<use xlink:href="#barr-norm-w94" transform="rotate(-240, 128, 128) translate(0, -26) "/>
+			<use xlink:href="#barr-norm-w94" transform="rotate(-240, 128, 128) translate(0,  26)"/>
+			<use xlink:href="#barr-norm-w94" transform="rotate( 240, 128, 128) translate(0, -26) "/>
+			<use xlink:href="#barr-norm-w94" transform="rotate( 240, 128, 128) translate(0,  26)"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="ranger" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#barr-norm-w120"/>
+			<use xlink:href="#barr-rang"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="smasher" class="sprite tank">
+		<use class="tank-hull" xlink:href="#hull-hexa">
+			<!-- Use Comment switch to enable animation -> 
+			<animateTransform 
+				repeatCount="indefinite"
+				attributeName="transform" type="rotate" 
+				from="0 128 128" to="360 128 128" begin="0" dur="3s"/> 
+			-->
+		</use>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="landmine" class="sprite tank">
+		<use class="tank-hull" xlink:href="#hull-hexa">
+			<!-- Use Comment switch enable animation ->
+			<animateTransform 
+				repeatCount="indefinite"
+				attributeName="transform" type="rotate" 
+				from="0 128 128" to="360 128 128" begin="0" dur="8s"/>
+			-->
+		</use>
+		<use class="tank-hull" xlink:href="#hull-hexa" transform="rotate(30, 128, 128)">
+			<!-- Use Comment switch enable animation ->
+			<animateTransform 
+				repeatCount="indefinite"
+				attributeName="transform" type="rotate" 
+				from="360 128 128" to="0 128 128" begin="0" dur="8s"/>
+			-->
+		</use>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="spike" class="sprite tank">
+		<g class="tank-hull">
+			<use xlink:href="#hull-tria" transform="rotate(90, 128, 128)"/>
+			<use xlink:href="#hull-tria" transform="rotate(60, 128, 128)"/>
+			<use xlink:href="#hull-tria" transform="rotate(30, 128, 128)"/>
+			<use xlink:href="#hull-tria" transform="rotate( 0, 128, 128)"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="overlord" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#spaw-norm" transform="rotate(270, 128, 128)"/>
+			<use xlink:href="#spaw-norm" transform="rotate(180, 128, 128)"/>
+			<use xlink:href="#spaw-norm" transform="rotate( 90, 128, 128)"/>
+			<use xlink:href="#spaw-norm"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="overseer" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#spaw-norm" transform="rotate(-90, 128, 128)"/>
+			<use xlink:href="#spaw-norm" transform="rotate( 90, 128, 128)"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="necromancer" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#spaw-norm" transform="rotate(-90, 128, 128)"/>
+			<use xlink:href="#spaw-norm" transform="rotate( 90, 128, 128)"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-rect"/>
+	</g>
+	<g id="trapper" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#laun-s"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="overtrapper" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#spaw-norm" transform="rotate(-120, 128, 128)"/>
+			<use xlink:href="#spaw-norm" transform="rotate( 120, 128, 128)"/>
+			<use xlink:href="#laun-s"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="tri-trapper" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#laun-s" transform="rotate(-120, 128, 128)"/>
+			<use xlink:href="#laun-s" transform="rotate( 120, 128, 128)"/>
+			<use xlink:href="#laun-s"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="mega_trapper" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#laun-xl"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="gunner_trapper" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#laun-m"/>
+			<use xlink:href="#barr-gutr"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="auto_gunner" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#barr-gunn"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+		<g class="tank-weapon">
+			<use xlink:href="#turret">
+				<!-- Use Comment switch enable animation ->
+				<animateTransform 
+				    repeatCount="indefinite"
+				    attributeName="transform" type="rotate"
+				    from="0 128 128" to="360 128 128" begin="0" dur="25s"/>
+				-->
+			</use>
+		</g>
+	</g>
+	<g id="gunner" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#barr-gunn"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="auto_trapper" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#laun-s"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+		<g class="tank-weapon">
+			<use xlink:href="#turret"/>
+			<!-- Use Comment switch enable animation ->
+			<animateTransform 
+			    repeatCount="indefinite"
+			    attributeName="transform" type="rotate"
+			    from="0 128 128" to="360 128 128" begin="0" dur="25s"/>
+			-->
+		</g>
+	</g>
+	<g id="auto_smasher" class="sprite tank">
+		<use class="tank-hull" xlink:href="#hull-hexa">
+			<!-- Use Comment switch enable animation ->
+			<animateTransform 
+				repeatCount="indefinite"
+				attributeName="transform" type="rotate" 
+				from="0 128 128" to="360 128 128" begin="0" dur="3s"/>
+			-->
+		</use>
+		<use class="tank-body" xlink:href="#body-circ"/>
+		<g class="tank-weapon">
+			<use xlink:href="#turret">
+				<!-- Use Comment switch enable animation ->
+				<animateTransform 
+				    repeatCount="indefinite"
+				    attributeName="transform" type="rotate"
+				    from="0 128 128" to="360 128 128" begin="0" dur="25s"/>
+				-->
+			</use>
+		</g>
+	</g>
+	<g id="hunter" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#barr-norm-w110"/>
+			<use xlink:href="#barr-hunt"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="spread_shot" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#barr-spre-w64" transform="rotate(-75, 128, 128)"/>
+			<use xlink:href="#barr-spre-w64" transform="rotate( 75, 128, 128)"/>
+			<use xlink:href="#barr-spre-w70" transform="rotate(-60, 128, 128)"/>
+			<use xlink:href="#barr-spre-w70" transform="rotate( 60, 128, 128)"/>
+			<use xlink:href="#barr-spre-w76" transform="rotate(-45, 128, 128)"/>
+			<use xlink:href="#barr-spre-w76" transform="rotate( 45, 128, 128)"/>
+			<use xlink:href="#barr-spre-w82" transform="rotate(-30, 128, 128)"/>
+			<use xlink:href="#barr-spre-w82" transform="rotate( 30, 128, 128)"/>
+			<use xlink:href="#barr-spre-w88" transform="rotate(-15, 128, 128)"/>
+			<use xlink:href="#barr-spre-w88" transform="rotate( 15, 128, 128)"/>
+			<use xlink:href="#barr-norm-w94"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="factory" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#spaw-norm"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-rect"/>
+	</g>
+	<g id="manager" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#spaw-norm"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="hybrid" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#spaw-norm" transform="rotate(180, 128, 128)"/>
+			<use xlink:href="#barr-dest"/>
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="auto_3" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#turret" transform="rotate(270, 128, 128) translate(39)"/>
+			<use xlink:href="#turret" transform="rotate(150, 128, 128) translate(39)"/>
+			<use xlink:href="#turret" transform="rotate( 30, 128, 128) translate(39)"/>
+			<!-- Use Comment switch enable animation ->
+			<animateTransform 
+				    repeatCount="indefinite"
+				    attributeName="transform" type="rotate"
+				    from="0 128 128" to="360 128 128" begin="0" dur="25s" />
+			-->
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+	<g id="auto_5" class="sprite tank">
+		<g class="tank-weapon">
+			<use xlink:href="#turret" transform="rotate(342, 128, 128) translate(39)"/>
+			<use xlink:href="#turret" transform="rotate(270, 128, 128) translate(39)"/>
+			<use xlink:href="#turret" transform="rotate(198, 128, 128) translate(39)"/>
+			<use xlink:href="#turret" transform="rotate(126, 128, 128) translate(39)"/>
+			<use xlink:href="#turret" transform="rotate( 54, 128, 128) translate(39)"/>
+			<!-- Use Comment switch enable animation ->
+			<animateTransform 
+				    repeatCount="indefinite"
+				    attributeName="transform" type="rotate"
+				    from="0 128 128" to="360 128 128" begin="0" dur="25s"/>
+			-->
+		</g>
+		<use class="tank-body" xlink:href="#body-circ"/>
+	</g>
+</svg>

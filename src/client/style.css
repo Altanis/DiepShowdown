@@ -150,6 +150,16 @@ input:placeholder-shown {
     overflow: scroll;
 }
 
+.tankInfo {
+    padding: 5px;
+    border-radius: 20px;
+    background: linear-gradient(to bottom,#edf2f8,#d7e3ec);
+    opacity: 0.5;
+    width: 100%;
+    height: 80%;
+    overflow: scroll;
+}
+
 .trainerInfo {
     font-size: 18px;
     padding-left: 10px;
@@ -163,10 +173,6 @@ input:placeholder-shown {
     padding-bottom: 20px;
 }
 
-.img-tiny {
-    flex-basis: 20px;
-}
-
 .name {
     padding-left: 20px;
 }
@@ -176,3 +182,7 @@ input:placeholder-shown {
     border-color: hsl(260.4651162790697,59.44700460829492%,40%);
     color: white;
 }
+
+/*
+.tank-annihilator{width:34px;height:34px;background:url(tanks.png) 0 0}.tank-rocketeer{width:34px;height:34px;background:url(tanks.png) -34px 0}.tank-machinegun{width:34px;height:34px;background:url(tanks.png) 0 -34px}.tank-tritrapper{width:34px;height:34px;background:url(tanks.png) -34px -34px}.tank-gunnertrapper{width:34px;height:34px;background:url(tanks.png) -68px 0}.tank-autosmasher{width:34px;height:34px;background:url(tanks.png) -68px -34px}.tank-spike{width:34px;height:34px;background:url(tanks.png) 0 -68px}.tank-factory{width:34px;height:34px;background:url(tanks.png) -34px -68px}.tank-skimmer{width:34px;height:34px;background:url(tanks.png) -68px -68px}.tank-skimmerold{width:34px;height:34px;background:url(tanks.png) -68px -68px}.tank-overtrapper{width:34px;height:34px;background:url(tanks.png) -102px 0}.tank-gunner{width:34px;height:34px;background:url(tanks.png) -102px -34px}.tank-necromancer{width:34px;height:34px;background:url(tanks.png) -102px -68px}.tank-destroyer{width:34px;height:34px;background:url(tanks.png) 0 -102px}.tank-flankguard{width:34px;height:34px;background:url(tanks.png) -34px -102px}.tank-fighter{width:34px;height:34px;background:url(tanks.png) -68px -102px}.tank-octotank{width:34px;height:34px;background:url(tanks.png) -102px -102px}.tank-quadtank{width:34px;height:34px;background:url(tanks.png) -136px 0}.tank-triangle{width:34px;height:34px;background:url(tanks.png) -136px -34px}.tank-battleship{width:34px;height:34px;background:url(tanks.png) -136px -68px}.tank-spreadshot{width:34px;height:34px;background:url(tanks.png) -136px -102px}.tank-spreadshotold{width:34px;height:34px;background:url(tanks.png) -136px -102px}.tank-smasher{width:34px;height:34px;background:url(tanks.png) 0 -136px}.tank-autotrapper{width:34px;height:34px;background:url(tanks.png) -34px -136px}.tank-streamliner{width:34px;height:34px;background:url(tanks.png) -68px -136px}.tank-landmine{width:34px;height:34px;background:url(tanks.png) -102px -136px}.tank-auto5{width:34px;height:34px;background:url(tanks.png) -136px -136px}.tank-auto3{width:34px;height:34px;background:url(tanks.png) -170px 0}.tank-autogunner{width:34px;height:34px;background:url(tanks.png) -170px -34px}.tank-overseer{width:34px;height:34px;background:url(tanks.png) -170px -68px}.tank-hybrid{width:34px;height:34px;background:url(tanks.png) -170px -102px}.tank-tripletwin{width:34px;height:34px;background:url(tanks.png) -170px -136px}.tank-booster{width:34px;height:34px;background:url(tanks.png) 0 -170px}.tank-trapper{width:34px;height:34px;background:url(tanks.png) -34px -170px}.tank-hunter{width:34px;height:34px;background:url(tanks.png) -68px -170px}.tank-ranger{width:34px;height:34px;background:url(tanks.png) -102px -170px}.tank-manager{width:34px;height:34px;background:url(tanks.png) -136px -170px}.tank-predator{width:34px;height:34px;background:url(tanks.png) -170px -170px}.tank-megatrapper{width:34px;height:34px;background:url(tanks.png) -204px 0}.tank-overlord{width:34px;height:34px;background:url(tanks.png) -204px -34px}.tank-assassin{width:34px;height:34px;background:url(tanks.png) -204px -68px}.tank-stalker{width:34px;height:34px;background:url(tanks.png) -204px -102px}.tank-sniper{width:34px;height:34px;background:url(tanks.png) -204px -136px}.tank-sprayer{width:34px;height:34px;background:url(tanks.png) -204px -170px}.tank-twinflank{width:34px;height:34px;background:url(tanks.png) 0 -204px}.tank-pentashot{width:34px;height:34px;background:url(tanks.png) -34px -204px}.tank-pentashotold{width:34px;height:34px;background:url(tanks.png) -34px -204px}.tank-basictank{width:34px;height:34px;background:url(tanks.png) -68px -204px}.tank-tripleshot{width:34px;height:34px;background:url(tanks.png) -102px -204px}.tank-triplet{width:34px;height:34px;background:url(tanks.png) -136px -204px}.tank-twin{width:34px;height:34px;background:url(tanks.png) -170px -204px} 
+*/

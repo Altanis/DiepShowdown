@@ -54,18 +54,20 @@
             tanks = document.getElementById('tanks'),
             tankBuild = document.getElementById('tankBuild');
 
-        const tankNickname = document.getElementById('tankNickname');
+        const tankSprite = document.getElementById('tankSprite'),
+            tankMoveset = document.getElementById('tankMoveset');
 
     // -- UPLOAD IMAGES -- //
     for (const tank of Object.values(window.Tanks)) {
-        const { name } = tank; // More will be referenced as time comes.
+        const { name, sprite } = tank; // More will be referenced as time comes.
 
         const li = document.createElement('li');
         li.classList.add('li');
 
         const img = document.createElement('img');
-        img.src = `img/assets/tanks/${name.toLowerCase()}.png`;
-        img.classList.add('img-tiny');
+        img.src = `img/svgs/tanks.svg#${sprite}`;
+        img.width = 50;
+        img.height = 50;
 
         const span = document.createElement('span');
         span.classList.add('name');
@@ -77,7 +79,13 @@
             tankBuild.style.display = 'block';
             chooseTank.style.display = 'none';
 
-            tankNickname.placeholder = name;
+            // tankNickname.placeholder = name;
+            tankSprite.src = `img/svgs/tanks.svg#${sprite}`;
+
+            for (const element of document.getElementsByClassName('move')) {
+                element.onfocus = () => moveset.style.display = 'inline-block';
+                element.onblur = () => moveset.style.display = 'none';
+            }
         };
 
         tanks.appendChild(li);
@@ -181,7 +189,7 @@
                 trainerID.innerText = 'Trainer ID: ' + playerData.trainerID;
                 hoursPlayed.innerText = 'Hours Online: ' + playerData.hoursPlayed;
                 joinDate.innerText = 'Joined At: ' + playerData.joinDate;
-                playerAvatar.src = `img/assets/tanks/large/blue/${playerData.avatar?.toLowerCase()}.png`;
+                playerAvatar.src = `img/svgs/tanks.svg#${playerData.avatar.toLowerCase()}`;
                 elo.innerText = 'ELO: ' + playerData.elo;
 
                 playerAvatar.style.display = 'block';
