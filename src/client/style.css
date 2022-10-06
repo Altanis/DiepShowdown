@@ -132,7 +132,7 @@ input:placeholder-shown {
     overflow: scroll;
 }
 
-#tanks {
+#tanks, #moves {
     max-width: 50px;
     max-height: 50px;
     height: max-content;

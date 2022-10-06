@@ -29,7 +29,6 @@ const Tanks = {
         name: 'Tank',
         sprite: 'basic_tank',
         tier: 1,
-        types: ["Bullet"],
         ability: AbilityEnum.None,
         stats: {
             HP: 100,

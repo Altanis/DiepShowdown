@@ -55,7 +55,8 @@
             tankBuild = document.getElementById('tankBuild');
 
         const tankSprite = document.getElementById('tankSprite'),
-            tankMoveset = document.getElementById('tankMoveset');
+            movesetContainer = document.getElementById('movesetContainer'),
+            moves = document.getElementById('moves');
 
     // -- UPLOAD IMAGES -- //
     for (const tank of Object.values(window.Tanks)) {
@@ -82,9 +83,12 @@
             // tankNickname.placeholder = name;
             tankSprite.src = `img/svgs/tanks.svg#${sprite}`;
 
+            // todo: fill in all moves of the tank
+
+
             for (const element of document.getElementsByClassName('move')) {
-                element.onfocus = () => moveset.style.display = 'inline-block';
-                element.onblur = () => moveset.style.display = 'none';
+                element.onfocus = () => movesetContainer.style.display = 'block';
+                element.onblur = () => movesetContainer.style.display = 'none';
             }
         };
 
