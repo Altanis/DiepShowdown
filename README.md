@@ -9,7 +9,8 @@ Diep.io is a 2D realtime game where you try getting high scores by farming or ki
 WIP.
 
 ## Credits
-Thank you to **Bismuth** for providing me with a tank renderer which I was able to make tank sources out of!
+Thank you to **Aspect** and **Bismuth** for previously providing me with a tank renderer which I was able to make tank sources out of!
+Currently using an SVG of every tank.
 
 ## To-do list:
 - [x] Create a WebSocket server and a database system.
