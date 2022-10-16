@@ -1,7 +1,4 @@
 (() => {
-    const windowPointer = globalThis;
-    windowPointer.scriptLoaded = 1;
-    
     const sanitizeHTML = function(str) {
         var temp = document.createElement('div');
         temp.textContent = str;
@@ -117,7 +114,9 @@
     function chatAction() {
         if (document.activeElement !== chatBox || !chatBox.value) return;
 
-        socket.send(new Writer().i8(0x01).string(chatBox.value).out());
+        const p = new Writer().i8(0x01).string(chatBox.value).out();
+        console.log(p);
+        socket.send(p);
         chatBox.value = '';
     }
 
@@ -146,7 +145,7 @@
     tankBuildBack.onclick = () => (chooseTank.style.display = 'block', tankBuild.style.display = 'none');
 
     // -- SOCKET -- //
-    const socket = new WebSocket(SERVER_URL);
+    const socket = window.socket = new WebSocket(SERVER_URL);
     socket.binaryType = 'arraybuffer';
     socket.addEventListener('error', console.error);
     socket.addEventListener('close', () => {
