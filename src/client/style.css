@@ -185,6 +185,7 @@ input:placeholder-shown {
 
 .col {
     float: left;
+    margin: 10px;
 }
 
 /*

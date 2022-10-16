@@ -1,6 +1,3 @@
-const Moves = require('../../data/Moves'),
-    Tanks = require('../../data/Tanks');
-
 module.exports = class BattleManager {
     constructor(server, player, opponent) {
         this.server = server;

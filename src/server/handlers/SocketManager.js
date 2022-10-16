@@ -1,5 +1,5 @@
 const { IncomingMessageHandler, OutgoingMessageHandler } = require('./MessageHandler'),
-    { Incoming } = require('../enum/Payloads'),
+    { Incoming, BannedWords } = require('../Constants'),
     { Reader } = require('./BinaryCoder');
 
 module.exports = class SocketManager {

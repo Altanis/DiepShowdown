@@ -1,5 +1,7 @@
 const bcrypt = require('bcrypt'),
     { randomUUID } = require('node:crypto');
+
+const { BannedWords } = require('../Constants');
 const BattleManager = require('./BattleManager');
 
 const { Writer } = require('./BinaryCoder'),
@@ -18,7 +20,10 @@ const IncomingMessageHandler = class {
             type = buffer.i8(),
             [r, g, b] = [buffer.i8(), buffer.i8(), buffer.i8()];
 
+        let tmpUser = username.replaceAll(' ', '').toLowerCase(); // may cause memory pollution (?)
+
         if (username.length < 2 || username.length > 32) return this.manager.outgoingMsgHandler.error('Could not perform action: Username must be within bounds of 2-32.');
+        if (BannedWords.filter(word => tmpUser.includes(word)).length) return this.manager.outgoingMsgHandler.error('Could not perform action: Username contains a blocked word.');
 
         switch (type) {
             case 0x00: { // LOGIN
@@ -79,11 +84,8 @@ const IncomingMessageHandler = class {
 
         const content = buffer.string();
 
-        let slur;
-        content.split(' ').forEach(word => {
-            if (['fag', 'faggot', 'nig', 'nigger', 'nigga', 'retard', 'chink', 'tranny'].includes(word)) return (slur = true, this.manager.outgoingMsgHandler.error('Could not send message: Message contained a blocked word.')); 
-        });
-        if (slur) return;
+        let tmpContent = content.replaceAll(' ', '').toLowerCase(); // may cause memory pollution (?)
+        if (BannedWords.filter(word => tmpContent.includes(word)).length) return this.manager.outgoingMsgHandler.error('Could not send message: Message contains a blocked word.');
 
         this.manager.lastMessageSent = Date.now();
     
@@ -127,7 +129,7 @@ const IncomingMessageHandler = class {
         for (const socket of this.manager.server.sockets) {
             if (socket.waitingForBattle) {
                 this.manager.waitingForBattle = socket.waitingForBattle = false;
-                // [WARNING XD MOMENT XD WARNING WARRENING]: This is a very bad way of doing this, but it works for now.
+                // [WARNING XD MOMENT XD WARNING]: This is a very bad way of doing this, but it works for now.
                 this.manager.battle = new BattleManager(this.manager.server, this.manager, socket);
                 socket.battle = new BattleManager(this.manager.server, socket, this.manager);
 

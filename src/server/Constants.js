@@ -10,5 +10,6 @@ module.exports = {
         0x02: 'error',
         0x03: 'chat',
         0x04: 'battle'
-    }
+    },
+    BannedWords: ['fag', 'faggot', 'nig', 'nigger', 'nigga', 'retard', 'chink', 'tranny'], // TODO: make a regexp for optimization
 }
