@@ -161,7 +161,7 @@
     socket.addEventListener('open', () => {
         document.getElementById('overlay').style.display = 'none';
         if (localStorage.username && localStorage.password) {
-            socket.send(new Writer().i8(0x00).string(localStorage.username).string(localStorage.password).i8(0).out());
+            socket.send(new Writer().i8(0x00).i8(0).string(localStorage.username).string(localStorage.password).out());
         }
     });
     socket.addEventListener('message', ({ data }) => {

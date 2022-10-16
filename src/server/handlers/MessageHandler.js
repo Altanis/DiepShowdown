@@ -144,7 +144,7 @@ const OutgoingMessageHandler = class {
     constructor(manager) { this.manager = manager; }
 
     accepted(id, hours, joinDate, avatar, elo) {
-        this.manager.socket.send(new Writer().i8(0x01).string(id).f32(hours).string(joinDate).string(avatar).f32(elo).out());
+        this.manager.socket.send(new Writer().i8(0x01).string(id.slice(0, 8)).f32(hours).string(joinDate).string(avatar).f32(elo).out());
     }
 
     error(error) {
