@@ -104,9 +104,9 @@
 
         const packet = new Writer()
             .i8(0x00)
+            .i8(type)
             .string(localStorage.username)
-            .string(`${localStorage.password}${type === 2 && changePassword.value ? ` + ${changePassword.value}` : ''}`)
-            .i8(type);
+            .string(`${localStorage.password}${type === 2 && changePassword.value ? ` + ${changePassword.value}` : ''}`);
 
         if (type === 1) colorPicker.value.slice(1).split(/(?<=^(?:.{2})+)(?!$)/).forEach(hex => packet.i8(parseInt(hex, 16)));
 

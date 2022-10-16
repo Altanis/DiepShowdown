@@ -15,9 +15,9 @@ const IncomingMessageHandler = class {
     login(buffer) {
         const database = this.manager.server.database;
 
-        const username = buffer.string(),
+        const type = buffer.i8(), 
+            username = buffer.string(),
             password = buffer.string(),
-            type = buffer.i8(),
             [r, g, b] = [buffer.i8(), buffer.i8(), buffer.i8()];
 
         let tmpUser = username.replaceAll(' ', '').toLowerCase(); // may cause memory pollution (?)
@@ -65,7 +65,7 @@ const IncomingMessageHandler = class {
             }
             case 0x02: { // CHANGE_PASSWORD
                 // Sending a CHANGE_PASSWORD request will have the format of [0x00, string(username), string(`${oldPW} + ${newPW}`), i8(type)]
-                const user = database.retreive('Users', document => document.username === username)?.[0];
+                const user = database.retreive('Users', document => document.username === username)?.[0] || this.manager.user;
                 if (!user) return this.manager.outgoingMsgHandler.error('Could not change password: account with that username was not found.');
 
                 const [oldPassword, newPassword] = password.split(' + ');
