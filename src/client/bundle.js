@@ -56,6 +56,23 @@
             movesetContainer = document.getElementById('movesetContainer'),
             moves = document.getElementById('moves');
 
+            login.onclick = () => loggedIn ? (loggedIn = false, delete localStorage.username, delete localStorage.password, picker.style.display = 'block', login.innerText = 'Log In', socket.close()) : accountAction(0);
+            register.onclick = () => accountAction(1);
+            changePW.onclick = () => accountAction(2);    
+            changeColor.onclick = () => {
+                picker.style.display = 'block';
+                colorPicker.value = `#${playerData.color}`;
+            }
+            teamBuilder.onclick = () => (MainMenu.style.display = 'none', TeamBuilder.style.display = 'block');
+            createTeam.onclick = () => (allTeams.style.display = 'none', teamBuild.style.display = 'block');
+            addTank.onclick = () => (chooseTank.style.display = 'block', teamBuild.style.display = 'none');
+            
+            allTeamsBack.onclick = () => (MainMenu.style.display = 'block', TeamBuilder.style.display = 'none');
+            teamBuildBack.onclick = () => (allTeams.style.display = 'block', teamBuild.style.display = 'none');
+            chooseTankBack.onclick = () => (chooseTank.style.display = 'none', teamBuild.style.display = 'block');
+            tankBuildBack.onclick = () => (chooseTank.style.display = 'block', tankBuild.style.display = 'none');
+        
+
     // -- UPLOAD IMAGES -- //
     for (const tank of Object.values(window.Tanks)) {
         const { name, sprite } = tank; // More will be referenced as time comes.
@@ -132,22 +149,6 @@
     });
 
     localStorage.noOverlay && (document.getElementById('overlay').style.display = 'none');
-
-    login.onclick = () => loggedIn ? (loggedIn = false, delete localStorage.username, delete localStorage.password, picker.style.display = 'block', login.innerText = 'Log In', socket.close()) : accountAction(0);
-    register.onclick = () => accountAction(1);
-    changePW.onclick = () => accountAction(2);    
-    changeColor.onclick = () => {
-        picker.style.display = 'block';
-        colorPicker.value = `#${playerData.color}`;
-    }
-    teamBuilder.onclick = () => (MainMenu.style.display = 'none', TeamBuilder.style.display = 'block');
-    createTeam.onclick = () => (allTeams.style.display = 'none', teamBuild.style.display = 'block');
-    addTank.onclick = () => (chooseTank.style.display = 'block', teamBuild.style.display = 'none');
-    
-    allTeamsBack.onclick = () => (MainMenu.style.display = 'block', TeamBuilder.style.display = 'none');
-    teamBuildBack.onclick = () => (allTeams.style.display = 'block', teamBuild.style.display = 'none');
-    chooseTankBack.onclick = () => (chooseTank.style.display = 'none', teamBuild.style.display = 'block');
-    tankBuildBack.onclick = () => (chooseTank.style.display = 'block', tankBuild.style.display = 'none');
 
     // -- SOCKET -- //
     const socket = window.socket = new WebSocket(SERVER_URL);
