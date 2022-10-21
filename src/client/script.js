@@ -157,8 +157,22 @@
                         globalChat.scrollTop = globalChat.scrollHeight;
                         return;                    
                     }
-                    case 0x04: {
+                    case 0x04: { // BATTLE packet
+                        const opponentTeam = {};
 
+                        const teamLength = data.i8();
+                        while (teamLength--) {
+                            const tankID = data.i8(),
+                                abilityID = data.i8(),
+                                movesetLength = data.i8(); 
+        
+                            opponentTeam[tankID] = { ability: abilityID, moveset: [] };
+        
+                            while (movesetLength--) {
+                                const moveID = data.i8();
+                                opponentTeam[tankID].moveset.push(moveID);
+                            }
+                        }
                     }
                 }
             });
