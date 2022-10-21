@@ -24,7 +24,8 @@
             changePassword = document.getElementById('changePassword'),
             login = document.getElementById('login'),
             register = document.getElementById('register'),
-            changePW = document.getElementById('changePW'),
+            changePW = document.getElementById('changePW')
+            changeColor = document.getElementById('changeColor'),
             picker = document.getElementById('picker'),
             colorPicker = document.getElementById('colorpicker');
         // Column 3
@@ -135,6 +136,10 @@
     login.onclick = () => loggedIn ? (loggedIn = false, delete localStorage.username, delete localStorage.password, picker.style.display = 'block', login.innerText = 'Log In', socket.close()) : accountAction(0);
     register.onclick = () => accountAction(1);
     changePW.onclick = () => accountAction(2);    
+    changeColor.onclick = () => {
+        picker.style.display = 'block';
+        colorPicker.value = `#${playerData.color}`;
+    }
     teamBuilder.onclick = () => (MainMenu.style.display = 'none', TeamBuilder.style.display = 'block');
     createTeam.onclick = () => (allTeams.style.display = 'none', teamBuild.style.display = 'block');
     addTank.onclick = () => (chooseTank.style.display = 'block', teamBuild.style.display = 'none');

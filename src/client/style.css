@@ -121,28 +121,15 @@ input:placeholder-shown {
 
 .globalChat {
     border-radius: 20px;
-    align-content: center;
-    background: linear-gradient(to bottom,#edf2f8,#d7e3ec);
-    height: 90%;
-    width: 32%;
-    position: fixed;
-    overflow: auto;
-    opacity: 50%;
-}
-
-/*.globalChat {
-    border-radius: 20px;
     background: linear-gradient(to bottom,#edf2f8,#d7e3ec);
     opacity: 0.5;
     width: 100%;
-    height: max-content;
     padding: 2%; 
     display: flex; 
     flex-direction: column; 
-    word-wrap: break-word;
-    overflow: auto;
-    position: fixed;
-}*/
+    height: 90%;
+    overflow: scroll;
+}
 
 #tanks, #moves {
     max-width: 50px;
