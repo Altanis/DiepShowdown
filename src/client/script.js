@@ -64,23 +64,25 @@
             // -- ELEMENTS -- //
             this.elements = new ElementManager([
                 // VIEW 0
-                'mainMenu',
-                'username',
-                'password',
-                'trainerID',
-                'hoursPlayed',
-                'joinDate',
-                'playerAvatar',
-                'elo',
-                'globalChat',
-                'chatBox',
-                { name: 'changePassword' },
+                'mainMenu', // VIEW: The view of the application.
+                'username', // INPUT: The username of the player.
+                'password', // INPUT: The password of the player.
+                'trainerID', // TRAINERCARD_INFO: The trainer ID of the player. 
+                'hoursPlayed', // TRAINERCARD_INFO: The hours the player has played.
+                'joinDate', // TRAINERCARD_INFO: The date the player joined.
+                'playerAvatar', // TRAINERCARD_INFO: The avatar of the player.
+                'elo', // TRAINERCARD_INFO: The ELO of the player.
+                'globalChat', // DIV: The chat for the application; all sent messages go here.
+                'chatBox', // INPUT: Where the client types and sends their messages.
+                'changePassword', // INPUT: The changed password of the player.
                 { name: 'login' },
                 { name: 'register', },
                 { name: 'changePW '},
                 { name: 'changeColor'},
                 { name: 'picker' },
                 { name: 'colorPicker' },
+
+                // VIEW 1
                 { name: 'teamBuilder', click() { this.view++ } } // Teambuilder Button
             ]);
 
