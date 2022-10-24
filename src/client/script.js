@@ -1,5 +1,5 @@
 (() => {
-    // -- MODIFY PROTOTYPEs -- //
+    // -- MODIFY PROTOTYPES -- //
     const { log: _log, warn: _warn, error: _error } = console;
     console.log = (...args) => _log(`%c[${new Date().toLocaleString()}] ${args.join(' ')}`, 'color: blue;');
     console.success = (...args) => _log(`%c[${new Date().toLocaleString()}] ${args.join(' ')}`, 'color: green;');
@@ -107,11 +107,17 @@
                         }
                     }
                 }, // BUTTON: The button to change the client's color.
-                { name: 'picker' },
-                { name: 'colorPicker' },
+                'picker', // DIV: The div that holds the color picker.
+                'colorPicker', // INPUT: The color picker for the client.
 
                 // VIEW 1
-                { name: 'teamBuilder', click() { this.view++; } } // Teambuilder Button
+                { name: 'teamBuilder', click() { this.view++; } }, // Teambuilder Button
+                { name: 'createTeam', click() { this.view++; } }, // Create Team Button
+                { name: 'addTank', click() { this.view++; } }, // Add Tank Button
+                { name: 'allTeamsBack', click() { this.view--; } }, // All Teams Back Button
+                { name: 'teamBuildBack', click() { this.view--; } }, // Team Build Back Button
+                { name: 'chooseTankBack', click() { this.view--; } }, // Choose Tank Back Button
+                { name: 'tankBuildBack', click() { this.view--; } }, // Tank Build Back Button
             ]);
 
             // -- SOCKET -- //
