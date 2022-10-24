@@ -42,7 +42,7 @@
             for (const info of elements) {
                 if (typeof info === 'string') info = { name: info };
 
-                const element = getElementById(info.name);
+                const element = getElementById(info.name) || window[info.name];
                 if (!element) return console.error(`[ELEMENT]: Could not find element with ID ${info.name}.`);
                 this.elements[info.name] = element;
 
@@ -63,6 +63,16 @@
         constructor() {
             // -- ELEMENTS -- //
             this.elements = new ElementManager([
+                // GLOBALS
+                {
+                    name: 'document',
+                    keydown(event) {
+                        if (event.code === 'Enter') {
+                            this.accountAction(1, true);
+                            this.chatAction();
+                        }
+                    }
+                },
                 // VIEW 0
                 'mainMenu', // VIEW: The view of the application.
                 'username', // INPUT: The username of the player.
@@ -75,15 +85,33 @@
                 'globalChat', // DIV: The chat for the application; all sent messages go here.
                 'chatBox', // INPUT: Where the client types and sends their messages.
                 'changePassword', // INPUT: The changed password of the player.
-                { name: 'login' },
-                { name: 'register', },
-                { name: 'changePW '},
-                { name: 'changeColor'},
+                { 
+                    name: 'login', 
+                    click() {
+                        player.accountAction(+!player.loggedIn);
+                    } 
+                }, // BUTTON: The button to login.
+                { name: 'register', click() { player.accountAction(2); } }, // BUTTON: The button to register.
+                { name: 'changePW', click() { player.accountAction(3); } }, // BUTTON: The button to change password.
+                { 
+                    name: 'changeColor', 
+                    click() {
+                        if (this.elements.colorPicker.style.display === 'none') {
+                            this.elements.colorPicker.style.display = 'block';
+                            this.elements.colorPicker.value = this.color;
+                            this.elements.changeColor.innerText = 'Confirm';
+                        } else {
+                            this.elements.colorPicker.style.display = 'none';
+                            this.elements.changeColor.innerText = 'Change Color';
+                            player.accountAction(4);
+                        }
+                    }
+                }, // BUTTON: The button to change the client's color.
                 { name: 'picker' },
                 { name: 'colorPicker' },
 
                 // VIEW 1
-                { name: 'teamBuilder', click() { this.view++ } } // Teambuilder Button
+                { name: 'teamBuilder', click() { this.view++; } } // Teambuilder Button
             ]);
 
             // -- SOCKET -- //
@@ -94,8 +122,44 @@
             // -- PLAYER DATA -- //
             this.card = {};
             this.loggedIn = false;
+            this.color = getItem('color') || '#000000';
 
             this.#attachEvents();
+        }
+
+        chatAction() {
+            if (document.activeElement !== this.elements.chatBox || !this.elements.chatBox.value) return;
+
+            this.io.send(new WritableStream().i8(1).string(this.elements.chatBox.value).out());
+            this.elements.chatBox.value = '';
+        }
+
+        accountAction(code, pressedEnter) {
+            if (!code) {
+                this.loggedIn = false;
+                removeItem('username');
+                removeItem('password');
+                this.elements.picker.style.display = 'block';
+                this.elements.login.innerText = 'Log In';
+                return this.io.close();
+            }
+
+            if (![this.elements.username, this.elements.password].includes(document.activeElement) && pressedEnter) return;
+
+            setItem('username', this.elements.username.value);
+            setItem('password', this.elements.password.value);
+            setItem('color', this.elements.colorPicker.value);
+
+            const packet = new Writer()
+                .i8(0x00) // LOGIN Packet
+                .i8(code - 1) // TYPE: 0 = Login, 1 = Register, 2 = Change Password, 3 = Change Color
+                .string(getItem('username'))
+                .string(`${getItem('password')}${code === 3 ? ` + ${this.elements.changePassword.value}` : ''}`); 
+            
+            if (code === 2) this.elements.colorPicker.value.slice(1).split(/(?<=^(?:.{2})+)(?!$)/).forEach(hex => packet.i8(parseInt(hex, 16)));
+            else if (code === 3) setItem('password', this.elements.changePassword.value);
+            else if (code === 4) packet.string(this.elements.colorPicker.value);
+            if (getItem('username') && getItem('password')) this.io.send(packet.out());
         }
 
         #attachEvents() {
@@ -180,4 +244,6 @@
             });
         }
     }
+
+    const player = new Player();
 })();
