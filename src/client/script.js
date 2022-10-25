@@ -19,8 +19,11 @@
     };
 
     // -- CACHED INTERNAL FUNCTIONS -- //
-    const { getElementById } = document;
-    const { getItem, setItem, removeItem } = localStorage;
+    // Cannot destructure due to illegal invocation
+    const getElementById = id => document.getElementById(id); 
+    const getItem = id => localStorage.getItem(id);
+    const setItem = (id, value) => localStorage.setItem(id, value);
+    const removeItem = id => localStorage.removeItem(id);
 
     class ElementManager {
         #views = enumerate({ 0: 'mainMenu', 1: 'allTeams', 2: 'teamBuild', 3: 'chooseTank', 4: 'tankBuild' });
@@ -39,23 +42,33 @@
                 }
             });
 
-            for (const info of elements) {
+            for (let info of elements) {
                 if (typeof info === 'string') info = { name: info };
 
                 const element = getElementById(info.name) || window[info.name];
-                if (!element) return console.error(`[ELEMENT]: Could not find element with ID ${info.name}.`);
+                if (!element) {
+                    console.error(`[ELEMENT]: Could not find element with ID ${info.name}.`);
+                    continue;
+                }
+
                 this.elements[info.name] = element;
 
                 for (const [k, cb] of Object.entries(info)) {
-                    if (typeof cb !== 'function') return;
-                    this.#elements[info.name].addEventListener(k, cb.bind(this));
+                    if (typeof cb !== 'function') continue;
+                    if (k === 'ready') { 
+                        cb.bind(this)();
+                        continue;
+                    }
+                    this.elements[info.name].addEventListener(k, cb.bind(this));
                 }
             };
         }
 
         changeView(view) {
-            this.#elements[this.#views[this.view]].style.display = 'none';
-            this.#elements[this.#views[view]].style.display = 'block';
+            console.log(this.view, view);
+            console.log(this.#views[this.view], this.#views[view]);
+            this.elements[this.#views[this.view]].style.display = 'none';
+            this.elements[this.#views[view]].style.display = 'block';
         }
     }
 
@@ -68,11 +81,18 @@
                     name: 'document',
                     keydown(event) {
                         if (event.code === 'Enter') {
-                            this.accountAction(1, true);
-                            this.chatAction();
+                            player.accountAction(1, true);
+                            player.chatAction();
                         }
                     }
                 },
+                
+                // ALL VIEWS
+                'allTeams',
+                'teamBuild',
+                'chooseTank',
+                'tankBuild',
+
                 // VIEW 0
                 'mainMenu', // VIEW: The view of the application.
                 'username', // INPUT: The username of the player.
@@ -82,13 +102,13 @@
                 'joinDate', // TRAINERCARD_INFO: The date the player joined.
                 'playerAvatar', // TRAINERCARD_INFO: The avatar of the player.
                 'elo', // TRAINERCARD_INFO: The ELO of the player.
-                'globalChat', // DIV: The chat for the application; all sent messages go here.
+                'chat', // DIV: The chat for the application; all sent messages go here.
                 'chatBox', // INPUT: Where the client types and sends their messages.
                 'changePassword', // INPUT: The changed password of the player.
                 { 
                     name: 'login', 
                     click() {
-                        player.accountAction(+!player.loggedIn);
+                        player.accountAction(+!player.loggedIn); // If not logged in, log in (+!false = 1), else log out (+!true = 0).
                     } 
                 }, // BUTTON: The button to login.
                 { name: 'register', click() { player.accountAction(2); } }, // BUTTON: The button to register.
@@ -96,22 +116,29 @@
                 { 
                     name: 'changeColor', 
                     click() {
-                        if (this.elements.colorPicker.style.display === 'none') {
-                            this.elements.colorPicker.style.display = 'block';
-                            this.elements.colorPicker.value = this.color;
+                        if (this.elements.colorpicker.style.display === 'none') {
+                            this.elements.colorpicker.style.display = 'block';
+                            this.elements.colorpicker.value = this.color;
                             this.elements.changeColor.innerText = 'Confirm';
                         } else {
-                            this.elements.colorPicker.style.display = 'none';
+                            this.elements.colorpicker.style.display = 'none';
                             this.elements.changeColor.innerText = 'Change Color';
                             player.accountAction(4);
                         }
                     }
                 }, // BUTTON: The button to change the client's color.
                 'picker', // DIV: The div that holds the color picker.
-                'colorPicker', // INPUT: The color picker for the client.
+                'colorpicker', // INPUT: The color picker for the client.
+                'modal', // The modal for connection state.
+                {
+                    name: 'overlay', // The gray overlay behind the modal.
+                    ready() {
+                        if (getItem('noOverlay')) this.elements.overlay.style.display = 'none';
+                    }
+                },
 
                 // VIEW 1
-                { name: 'teamBuilder', click() { this.view++; } }, // Teambuilder Button
+                { name: 'teambuilder', click() { this.view++; } }, // Teambuilder Button
                 { name: 'createTeam', click() { this.view++; } }, // Create Team Button
                 { name: 'addTank', click() { this.view++; } }, // Add Tank Button
                 { name: 'allTeamsBack', click() { this.view--; } }, // All Teams Back Button
@@ -154,7 +181,7 @@
 
             setItem('username', this.elements.username.value);
             setItem('password', this.elements.password.value);
-            setItem('color', this.elements.colorPicker.value);
+            setItem('color', this.elements.colorpicker.value);
 
             const packet = new Writer()
                 .i8(0x00) // LOGIN Packet
@@ -162,9 +189,8 @@
                 .string(getItem('username'))
                 .string(`${getItem('password')}${code === 3 ? ` + ${this.elements.changePassword.value}` : ''}`); 
             
-            if (code === 2) this.elements.colorPicker.value.slice(1).split(/(?<=^(?:.{2})+)(?!$)/).forEach(hex => packet.i8(parseInt(hex, 16)));
-            else if (code === 3) setItem('password', this.elements.changePassword.value);
-            else if (code === 4) packet.string(this.elements.colorPicker.value);
+            if (code === 2 || code === 4) this.elements.colorpicker.value.slice(1).split(/(?<=^(?:.{2})+)(?!$)/).forEach(hex => packet.i8(parseInt(hex, 16))); // REGISTER / CHANGE COLOR
+            else if (code === 3) setItem('password', this.elements.changePassword.value); // CHANGE PASSWORD
             if (getItem('username') && getItem('password')) this.io.send(packet.out());
         }
 
@@ -173,13 +199,13 @@
                 console.success("[SOCKET]: Connected to server.");
             });
 
-            this.io.addEventListener("error", er => console.error(`[SOCKET]: Error during connection has occured: ${er}.`));
+            this.io.addEventListener("error", () => console.error(`[SOCKET]: Error during connection has occured.`));
             this.io.addEventListener("close", function() {
                 console.log("[SOCKET]: Connection to server has been closed.");
                 if (getItem('noOverlay')) return;
 
-                this.elements.get('overlay').style.display = '';
-                this.elements.get('modal').innerHTML = `
+                this.elements.overlay.style.display = '';
+                this.elements.modal.innerHTML = `
                 <p style="color: red; font-size: 48px;">💀Disconnected💀</p>
                 <p style="color: red; font-size: 24px;">The server may be down, you have no connection, or you went AFK.</p>
                 `;
