@@ -96,56 +96,58 @@
 			<input placeholder="Please log in to send messages!" id="chatBox" class="bigButton" disabled></input>
 		</div>
 	</div>
-	<div id="allTeams" style="display: none;">
-		<button type="button" id="allTeamsBack" class="miniButton"><i class="material-icons">&#xe317;</i> Back</button>
-		<button type="button" id="createTeam" class="miniButton"><i class="material-icons">&#xe147;</i> New Team</button>
-		<p>All teams:</p>
-	</div>
-
-	<div id="teamBuild" style="display: none;">
-		<button type="button" id="teamBuildBack" class="miniButton"><i class="material-icons">&#xe317;</i> Back</button>
-		<button type="button" id="addTank" class="miniButton"><i class="material-icons">&#xe147;</i> Add Tank</button>
-		<div id="currentTanks">
-			<i>you have no tanks in your team git gud lol</i>
+	<div id="teamBuilder" class="container">
+		<div id="allTeams" style="display: none;">
+			<button type="button" id="allTeamsBack" class="miniButton"><i class="material-icons">&#xe317;</i> Back</button>
+			<button type="button" id="createTeam" class="miniButton"><i class="material-icons">&#xe147;</i> New Team</button>
+			<p>All teams:</p>
 		</div>
-	</div>
-
-	<div id="chooseTank" style="display: none;">
-		<button type="button" id="chooseTankBack" class="miniButton"><i class="material-icons">&#xe317;</i> Back</button><br>
-		<div class="allTanks" id="allTanks">
-			<ul id="tanks" style="display: inline-block;"></ul>
-		</div>
-	</div>
-
-	<div id="tankBuild" style="display: none;">
-		<button type="button" id="tankBuildBack" class="miniButton"><i class="material-icons">&#xe317;</i> Back</button>
-		<div id="tankInfo" class="tankInfo" style="display: flex; width: 100%; padding: 2%;">
-			<img id="tankSprite" align="left" width="200" height="200">
-			<!-- <div class="nickname" style="font-weight: bold;"> To be added at a later date.
-				<p>Nickname:</p>
-				<input id="tankNickname" class="miniButton" placeholder="Nickname" maxlength="18">
-			</div> !-->
-			<div style="font-weight: bold; flex-grow: 1;">
-				<p>Level:</p>
-				<input id="tankLevel" class="miniButton" placeholder="100" maxlength="3">
-			</div>
-			<div style="font-weight: bold; flex-grow: 1; display: inline-grid;">
-				<p>Moveset:</p>
-				<input id="move1" class="move bigButton" placeholder="Move 1">
-				<input id="move2" class="move bigButton" placeholder="Move 2">
-				<input id="move3" class="move bigButton" placeholder="Move 3">
-				<input id="move4" class="move bigButton" placeholder="Move 4">
+	
+		<div id="teamBuild" style="display: none;">
+			<button type="button" id="teamBuildBack" class="miniButton"><i class="material-icons">&#xe317;</i> Back</button>
+			<button type="button" id="addTank" class="miniButton"><i class="material-icons">&#xe147;</i> Add Tank</button>
+			<div id="currentTanks">
+				<i>you have no tanks in your team git gud lol</i>
 			</div>
 		</div>
+	
+		<div id="chooseTank" style="display: none;">
+			<button type="button" id="chooseTankBack" class="miniButton"><i class="material-icons">&#xe317;</i> Back</button><br>
+			<div class="allTanks" id="allTanks">
+				<ul id="tanks" style="display: inline-block;"></ul>
+			</div>
 		</div>
-		<div id="movesetContainer" style="display: none; padding-top: 1%;">
-			<div class="allTanks">
-				<li style="display: flex; width: auto; height: auto;">
-					<p class="col movname">Protect</span>
-					<p class="col movecat">Status</span>
-					<p class="col movpower"></span>
-					<p class="col movdesc">Protects the user from all attacks. This move fails if the user is already protected.</span>
-				</li>
+	
+		<div id="tankBuild" style="display: none;">
+			<button type="button" id="tankBuildBack" class="miniButton"><i class="material-icons">&#xe317;</i> Back</button>
+			<div id="tankInfo" class="tankInfo" style="display: flex; width: 100%; padding: 2%;">
+				<img id="tankSprite" align="left" width="200" height="200">
+				<!-- <div class="nickname" style="font-weight: bold;"> To be added at a later date.
+					<p>Nickname:</p>
+					<input id="tankNickname" class="miniButton" placeholder="Nickname" maxlength="18">
+				</div> !-->
+				<div style="font-weight: bold; flex-grow: 1;">
+					<p>Level:</p>
+					<input id="tankLevel" class="miniButton" placeholder="100" maxlength="3">
+				</div>
+				<div style="font-weight: bold; flex-grow: 1; display: inline-grid;">
+					<p>Moveset:</p>
+					<input id="move1" class="move bigButton" placeholder="Move 1">
+					<input id="move2" class="move bigButton" placeholder="Move 2">
+					<input id="move3" class="move bigButton" placeholder="Move 3">
+					<input id="move4" class="move bigButton" placeholder="Move 4">
+				</div>
+			</div>
+			</div>
+			<div id="movesetContainer" style="display: none; padding-top: 1%;">
+				<div class="allTanks">
+					<li style="display: flex; width: auto; height: auto;">
+						<p class="col movname">Protect</span>
+						<p class="col movecat">Status</span>
+						<p class="col movpower"></span>
+						<p class="col movdesc">Protects the user from all attacks. This move fails if the user is already protected.</span>
+					</li>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -158,6 +160,6 @@
 	</div>
 	
 	<script src="../data/Tanks.js" defer></script> <!-- Low priority execution. Loads after every other script tag.-->
-	<script src="bundle.js" defer></script>
+	<script src="script.js" defer></script>
 </body>
 </html>

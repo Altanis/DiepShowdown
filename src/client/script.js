@@ -5,6 +5,7 @@
     console.success = (...args) => _log(`%c[${new Date().toLocaleString()}] ${args.join(' ')}`, 'color: green;');
     console.error = (...args) => _error(`[${new Date().toLocaleString()}] ${args.join(' ')}`);
     console.warn = (...args) => _warn(`[${new Date().toLocaleString()}] ${args.join(' ')}`);
+    console.debug = _log;
 
     // -- MANMADE FUNCTIONS -- //
     const sanitizeHTML = function(str) {
@@ -52,6 +53,7 @@
                 }
 
                 this.elements[info.name] = element;
+                if (info.name === 'overlay') console.debug(element.style);
 
                 for (const [k, cb] of Object.entries(info)) {
                     if (typeof cb !== 'function') continue;
@@ -69,6 +71,14 @@
             console.log(this.#views[this.view], this.#views[view]);
             this.elements[this.#views[this.view]].style.display = 'none';
             this.elements[this.#views[view]].style.display = 'block';
+
+            if (!view) {
+                this.elements.mainMenu.style.display = 'block';
+                this.elements.teamBuilder.style.display = 'none';
+            } else {
+                this.elements.mainMenu.style.display = 'none';
+                this.elements.teamBuilder.style.display = 'block';
+            }
         }
     }
 
@@ -88,13 +98,14 @@
                 },
                 
                 // ALL VIEWS
+                'mainMenu',
+                'teamBuilder', // PSUEDO-VIEW: WRAPS ALL TEAM BUILDER ELEMENTS
                 'allTeams',
                 'teamBuild',
                 'chooseTank',
                 'tankBuild',
 
                 // VIEW 0
-                'mainMenu', // VIEW: The view of the application.
                 'username', // INPUT: The username of the player.
                 'password', // INPUT: The password of the player.
                 'trainerID', // TRAINERCARD_INFO: The trainer ID of the player. 
@@ -105,6 +116,14 @@
                 'chat', // DIV: The chat for the application; all sent messages go here.
                 'chatBox', // INPUT: Where the client types and sends their messages.
                 'changePassword', // INPUT: The changed password of the player.
+                'placeholder',
+                'usernameInfo',
+                'trainerID',
+                'hoursPlayed',
+                'joinDate',
+                'playerAvatar',
+                'elo',
+
                 { 
                     name: 'login', 
                     click() {
@@ -145,7 +164,7 @@
                 { name: 'teamBuildBack', click() { this.view--; } }, // Team Build Back Button
                 { name: 'chooseTankBack', click() { this.view--; } }, // Choose Tank Back Button
                 { name: 'tankBuildBack', click() { this.view--; } }, // Tank Build Back Button
-            ]);
+            ]).elements;
 
             // -- SOCKET -- //
             this.SERVER_URL = "ws://localhost:3000/";
@@ -195,12 +214,14 @@
         }
 
         #attachEvents() {
-            this.io.addEventListener("open", function() {
+            this.io.addEventListener("open", () => {
                 console.success("[SOCKET]: Connected to server.");
+                console.debug(this.elements.overlay.style.display);
+                this.elements.overlay.style.display = 'none';
             });
 
             this.io.addEventListener("error", () => console.error(`[SOCKET]: Error during connection has occured.`));
-            this.io.addEventListener("close", function() {
+            this.io.addEventListener("close", () => {
                 console.log("[SOCKET]: Connection to server has been closed.");
                 if (getItem('noOverlay')) return;
 
@@ -209,9 +230,13 @@
                 <p style="color: red; font-size: 48px;">💀Disconnected💀</p>
                 <p style="color: red; font-size: 24px;">The server may be down, you have no connection, or you went AFK.</p>
                 `;
+
+                if (getItem('username') && getItem('password')) {
+                    this.io.send(new Writer().i8(0x00).i8(0).string(localStorage.username).string(localStorage.password).out());
+                }
             });
 
-            this.io.addEventListener("message", function({ data }) {
+            this.io.addEventListener("message", ({ data }) => {
                 _log(new Uint8Array(data));
                 data = new Reader(new Uint8Array(data));
 
@@ -233,11 +258,11 @@
                         picker.style.display = 'none';
                         login.innerText = 'Log Out';
 
-                        this.elements.usernameInfo.innnerText = `Username: ${getItem('username')}}`;
+                        this.elements.usernameInfo.innerText = `Username: ${getItem('username')}`;
                         this.elements.trainerID.innerText = `Trainer ID: ${this.card.trainerID}`;
                         this.elements.hoursPlayed.innerText = `Hours Online: ${this.card.hoursPlayed}`;
                         this.elements.joinDate.innerText = `Join Date: ${this.card.joinDate}`;
-                        this.elements.playerAvatar.src = `img/svgs/tanks.svg#${this.card.playerAvatar}`;
+                        this.elements.playerAvatar.src = `img/svgs/tanks.svg#${this.card.playerAvatar.toLowerCase()}`;
                         this.elements.elo.innerText = `ELO: ${this.card.elo}`;
 
                         return;

@@ -12,8 +12,7 @@
     // -- ELEMENTS -- //
     
     // Views
-    const MainMenu = document.getElementById('mainMenu'),
-        TeamBuilder = document.getElementById('teamBuilder');
+    const MainMenu = document.getElementById('mainMenu');
     
     // Main Menu:
         // Column 1
@@ -63,7 +62,7 @@
                 picker.style.display = 'block';
                 colorPicker.value = `#${playerData.color}`;
             }
-            teamBuilder.onclick = () => (MainMenu.style.display = 'none', TeamBuilder.style.display = 'block');
+            teamBuilder.onclick = () => (MainMenu.style.display = 'none', allTeams.style.display = 'block');
             createTeam.onclick = () => (allTeams.style.display = 'none', teamBuild.style.display = 'block');
             addTank.onclick = () => (chooseTank.style.display = 'block', teamBuild.style.display = 'none');
             
