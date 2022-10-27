@@ -116,6 +116,7 @@
                 'chat', // DIV: The chat for the application; all sent messages go here.
                 'chatBox', // INPUT: Where the client types and sends their messages.
                 'changePassword', // INPUT: The changed password of the player.
+                'changeUsername', // INPUT: The changed username of the player.
                 'placeholder', // Placeholder for "Please log in to see your trainer card."
                 'usernameInfo', // TRAINERCARD_INFO: The username of the player.
                 'trainerID', // TRAINERCARD_INFO: The trainer ID of the player.
@@ -134,7 +135,8 @@
                     } 
                 }, // BUTTON: The button to login.
                 { name: 'register', click() { player.accountAction(2); } }, // BUTTON: The button to register.
-                { name: 'changePW', click() { player.accountAction(3); } }, // BUTTON: The button to change password.
+                { name: 'changePW', click() { player.accountAction(3, 2); } }, // BUTTON: The button to change password.
+                { name: 'changeUsername', click() { player.accountAction(3, 3); } }, // BUTTON: The button to change username.
                 { 
                     name: 'changeColor', 
                     click() {
@@ -143,7 +145,7 @@
                             changeColor.innerText = 'Confirm';
                         } else {
                             changeColor.innerText = 'Change Color';
-                            player.accountAction(3);
+                            player.accountAction(3, 1);
                         }
                     }
                 }, // BUTTON: The button to change the client's color.
@@ -200,18 +202,38 @@
             const buffer = new Writer().i8(0x00).i8(code);
 
             switch (code) {
-                case 0: // Login
+                case 0: { // Login
+                    setItem('username', this.elements.username.value);
+                    setItem('password', this.elements.password.value);
+
                     return buffer.string(this.elements.username.value).string(this.elements.password.value);
-                case 1: // Register
+                }
+                case 1: { // Register
+                    setItem('username', this.elements.username.value);
+                    setItem('password', this.elements.password.value);
+
                     buffer.string(this.elements.username.value).string(this.elements.password.value).string('overlord');
                     return this.elements.colorpicker.value.slice(1).split(/(?<=^(?:.{2})+)(?!$)/).forEach(hex => buffer.i8(parseInt(hex, 16))); 
+                }
                 case 2: // Change Profile
                     switch (type) {
-                        case 0: return buffer.string(`${this.elements.password.value} + ${this.elements.changePassword.value}`); // Change Avatar
-                        case 1: return this.elements.colorpicker.value.slice(1).split(/(?<=^(?:.{2})+)(?!$)/).forEach(hex => buffer.i8(parseInt(hex, 16))); // Change Color
-                        case 2: return buffer.string('newusername'); // Change Username
+                        case 0: return buffer.string('overlord'); // Change Avatar
+                        case 1: {
+                            setItem('color', this.elements.colorpicker.value);
+                            return this.elements.colorpicker.value.slice(1).split(/(?<=^(?:.{2})+)(?!$)/).forEach(hex => buffer.i8(parseInt(hex, 16))); // Change Color
+                        }
+                        case 2: {
+                            setItem('username', this.elements.changeUsername.value);
+                            return buffer.string(this.elements.changeUsername.value); // Change Username
+                        }
+                        case 3: {
+                            setItem('password', this.elements.changePassword.value);
+                            return buffer.string(this.elements.changePassword); // Change Password
+                        }
                     }
             }
+
+            this.io.send(buffer.out());
             
             /*const packet = new Writer()
                 .i8(0x00) // LOGIN Packet

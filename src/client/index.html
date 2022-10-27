@@ -62,25 +62,26 @@
 					<p>Login/Register:</p>
 					<input placeholder="Username" id="username" class="bigButton">
 					<input type="password" placeholder="Password" id="password" class="bigButton">
-					<span id="picker">Username Color: <input type="color" id="colorpicker" value="#000000"></span>
+					<span id="picker">Color: <input type="color" id="colorpicker" value="#000000"></span>
 					<div class="buttonActions" style="display: flex; align-items: center; justify-content: center; width: 100%;">
 						<button type="button" id="login" class="smallButton">Log In</button>
 						<button type="button" id="register" class="smallButton">Register</button>
 					</div>
 
-					<p>Change Profile:</p>
+					<a>Change Profile:</a>
+					<input id="username" placeholder="Change Username" class="bigButton">
+					<input type="password" placeholder="Change Password" id="changePassword" class="bigButton">
 					<div class="buttonActions" style="display: flex; align-items: center; justify-content: center; width: 100%;">
+						<button type="button" id="changeUsername" class="smallButton">Change Username</button>
 						<button type="button" id="changePW" class="smallButton">Change Password</button>
 						<button type="button" id="changeColor" class="smallButton">Change Color</button>
 					</div>
-
-					<input type="password" placeholder="Change Password" id="changePassword" class="bigButton"></input>
 				</form>
 			</div>
 			<div class="accountInfo" style="background: linear-gradient(to bottom,#edf2f8,#d7e3ec); border-radius: 20px; height: 40%;">
 				<img id="playerAvatar" align="right" width="200" height="200" style="display: none; transform: rotate(45deg);">
-				<form>
-					<p style="text-align: center; font-size: 48px;">Trainer Card</p>
+				<form style="text-align: center;">
+					<a style="display: inline-block; font-size: 48px; padding: 1px;">Trainer Card</a>
           			<p id="placeholder" style="text-align: center; font-style: italic;">Please log in to get your account data.</p>
 					<p id="usernameInfo" class="trainerInfo"></p>
 					<p id="trainerID" class="trainerInfo"></p>
@@ -95,7 +96,7 @@
 			<div id="chat" class="globalChat">
 				<p style="font-size: 24px; font-weight: bold; text-align: center;">Please be respectful.</p>
 			</div>
-			<input placeholder="Please log in to send messages!" id="chatBox" class="bigButton" disabled></input>
+			<input placeholder="Please log in to send messages!" id="chatBox" class="bigButton" disabled>
 		</div>
 	</div>
 	<div id="teamBuilder" class="container">
