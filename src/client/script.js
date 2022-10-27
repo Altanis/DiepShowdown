@@ -138,14 +138,12 @@
                 { 
                     name: 'changeColor', 
                     click() {
-                        if (this.elements.picker.style.display === 'none') {
-                            this.elements.picker.style.display = 'block';
-                            this.elements.picker.value = player.color;
-                            this.elements.changeColor.innerText = 'Confirm';
+                        const { changeColor } = this.elements;
+                        if (changeColor.innerText === 'Change Color') {
+                            changeColor.innerText = 'Confirm';
                         } else {
-                            this.elements.picker.style.display = 'none';
-                            this.elements.changeColor.innerText = 'Change Color';
-                            player.accountAction(4);
+                            changeColor.innerText = 'Change Color';
+                            player.accountAction(3);
                         }
                     }
                 }, // BUTTON: The button to change the client's color.
@@ -196,9 +194,26 @@
                 return this.io.close();
             }
 
-            if (![this.elements.username, this.elements.password].includes(document.activeElement) && pressedEnter) return;
+            code -= 1;
+            if (![this.elements.username, this.elements.password].includes(document.activeElement) && pressedEnter && code !== 2) return;
 
-            const packet = new Writer()
+            const buffer = new Writer().i8(0x00).i8(code);
+
+            switch (code) {
+                case 0: // Login
+                    return buffer.string(this.elements.username.value).string(this.elements.password.value);
+                case 1: // Register
+                    buffer.string(this.elements.username.value).string(this.elements.password.value).string('overlord');
+                    return this.elements.colorpicker.value.slice(1).split(/(?<=^(?:.{2})+)(?!$)/).forEach(hex => buffer.i8(parseInt(hex, 16))); 
+                case 2: // Change Profile
+                    switch (type) {
+                        case 0: return buffer.string(`${this.elements.password.value} + ${this.elements.changePassword.value}`); // Change Avatar
+                        case 1: return this.elements.colorpicker.value.slice(1).split(/(?<=^(?:.{2})+)(?!$)/).forEach(hex => buffer.i8(parseInt(hex, 16))); // Change Color
+                        case 2: return buffer.string('newusername'); // Change Username
+                    }
+            }
+            
+            /*const packet = new Writer()
                 .i8(0x00) // LOGIN Packet
                 .i8(code - 1) // TYPE: 0 = Login, 1 = Register, 2 = Change Profile
                 .string(getItem('username'))
@@ -211,7 +226,8 @@
                     case 'password': packet.string(this.elements.changePassword.value); break;
                 }
             }
-            if (code === 2 || code === 4) this.elements.colorpicker.value.slice(1).split(/(?<=^(?:.{2})+)(?!$)/).forEach(hex => packet.i8(parseInt(hex, 16))); // REGISTER / CHANGE COLOR
+
+            /*if (code === 2 || code === 4) this.elements.colorpicker.value.slice(1).split(/(?<=^(?:.{2})+)(?!$)/).forEach(hex => packet.i8(parseInt(hex, 16))); // REGISTER / CHANGE COLOR
             else if (code === 3) setItem('password', this.elements.changePassword.value); // CHANGE PASSWORD
 
             if (code !== 4) { // <- Change Color, doesn't require logging in again (as long as the WS conneciton has a user).
@@ -220,7 +236,7 @@
                 setItem('color', this.elements.colorpicker.value);
             }
 
-            if (getItem('username') && getItem('password')) this.io.send(packet.out());
+            if (getItem('username') && getItem('password')) this.io.send(packet.out());*/
         }
 
         #attachEvents() {
@@ -271,6 +287,7 @@
                         this.elements.trainerID.innerText = `Trainer ID: ${this.card.trainerID}`;
                         this.elements.hoursPlayed.innerText = `Hours Online: ${this.card.hoursPlayed}`;
                         this.elements.joinDate.innerText = `Join Date: ${this.card.joinDate}`;
+                        this.elements.playerAvatar.style.display = '';
                         this.elements.playerAvatar.src = `img/svgs/tanks.svg#${this.card.playerAvatar.toLowerCase()}`;
                         this.elements.elo.innerText = `ELO: ${this.card.elo}`;
 

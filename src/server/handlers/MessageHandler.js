@@ -17,17 +17,12 @@ const IncomingMessageHandler = class {
     login(buffer) {
         const database = this.manager.server.database
 
-        const type = buffer.i8(), 
-            username = buffer.string(),
-            password = buffer.string();
-
-        let tmpUser = username.replaceAll(' ', '').toLowerCase(); // may cause memory pollution (?)
-
-        if (username.length < 2 || username.length > 32) return this.manager.outgoingMsgHandler.notification('Could not perform action: Username must be within bounds of 2-32.', 'error');
-        if (BannedWords.filter(word => tmpUser.includes(word)).length) return this.manager.outgoingMsgHandler.notification('Could not perform action: Username contains a blocked word.', 'error');
+        const type = buffer.i8();
 
         switch (type) {
             case 0x00: { // LOGIN
+                const username = buffer.string(),
+                    password = buffer.string();
                 const user = database.retreive('Users', document => document.username === username)?.[0];
 
                 if (!user) return this.manager.outgoingMsgHandler.notification('Could not login: account with that username was not found.', 'error');
@@ -42,6 +37,14 @@ const IncomingMessageHandler = class {
                 // If botting becomes an issue, I will create a way to verify whether or not a bot or a real client is trying to register.
                 if (this.manager.user) return this.manager.remove(true, 'Sent a REGISTER packet after logging in.');
 
+                const username = buffer.string(),
+                    password = buffer.string();
+    
+                let tmpUser = username.replaceAll(' ', '').toLowerCase(); // may cause memory pollution (?)
+        
+                if (username.length < 2 || username.length > 32) return this.manager.outgoingMsgHandler.notification('Could not perform action: Username must be within bounds of 2-32.', 'error');
+                if (BannedWords.filter(word => tmpUser.includes(word)).length) return this.manager.outgoingMsgHandler.notification('Could not perform action: Username contains a blocked word.', 'error');
+        
                 const avatar = buffer.string().toLowerCase();
                 const [r, g, b] = [buffer.i8(), buffer.i8(), buffer.i8()];
                 
