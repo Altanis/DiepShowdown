@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt'),
     { randomUUID } = require('node:crypto');
 
-const { BannedWords } = require('../Constants');
+const { BannedWords, NotificationTypes } = require('../Constants');
 const BattleManager = require('./BattleManager');
 
 const { Writer } = require('./BinaryCoder'),
@@ -9,37 +9,45 @@ const { Writer } = require('./BinaryCoder'),
     Moves = require('../../data/Moves'),
     Abilities = require('../../data/Abilities');
 
+const TankTable = Object.values(Tanks).map(tank => tank.name.toLowerCase());
+
 const IncomingMessageHandler = class {
     constructor(manager) { this.manager = manager; }
 
     login(buffer) {
-        const database = this.manager.server.database;
+        const database = this.manager.server.database
 
         const type = buffer.i8(), 
             username = buffer.string(),
-            password = buffer.string(),
-            [r, g, b] = [buffer.i8(), buffer.i8(), buffer.i8()];
+            password = buffer.string();
 
         let tmpUser = username.replaceAll(' ', '').toLowerCase(); // may cause memory pollution (?)
 
-        if (username.length < 2 || username.length > 32) return this.manager.outgoingMsgHandler.error('Could not perform action: Username must be within bounds of 2-32.');
-        if (BannedWords.filter(word => tmpUser.includes(word)).length) return this.manager.outgoingMsgHandler.error('Could not perform action: Username contains a blocked word.');
+        if (username.length < 2 || username.length > 32) return this.manager.outgoingMsgHandler.notification('Could not perform action: Username must be within bounds of 2-32.', 'error');
+        if (BannedWords.filter(word => tmpUser.includes(word)).length) return this.manager.outgoingMsgHandler.notification('Could not perform action: Username contains a blocked word.', 'error');
 
         switch (type) {
             case 0x00: { // LOGIN
                 const user = database.retreive('Users', document => document.username === username)?.[0];
 
-                if (!user) return this.manager.outgoingMsgHandler.error('Could not login: account with that username was not found.');
-                if (!bcrypt.compareSync(password, user.password)) return this.manager.outgoingMsgHandler.error('Could not login: invalid password.');
+                if (!user) return this.manager.outgoingMsgHandler.notification('Could not login: account with that username was not found.', 'error');
+                if (!bcrypt.compareSync(password, user.password)) return this.manager.outgoingMsgHandler.notification('Could not login: invalid password.', 'error');
 
                 this.manager.user = user;
                 this.manager.outgoingMsgHandler.accepted(user.trainerID, user.hoursPlayed, user.joinedAt, user.avatar, user.elo);
+                this.manager.outgoingMsgHandler.notification(`Welcome back, ${user.username}!`, 'success');
                 break;
             }
             case 0x01: { // REGISTER
                 // If botting becomes an issue, I will create a way to verify whether or not a bot or a real client is trying to register.
-                if (database.retreive('Users', document => document.username === username).length) return this.manager.outgoingMsgHandler.error('Could not register account: that username is already taken.');
+                if (this.manager.user) return this.manager.remove(true, 'Sent a REGISTER packet after logging in.');
+
+                const avatar = buffer.string().toLowerCase();
+                const [r, g, b] = [buffer.i8(), buffer.i8(), buffer.i8()];
                 
+                if (database.retreive('Users', document => document.username === username).length) return this.manager.outgoingMsgHandler.notification('Could not register account: that username is already taken.', 'error');
+                if (!TankTable.includes(avatar)) return this.manager.remove(true, 'Provided an invalid Avatar.');
+
                 database.create('Users', {
                     username,
                     password: bcrypt.hashSync(password, 10),
@@ -55,37 +63,93 @@ const IncomingMessageHandler = class {
                         minute: "numeric",
                         second: "numeric"
                     }),
-                    avatar: 'Overlord',
+                    avatar: avatar,
                     elo: 1000,
                     color: [r, g, b],
                 })
-                    .then(user => (this.manager.user = user, this.manager.outgoingMsgHandler.accepted(user.trainerID, user.hoursPlayed, user.joinedAt, user.avatar, user.elo)))
-                    .catch(er => (console.error(er), this.manager.outgoingMsgHandler.error('Could not create account. Please try again later.')));
+                    .then(user => {
+                        this.manager.user = user;
+                        this.manager.outgoingMsgHandler.accepted(user.trainerID, user.hoursPlayed, user.joinedAt, user.avatar, user.elo);
+                        this.manager.outgoingMsgHandler.notification(`You have been registered successfully, ${user.username}!`, 'success');
+                    })
+                    .catch(er => (console.error(er), this.manager.outgoingMsgHandler.notification('Could not create account. Please try again later.', 'error')));
                 break;
             }
-            case 0x02: { // CHANGE_PASSWORD
+            /*case 0x02: { // CHANGE_PASSWORD
                 // Sending a CHANGE_PASSWORD request will have the format of [0x00, string(username), string(`${oldPW} + ${newPW}`), i8(type)]
                 const user = database.retreive('Users', document => document.username === username)?.[0] || this.manager.user;
-                if (!user) return this.manager.outgoingMsgHandler.error('Could not change password: account with that username was not found.');
+                if (!user) return this.manager.outgoingMsgHandler.notification('Could not change password: account with that username was not found.', 'error');
 
                 const [oldPassword, newPassword] = password.split(' + ');
-                if (!bcrypt.compareSync(oldPassword, user.password)) return this.manager.outgoingMsgHandler.error('Could not change password: Old password is invalid.');
+                if (!bcrypt.compareSync(oldPassword, user.password)) return this.manager.outgoingMsgHandler.notification('Could not change password: Old password is invalid.', 'error');
 
                 database.edit('Users', document => document.username === username, { password: bcrypt.hashSync(newPassword, 10) })
-                    .then(() => this.manager.outgoingMsgHandler.accepted(user.trainerID, user.hoursPlayed, user.joinedAt, user.avatar, user.elo))
-                    .catch(er => (console.error(er), this.manager.outgoingMsgHandler.error('Could not change password. Please try again later.')));
+                    .then(() => {
+                        this.manager.outgoingMsgHandler.accepted(user.trainerID, user.hoursPlayed, user.joinedAt, user.avatar, user.elo);
+                        this.manager.outgoingMsgHandler.notification('You have successfully changed your password!', 'success');
+                    })
+                    .catch(er => (console.error(er), this.manager.outgoingMsgHandler.notification('Could not change password. Please try again later.', 'error')));
+                break;
+            }*/
+            case 0x02: { // CHANGE_PROFILE 
+                if (!this.manager.user) return this.manager.remove(true, 'Sent a CHANGE_PROFILE packet before logging in.');
+
+                const type = buffer.i8();
+
+                switch (type) {
+                    case 0x00: { // CHANGE_AVATAR
+                        const avatar = buffer.string().toLowerCase();
+                        if (!TankTable.includes(avatar)) return this.manager.remove(true, 'Provided an invalid Avatar.');
+
+                        database.edit('Users', document => document.username === this.manager.user.username, { avatar })
+                            .then(() => this.manager.outgoingMsgHandler.notification('You have successfully changed your avatar!', 'success'))
+                            .catch(er => (console.error(er), this.manager.outgoingMsgHandler.notification('Could not change avatar. Please try again later.', 'error')));
+                        break;
+                    }
+                    case 0x01: { // CHANGE_COLOR
+                        const [r, g, b] = [buffer.i8(), buffer.i8(), buffer.i8()];
+                        database.edit('Users', document => document.username === this.manager.user.username, { color: [r, g, b] })
+                            .then(() => this.manager.outgoingMsgHandler.notification('You have successfully changed your username color!', 'success'))
+                            .catch(er => (console.error(er), this.manager.outgoingMsgHandler.notification('Could not change username color. Please try again later.', 'error')));
+
+                        break;
+                    }
+                    case 0x02: { // CHANGE_USERNAME
+                        const newUsername = buffer.string();
+                        if (newUsername.length < 2 || newUsername.length > 32) return this.manager.outgoingMsgHandler.notification('Could not change username: Username must be within bounds of 2-32.', 'error');
+                        if (database.retreive('Users', document => document.username === newUsername).length) return this.manager.outgoingMsgHandler.notification('Could not change username: that username is already taken.', 'error');
+
+                        database.edit('Users', document => document.username === this.manager.user.username, { username: newUsername })
+                            .then(() => {
+                                this.manager.user.username = newUsername;
+                                this.manager.outgoingMsgHandler.notification('You have successfully changed your username!', 'success');
+                            })
+                            .catch(er => (console.error(er), this.manager.outgoingMsgHandler.notification('Could not change username. Please try again later.', 'error')));
+
+                        break;
+                    }
+                    case 0x03: { // CHANGE_PASSWORD
+                        const newPassword = buffer.string();
+
+                        database.edit('Users', document => document.username === this.manager.user.username, { password: bcrypt.hashSync(newPassword, 10) })
+                            .then(() => this.manager.outgoingMsgHandler.notification('You have successfully changed your password!', 'success'))
+                            .catch(er => (console.error(er), this.manager.outgoingMsgHandler.notification('Could not change password. Please try again later.', 'error')));
+
+                        break;
+                    }
+                }
             }
         }
     }
 
     chat(buffer) {
         if (!this.manager.user) return (console.log('WTF?'), this.manager.remove(true, 'Sent a CHAT packet before logging in.'));
-        if (Date.now() - this.manager.lastMessageSent < 1000) return this.manager.outgoingMsgHandler.error('Could not send message: Spam was detected.');
+        if (Date.now() - this.manager.lastMessageSent < 1000) return this.manager.outgoingMsgHandler.notification('Could not send message: Spam was detected.', 'error');
 
         const content = buffer.string();
 
         let tmpContent = content.replaceAll(' ', '').toLowerCase(); // may cause memory pollution (?)
-        if (BannedWords.filter(word => tmpContent.includes(word)).length) return this.manager.outgoingMsgHandler.error('Could not send message: Message contains a blocked word.');
+        if (BannedWords.filter(word => tmpContent.includes(word)).length) return this.manager.outgoingMsgHandler.notification('Could not send message: Message contains a blocked word.', 'error');
 
         this.manager.lastMessageSent = Date.now();
     
@@ -147,8 +211,11 @@ const OutgoingMessageHandler = class {
         this.manager.socket.send(new Writer().i8(0x01).string(id.slice(0, 8)).f32(hours).string(joinDate).string(avatar).f32(elo).out());
     }
 
-    error(error) {
-        this.manager.socket.send(new Writer().i8(0x02).string(error).out());
+    notification(error, type) {
+        const buffer = new Writer().i8(0x02).string(error);
+        NotificationTypes[type]?.forEach(byte => buffer.i8(byte));
+
+        this.manager.socket.send(buffer.out());
     }
 
     chat(username, [r, g, b], message) {

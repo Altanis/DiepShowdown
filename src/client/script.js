@@ -116,16 +116,19 @@
                 'chat', // DIV: The chat for the application; all sent messages go here.
                 'chatBox', // INPUT: Where the client types and sends their messages.
                 'changePassword', // INPUT: The changed password of the player.
-                'placeholder',
-                'usernameInfo',
-                'trainerID',
-                'hoursPlayed',
-                'joinDate',
-                'playerAvatar',
-                'elo',
+                'placeholder', // Placeholder for "Please log in to see your trainer card."
+                'usernameInfo', // TRAINERCARD_INFO: The username of the player.
+                'trainerID', // TRAINERCARD_INFO: The trainer ID of the player.
+                'hoursPlayed', // TRAINERCARD_INFO: The hours the player has played.
+                'joinDate', // TRAINERCARD_INFO: The date the player joined.
+                'playerAvatar', // TRAINERCARD_INFO: The avatar of the player.
+                'elo', // TRAINERCARD_INFO: The ELO of the player.
+                'picker', // DIV: The div that holds the color picker.
+                'colorpicker', // INPUT: The color picker for the client.
+                'modal', // The modal for connection state.
 
                 { 
-                    name: 'login', 
+                    name: 'login', // BUTTON: The button to log in.
                     click() {
                         player.accountAction(+!player.loggedIn); // If not logged in, log in (+!false = 1), else log out (+!true = 0).
                     } 
@@ -135,20 +138,17 @@
                 { 
                     name: 'changeColor', 
                     click() {
-                        if (this.elements.colorpicker.style.display === 'none') {
-                            this.elements.colorpicker.style.display = 'block';
-                            this.elements.colorpicker.value = this.color;
+                        if (this.elements.picker.style.display === 'none') {
+                            this.elements.picker.style.display = 'block';
+                            this.elements.picker.value = player.color;
                             this.elements.changeColor.innerText = 'Confirm';
                         } else {
-                            this.elements.colorpicker.style.display = 'none';
+                            this.elements.picker.style.display = 'none';
                             this.elements.changeColor.innerText = 'Change Color';
                             player.accountAction(4);
                         }
                     }
                 }, // BUTTON: The button to change the client's color.
-                'picker', // DIV: The div that holds the color picker.
-                'colorpicker', // INPUT: The color picker for the client.
-                'modal', // The modal for connection state.
                 {
                     name: 'overlay', // The gray overlay behind the modal.
                     ready() {
@@ -182,7 +182,7 @@
         chatAction() {
             if (document.activeElement !== this.elements.chatBox || !this.elements.chatBox.value) return;
 
-            this.io.send(new WritableStream().i8(1).string(this.elements.chatBox.value).out());
+            this.io.send(new Writer().i8(1).string(this.elements.chatBox.value).out());
             this.elements.chatBox.value = '';
         }
 
@@ -198,10 +198,6 @@
 
             if (![this.elements.username, this.elements.password].includes(document.activeElement) && pressedEnter) return;
 
-            setItem('username', this.elements.username.value);
-            setItem('password', this.elements.password.value);
-            setItem('color', this.elements.colorpicker.value);
-
             const packet = new Writer()
                 .i8(0x00) // LOGIN Packet
                 .i8(code - 1) // TYPE: 0 = Login, 1 = Register, 2 = Change Password, 3 = Change Color
@@ -210,14 +206,24 @@
             
             if (code === 2 || code === 4) this.elements.colorpicker.value.slice(1).split(/(?<=^(?:.{2})+)(?!$)/).forEach(hex => packet.i8(parseInt(hex, 16))); // REGISTER / CHANGE COLOR
             else if (code === 3) setItem('password', this.elements.changePassword.value); // CHANGE PASSWORD
+
+            if (code !== 4) { // <- Change Color, doesn't require logging in again (as long as the WS conneciton has a user).
+                setItem('username', this.elements.username.value);
+                setItem('password', this.elements.password.value);
+                setItem('color', this.elements.colorpicker.value);
+            }
+
             if (getItem('username') && getItem('password')) this.io.send(packet.out());
         }
 
         #attachEvents() {
             this.io.addEventListener("open", () => {
                 console.success("[SOCKET]: Connected to server.");
-                console.debug(this.elements.overlay.style.display);
                 this.elements.overlay.style.display = 'none';
+
+                if (getItem('username') && getItem('password')) {
+                    this.io.send(new Writer().i8(0x00).i8(0).string(localStorage.username).string(localStorage.password).out());
+                }
             });
 
             this.io.addEventListener("error", () => console.error(`[SOCKET]: Error during connection has occured.`));
@@ -230,10 +236,6 @@
                 <p style="color: red; font-size: 48px;">💀Disconnected💀</p>
                 <p style="color: red; font-size: 24px;">The server may be down, you have no connection, or you went AFK.</p>
                 `;
-
-                if (getItem('username') && getItem('password')) {
-                    this.io.send(new Writer().i8(0x00).i8(0).string(localStorage.username).string(localStorage.password).out());
-                }
             });
 
             this.io.addEventListener("message", ({ data }) => {
@@ -275,9 +277,9 @@
                         const [r, g, b] = [data.i8(), data.i8(), data.i8()];
                         const content = data.string();
 
-                        const { globalChat } = this.elements;
-                        globalChat.innerHTML += `<div class="padding: 5px;"><b style="color: rgb(${r}, ${g}, ${b});">${sanitizeHTML(username)}:</b> ${sanitizeHTML(content)}</div>`;
-                        globalChat.scrollTop = globalChat.scrollHeight;
+                        const { chat } = this.elements;
+                        chat.innerHTML += `<div class="padding: 5px;"><b style="color: rgb(${r}, ${g}, ${b});">${sanitizeHTML(username)}:</b> ${sanitizeHTML(content)}</div>`;
+                        chat.scrollTop = chat.scrollHeight;
                         return;                    
                     }
                     case 0x04: { // BATTLE packet
