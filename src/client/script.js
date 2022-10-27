@@ -186,7 +186,7 @@
             this.elements.chatBox.value = '';
         }
 
-        accountAction(code, pressedEnter) {
+        accountAction(code, type, pressedEnter) {
             if (!code) {
                 this.loggedIn = false;
                 removeItem('username');
@@ -200,10 +200,17 @@
 
             const packet = new Writer()
                 .i8(0x00) // LOGIN Packet
-                .i8(code - 1) // TYPE: 0 = Login, 1 = Register, 2 = Change Password, 3 = Change Color
+                .i8(code - 1) // TYPE: 0 = Login, 1 = Register, 2 = Change Profile
                 .string(getItem('username'))
                 .string(`${getItem('password')}${code === 3 ? ` + ${this.elements.changePassword.value}` : ''}`); 
             
+            if (code === 2) {
+                switch (type) {
+                    case 'avatar': break; // avatar isn't changable yet
+                    case 'color': this.elements.colorpicker.value.slice(1).split(/(?<=^(?:.{2})+)(?!$)/).forEach(hex => packet.i8(parseInt(hex, 16))); break;
+                    case 'password': packet.string(this.elements.changePassword.value); break;
+                }
+            }
             if (code === 2 || code === 4) this.elements.colorpicker.value.slice(1).split(/(?<=^(?:.{2})+)(?!$)/).forEach(hex => packet.i8(parseInt(hex, 16))); // REGISTER / CHANGE COLOR
             else if (code === 3) setItem('password', this.elements.changePassword.value); // CHANGE PASSWORD
 
