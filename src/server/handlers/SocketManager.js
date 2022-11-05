@@ -1,5 +1,5 @@
 const { IncomingMessageHandler, OutgoingMessageHandler } = require('./MessageHandler'),
-    { Incoming, BannedWords } = require('../Constants'),
+    { Incoming } = require('../Constants'),
     { Reader } = require('./BinaryCoder');
 
 module.exports = class SocketManager {
@@ -51,7 +51,7 @@ module.exports = class SocketManager {
     }
 
     remove(ban, reason) {
-        console.log(`Socket is being ${ban ? 'banned' : 'disconnected'} for: ${reason || 'an unspecified reason.'}.`);
+        console.trace(`Socket is being ${ban ? 'banned' : 'disconnected'} for: ${reason || 'an unspecified reason.'}.`);
         (ban && !this.local) ? this.socket.terminate(reason) : this.socket.close();
         this.server.sockets.delete(this.socket);
     }

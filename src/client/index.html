@@ -69,10 +69,10 @@
 					</div>
 
 					<a>Change Profile:</a>
-					<input id="username" placeholder="Change Username" class="bigButton">
-					<input type="password" placeholder="Change Password" id="changePassword" class="bigButton">
+					<input id="changeUsername" placeholder="Change Username" class="bigButton">
+					<input type="password" id="changePassword" placeholder="Change Password" class="bigButton">
 					<div class="buttonActions" style="display: flex; align-items: center; justify-content: center; width: 100%;">
-						<button type="button" id="changeUsername" class="smallButton">Change Username</button>
+						<button type="button" id="changeUN" class="smallButton">Change Username</button>
 						<button type="button" id="changePW" class="smallButton">Change Password</button>
 						<button type="button" id="changeColor" class="smallButton">Change Color</button>
 					</div>
@@ -80,8 +80,8 @@
 			</div>
 			<div class="accountInfo" style="background: linear-gradient(to bottom,#edf2f8,#d7e3ec); border-radius: 20px; height: 40%;">
 				<img id="playerAvatar" align="right" width="200" height="200" style="display: none; transform: rotate(45deg);">
-				<form style="text-align: center;">
-					<a style="display: inline-block; font-size: 48px; padding: 1px;">Trainer Card</a>
+				<form>
+					<span style="display: table; margin: 0 auto; font-size: 48px;">Trainer Card</span>
           			<p id="placeholder" style="text-align: center; font-style: italic;">Please log in to get your account data.</p>
 					<p id="usernameInfo" class="trainerInfo"></p>
 					<p id="trainerID" class="trainerInfo"></p>
@@ -163,6 +163,6 @@
 	</div>
 	
 	<script src="../data/Tanks.js" defer></script> <!-- Low priority execution. Loads after every other script tag.-->
-	<script src="script.js" defer></script>
+	<script src="bundle.js" defer></script>
 </body>
 </html>

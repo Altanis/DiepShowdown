@@ -9,13 +9,11 @@ const { Writer } = require('./BinaryCoder'),
     Moves = require('../../data/Moves'),
     Abilities = require('../../data/Abilities');
 
-const TankTable = Object.values(Tanks).map(tank => tank.name.toLowerCase());
-
 const IncomingMessageHandler = class {
     constructor(manager) { this.manager = manager; }
 
     login(buffer) {
-        const database = this.manager.server.database
+        const database = this.manager.server.database;
 
         const type = buffer.i8();
 
@@ -45,11 +43,11 @@ const IncomingMessageHandler = class {
                 if (username.length < 2 || username.length > 32) return this.manager.outgoingMsgHandler.notification('Could not perform action: Username must be within bounds of 2-32.', 'error');
                 if (BannedWords.filter(word => tmpUser.includes(word)).length) return this.manager.outgoingMsgHandler.notification('Could not perform action: Username contains a blocked word.', 'error');
         
-                const avatar = buffer.string().toLowerCase();
+                let avatar = buffer.i8();
                 const [r, g, b] = [buffer.i8(), buffer.i8(), buffer.i8()];
                 
                 if (database.retreive('Users', document => document.username === username).length) return this.manager.outgoingMsgHandler.notification('Could not register account: that username is already taken.', 'error');
-                if (!TankTable.includes(avatar)) return this.manager.remove(true, 'Provided an invalid Avatar.');
+                if (!Tanks[avatar]) avatar = 1; // <- may be an accident return this.manager.remove(true, 'Provided an invalid Avatar.');
 
                 database.create('Users', {
                     username,
@@ -58,7 +56,7 @@ const IncomingMessageHandler = class {
                     hoursPlayed: 0,
                     lastTick: 0,
                     joinedAt: new Date().toLocaleString('en-US', {
-                        hour12: false,
+                        hour12: true,
                         year: 'numeric',
                         month: '2-digit',
                         day: '2-digit',
@@ -95,14 +93,15 @@ const IncomingMessageHandler = class {
                 break;
             }*/
             case 0x02: { // CHANGE_PROFILE 
-                if (!this.manager.user) return this.manager.remove(true, 'Sent a CHANGE_PROFILE packet before logging in.');
+                if (!this.manager.user) return; // < may be an accident:  this.manager.remove(true, 'Sent a CHANGE_PROFILE packet before logging in.');
+                console.log('test 1 passed');
 
                 const type = buffer.i8();
 
                 switch (type) {
                     case 0x00: { // CHANGE_AVATAR
-                        const avatar = buffer.string().toLowerCase();
-                        if (!TankTable.includes(avatar)) return this.manager.remove(true, 'Provided an invalid Avatar.');
+                        const avatar = buffer.i8();
+                        if (!Tanks[avatar]) return; // < may be an accident: this.manager.remove(true, 'Provided an invalid Avatar.');
 
                         database.edit('Users', document => document.username === this.manager.user.username, { avatar })
                             .then(() => this.manager.outgoingMsgHandler.notification('You have successfully changed your avatar!', 'success'))
@@ -118,12 +117,17 @@ const IncomingMessageHandler = class {
                         break;
                     }
                     case 0x02: { // CHANGE_USERNAME
+                        console.log('test 2 passed');
+
                         const newUsername = buffer.string();
+                        console.log(newUsername);
                         if (newUsername.length < 2 || newUsername.length > 32) return this.manager.outgoingMsgHandler.notification('Could not change username: Username must be within bounds of 2-32.', 'error');
                         if (database.retreive('Users', document => document.username === newUsername).length) return this.manager.outgoingMsgHandler.notification('Could not change username: that username is already taken.', 'error');
 
                         database.edit('Users', document => document.username === this.manager.user.username, { username: newUsername })
-                            .then(() => {
+                            .then((doc) => {
+                                console.log('test 3 passed');
+                                console.log(doc);
                                 this.manager.user.username = newUsername;
                                 this.manager.outgoingMsgHandler.notification('You have successfully changed your username!', 'success');
                             })
@@ -211,7 +215,7 @@ const OutgoingMessageHandler = class {
     constructor(manager) { this.manager = manager; }
 
     accepted(id, hours, joinDate, avatar, elo) {
-        this.manager.socket.send(new Writer().i8(0x01).string(id.slice(0, 8)).f32(hours).string(joinDate).string(avatar).f32(elo).out());
+        this.manager.socket.send(new Writer().i8(0x01).string(id.slice(0, 8)).f32(hours).string(joinDate).i8(avatar).f32(elo).out());
     }
 
     notification(error, type) {
