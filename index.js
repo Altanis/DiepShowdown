@@ -38,6 +38,7 @@ console.log('===============');
 const server = http.createServer((req, res) => {
     // TODO: Fix how SVG is served.
     if (req.url === '/') return res.end(files['src/client/index.html']);
+    if (req.url.includes('svg')) return res.setHeader('Content-Type', 'image/svg+xml');
     return res.end(files[`src${req.url}`] || '404');
 });
 
