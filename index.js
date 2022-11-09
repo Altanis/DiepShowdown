@@ -34,16 +34,24 @@ for (let [file] of Object.entries(files)) {
 
 console.log('===============');
 
-// Serve client:
 const server = http.createServer((req, res) => {
-    // TODO: Fix how SVG is served.
-    if (req.url === '/') return res.end(files['src/client/index.html']);
-    if (req.url.includes('svg')) return res.setHeader('Content-Type', 'image/svg+xml');
-    return res.end(files[`src${req.url}`] || '404');
+    // Request handlers:
+    req.on('error', function(error) {
+        console.error(error);
+        res.statusCode = 500;
+        res.end('500 Internal Server Error');
+    });
+
+    // Serve frontend files:
+    if (req.url === '/' && req.method === 'GET') return res.end(files['src/client/index.html']); // Provide mainfile if GET request made to main page.
+
+    // Intermediary to send correct content types (if HTTP fails to set them):
+    if (req.url?.includes('svg')) res.setHeader('Content-Type', 'image/svg+xml'); // Explicitly set SVG content type.
+    
+    return res.end(files[`src${req.url}`] || '404 Not Found'); // Sends the file if it exists, otherwise gives a 404 Error.
 });
 
 server.listen(8080, () => { 
-    console.log('Client has fully loaded! Being served at `localhost:8080`.'); 
+    console.log('Client has fully loaded! Being served at http://localhost:8080.'); 
+    require('./src/server/Server'); // Starts the server.
 });
-
-require('./src/server/Server'); // Starts the server.
