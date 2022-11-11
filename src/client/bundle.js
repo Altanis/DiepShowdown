@@ -26,7 +26,7 @@
     const setItem = (id, value) => localStorage.setItem(id, value);
     const removeItem = id => localStorage.removeItem(id);
 
-    class ElementManager {
+    const ElementManager = class {
         #views = enumerate({ 0: 'mainMenu', 1: 'allTeams', 2: 'teamBuild', 3: 'chooseTank', 4: 'tankBuild' });
 
         constructor(elements) {
@@ -43,9 +43,21 @@
 
             this.initialize(elements);
 
+            // TOOD: Make this more OOP-based and remove functional patterns
             // -- DYNAMICALLY UPLOAD TANKS -- //
             for (const tank of Object.values(window.Tanks)) {
-                const { name, sprite } = tank; // More will be referenced as time comes.
+                const { name, sprite, moveset } = tank; // More will be referenced as time comes.
+                const { 
+                    tankSprite,
+                    movesetWrapper,
+                    movesetContainer,
+                    tanks,
+
+                    move1,
+                    move2,
+                    move3,
+                    move4,
+                } = this.elements;
 
                 const li = document.createElement('li');
                 li.classList.add('li');
@@ -61,21 +73,56 @@
 
                 li.appendChild(img);
                 li.appendChild(span);
-                li.onclick = function() {
-                    tankBuild.style.display = 'block';
-                    chooseTank.style.display = 'none';
+                li.addEventListener('click', () => {
+                    this.view++;
 
                     // tankNickname.placeholder = name;
                     tankSprite.src = `img/svgs/tanks.svg#${sprite}`;
 
-                    // todo: fill in all moves of the tank
+                    // TODO: make more OOP-based
+                    for (let move of moveset) {
+                        move = window.Moves[move];
 
+                        const li = document.createElement('li');
+                        li.style.display = "flex";
+                        li.style.width = li.style.height = "auto";
+
+                        const movname = document.createElement('p');
+                        const movecat = document.createElement('p');
+                        const movpower = document.createElement('p');
+                        const movdesc = document.createElement('p');
+
+                        movname.textContent = move.name;
+                        movecat.textContent = move.type;
+                        movpower.textContent = move.power || '--';
+                        movdesc.textContent = move.description;
+
+                        movname.classList.add("col", "movname");
+                        movecat.classList.add("col", "movecat");
+                        movpower.classList.add("col", "movpower");
+                        movdesc.classList.add("col", "movdesc");
+
+                        li.appendChild(movname);
+                        li.appendChild(movecat);
+                        li.appendChild(movpower);
+                        li.appendChild(movdesc);
+
+                        li.addEventListener('click', () => {
+                            alert('CLICKED');
+                            // TODO: Very hacky method of getting current input
+                            const input = document.querySelector('.move:focus');
+                            if (!input) return alert('could not find input');
+                            _log(document.activeElement);
+                        });
+
+                        movesetContainer.appendChild(li);
+                    }
 
                     for (const element of document.getElementsByClassName('move')) {
-                        element.onfocus = () => movesetContainer.style.display = 'block';
-                        element.onblur = () => movesetContainer.style.display = 'none';
+                        element.addEventListener('focus', () => movesetWrapper.style.display = 'block');
+                        element.addEventListener('blur', () => movesetWrapper.style.display = 'none');
                     }
-                };
+                });
 
                 tanks.appendChild(li);
             }
@@ -95,18 +142,18 @@
 
                 for (const [k, cb] of Object.entries(info)) {
                     if (typeof cb !== 'function') continue;
+                    
                     if (k === 'ready') { 
                         cb.bind(this)();
                         continue;
                     }
+
                     this.elements[info.name].addEventListener(k, cb.bind(this));
                 }
             };
         }
 
         changeView(view) {
-            console.log(this.view, view);
-            console.log(this.#views[this.view], this.#views[view]);
             this.elements[this.#views[this.view]].style.display = 'none';
             this.elements[this.#views[view]].style.display = 'block';
 
@@ -120,7 +167,9 @@
         }
     }
 
-    class Player {
+    const Animations = class {}; // When battles are worked on, this will manage HTMLCanvas2D animations.
+
+    const Player = class {
         constructor() {
             // -- ELEMENTS -- //
             this.elements = new ElementManager([
@@ -198,7 +247,20 @@
                     }
                 },
 
-                // VIEW 1
+                // VIEW 3
+                'tanks', // DIV: The div that holds all the tanks.
+
+                // VIEW 4
+                'tankSprite', // The sprite of the tank selected.
+                'movesetWrapper', // Div which provides wrapping.
+                'movesetContainer', // The container for the moveset.
+                // INPUTS: Inputs for the movesets.
+                'move1',
+                'move2',
+                'move3',
+                'move4',
+
+                // View Support Buttons
                 { name: 'teambuilder', click() { this.view++; } }, // Teambuilder Button
                 { name: 'createTeam', click() { this.view++; } }, // Create Team Button
                 { name: 'addTank', click() { this.view++; } }, // Add Tank Button
