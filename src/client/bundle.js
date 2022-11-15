@@ -30,7 +30,7 @@
         constructor() {
             this.teams = getItem('teams') ? JSON.parse(getItem('teams')) : {};
             this.pointer = null;
-            this.selectedTeam = null;
+            this.selectedTeam = null; 
         }
 
         createTeam() {
@@ -67,7 +67,35 @@
             });
 
             this.initialize(elements);
+            this.uploadTanks();
+        }
 
+        initialize(elements) {
+            for (let info of elements) {
+                if (typeof info === 'string') info = { name: info };
+
+                const element = getElementById(info.name) || window[info.name];
+                if (!element) {
+                    console.error(`[ELEMENT]: Could not find element with ID ${info.name}.`);
+                    continue;
+                }
+
+                this.elements[info.name] = element;
+
+                for (const [k, cb] of Object.entries(info)) {
+                    if (typeof cb !== 'function') continue;
+                    
+                    if (k === 'ready') { 
+                        cb.bind(this)();
+                        continue;
+                    }
+
+                    this.elements[info.name].addEventListener(k, cb.bind(this));
+                }
+            };
+        }
+
+        uploadTanks() {
             // TOOD: Make this more OOP-based and remove functional patterns
             // -- DYNAMICALLY UPLOAD TANKS -- //
             for (const [id, tank] of Object.entries(window.Tanks)) {
@@ -164,29 +192,26 @@
             }
         }
 
-        initialize(elements) {
-            for (let info of elements) {
-                if (typeof info === 'string') info = { name: info };
+        uploadTeams() {
+            const teamContainer = this.elements.teamContainer;
+            teamContainer.innerHTML = '';
 
-                const element = getElementById(info.name) || window[info.name];
-                if (!element) {
-                    console.error(`[ELEMENT]: Could not find element with ID ${info.name}.`);
-                    continue;
-                }
+            for (const [id, team] of Object.entries(player.TeamManger.teams)) {
+                const li = document.createElement('li');
+                li.classList.add('li');
 
-                this.elements[info.name] = element;
+                const span = document.createElement('span');
+                span.classList.add('name');
+                span.textContent = id;
 
-                for (const [k, cb] of Object.entries(info)) {
-                    if (typeof cb !== 'function') continue;
-                    
-                    if (k === 'ready') { 
-                        cb.bind(this)();
-                        continue;
-                    }
+                li.appendChild(span);
+                li.addEventListener('click', () => {
+                    player.TeamManger.pointer = id;
+                    this.view++;
+                });
 
-                    this.elements[info.name].addEventListener(k, cb.bind(this));
-                }
-            };
+                teamContainer.appendChild(li);
+            }
         }
 
         changeView(view) {
@@ -306,6 +331,7 @@
                 { 
                     name: 'teambuilder',
                      click() {
+                        this.uploadTeams();
                         this.view++; 
                     } 
                 }, // Teambuilder Button
