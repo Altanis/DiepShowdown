@@ -182,6 +182,10 @@ input:placeholder-shown {
     padding-left: 20px;
 }
 
+.name:hover {
+    cursor: pointer;
+}
+
 #battle {
     background: linear-gradient(to bottom,  hsl(260.4651162790697,59.44700460829492%,72%),  hsl(260.4651162790697,59.44700460829492%,52%));
     border-color: hsl(260.4651162790697,59.44700460829492%,40%);

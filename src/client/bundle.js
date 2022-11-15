@@ -26,11 +26,36 @@
     const setItem = (id, value) => localStorage.setItem(id, value);
     const removeItem = id => localStorage.removeItem(id);
 
+    const TeamManager = class {
+        constructor() {
+            this.teams = getItem('teams') ? JSON.parse(getItem('teams')) : {};
+            this.pointer = null;
+            this.selectedTeam = null;
+        }
+
+        createTeam() {
+            this.pointer = Date.now();
+            this.teams[this.pointer] = this.selectedTeam = {};
+            this.save();
+        }
+
+        addEntry(key, value) {
+            /**
+             * Format: { tankID: { moveset: Array<String>, level: Integer, nickname: String } }
+             */
+            this.selectedTeam[key] = value;
+            this.save();
+        }
+
+        save() { setItem('teams', JSON.stringify(this.teams)); }
+    }
+
     const ElementManager = class {
         #views = enumerate({ 0: 'mainMenu', 1: 'allTeams', 2: 'teamBuild', 3: 'chooseTank', 4: 'tankBuild' });
 
         constructor(elements) {
             this.elements = {};
+            this.TeamManager = new TeamManager();
 
             this._view = 0;
             Object.defineProperty(this, 'view', {
@@ -45,18 +70,12 @@
 
             // TOOD: Make this more OOP-based and remove functional patterns
             // -- DYNAMICALLY UPLOAD TANKS -- //
-            for (const tank of Object.values(window.Tanks)) {
+            for (const [id, tank] of Object.entries(window.Tanks)) {
                 const { name, sprite, moveset } = tank; // More will be referenced as time comes.
                 const { 
                     tankSprite,
-                    movesetWrapper,
                     movesetContainer,
                     tanks,
-
-                    move1,
-                    move2,
-                    move3,
-                    move4,
                 } = this.elements;
 
                 const li = document.createElement('li');
@@ -74,14 +93,21 @@
                 li.appendChild(img);
                 li.appendChild(span);
                 li.addEventListener('click', () => {
+                    const currTank = player.TeamManger.currentTeam[id] = {
+                        moveset: [],
+                        level: 100,
+                        nickname: '',
+                    };
+                    
+                    movesetContainer.innerHTML = '';
                     this.view++;
 
                     // tankNickname.placeholder = name;
                     tankSprite.src = `img/svgs/tanks.svg#${sprite}`;
 
                     // TODO: make more OOP-based
-                    for (let move of moveset) {
-                        move = window.Moves[move];
+                    for (const id of moveset) {
+                        const move = window.Moves[id];
 
                         const li = document.createElement('li');
                         li.style.display = "flex";
@@ -107,20 +133,30 @@
                         li.appendChild(movpower);
                         li.appendChild(movdesc);
 
+                        for (let i = 5; i-- > 1;) {
+                            const input = this.elements[`move${i}`];
+                            input.addEventListener('input', event => {
+                                currTank.moveset[i - 1] = null;
+
+                                const content = event.target.value.toLowerCase().replaceAll(' ', '');
+                                if (content) {
+                                    for (const child of movesetContainer.children) {
+                                        child.style.display = child.children[0].innerText.toLowerCase().replaceAll(' ', '').includes(content) ? 'flex' : 'none'; 
+                                    }
+                                } else {
+                                    for (const child of movesetContainer.children) child.style.display = 'flex';
+                                }
+                            });
+                        }
+
                         li.addEventListener('click', () => {
-                            alert('CLICKED');
-                            // TODO: Very hacky method of getting current input
-                            const input = document.querySelector('.move:focus');
-                            if (!input) return alert('could not find input');
-                            _log(document.activeElement);
+                            const idx = currTank.moveset.indexOf(null) + 1 || currTank.moveset.push(+id);
+                            this.elements[`move${idx}`].value = move.name;
+                            currTank.moveset[idx - 1] = +id; // ensurance in the event moveset[idx - 1] === null
+                            player.TeamManger.save();
                         });
 
                         movesetContainer.appendChild(li);
-                    }
-
-                    for (const element of document.getElementsByClassName('move')) {
-                        element.addEventListener('focus', () => movesetWrapper.style.display = 'block');
-                        element.addEventListener('blur', () => movesetWrapper.style.display = 'none');
                     }
                 });
 
@@ -154,6 +190,9 @@
         }
 
         changeView(view) {
+            // TODO: Remove bandaid and make real solution
+            // this.elements.movesetWrapper.style.display = view === 4 ? 'block' : 'none';
+
             this.elements[this.#views[this.view]].style.display = 'none';
             this.elements[this.#views[view]].style.display = 'block';
 
@@ -247,10 +286,13 @@
                     }
                 },
 
-                // VIEW 3
+                // VIEW 1
+                'teamContainer', // DIV: The div that holds all the teams.
+
+                // VIEW 2
                 'tanks', // DIV: The div that holds all the tanks.
 
-                // VIEW 4
+                // VIEW 3
                 'tankSprite', // The sprite of the tank selected.
                 'movesetWrapper', // Div which provides wrapping.
                 'movesetContainer', // The container for the moveset.
@@ -261,13 +303,25 @@
                 'move4',
 
                 // View Support Buttons
-                { name: 'teambuilder', click() { this.view++; } }, // Teambuilder Button
-                { name: 'createTeam', click() { this.view++; } }, // Create Team Button
-                { name: 'addTank', click() { this.view++; } }, // Add Tank Button
-                { name: 'allTeamsBack', click() { this.view--; } }, // All Teams Back Button
-                { name: 'teamBuildBack', click() { this.view--; } }, // Team Build Back Button
-                { name: 'chooseTankBack', click() { this.view--; } }, // Choose Tank Back Button
-                { name: 'tankBuildBack', click() { this.view--; } }, // Tank Build Back Button
+                { 
+                    name: 'teambuilder',
+                     click() {
+                        this.view++; 
+                    } 
+                }, // Teambuilder Button
+                { 
+                    name: 'createTeam', 
+                    click() { 
+                        this.view++;
+                        player.TeamManger.teams[player.TeamManger.pointer = Date.now()] = {};
+                        player.TeamManger.save();
+                    }
+                }, // Create Team Button
+                { name: 'addTank', click() { this.view++; player.TeamManger.save(); } }, // Add Tank Button
+                { name: 'allTeamsBack', click() { this.view--; player.TeamManger.save(); } }, // All Teams Back Button
+                { name: 'teamBuildBack', click() { this.view--; player.TeamManger.save(); } }, // Team Build Back Button
+                { name: 'chooseTankBack', click() { this.view--; player.TeamManger.save(); } }, // Choose Tank Back Button
+                { name: 'tankBuildBack', click() { this.view--; player.TeamManger.save(); } }, // Tank Build Back Button
             ]).elements;
 
             // -- SOCKET -- //
@@ -279,6 +333,20 @@
             this.card = {};
             this.loggedIn = false;
             this.color = getItem('color') || '#000000';
+
+            // -- TEAM DATA -- //
+            this.TeamManger = {
+                teams: getItem('teams') ? JSON.parse(getItem('teams')) : {},
+                pointer: null,
+                get currentTeam() {
+                    return this.teams[this.pointer] || {};
+                },
+                save() {
+                    setItem('teams', JSON.stringify(this.teams));
+                },
+            };
+
+            this.TeamManger.pointer = Object.keys(this.TeamManger.teams)[0] || null;
 
             this.#attachEvents();
         }
@@ -324,7 +392,6 @@
                     break;
                 }
                 case 2: { // Change Profile
-                    console.log(type);
                     switch (type) {
                         case 0: buffer.i8(0).i8(1); break; // Change Avatar
                         case 1: {
@@ -347,8 +414,6 @@
                     break;
                 }
             }
-
-            console.log(buffer.out());
 
             this.io.send(buffer.out());
             
@@ -411,7 +476,6 @@
                         this.card.hoursPlayed = data.f32();
                         this.card.joinDate = data.string();
                         this.card.playerAvatar = Tanks[data.i8()].sprite;
-                        console.log(this.card.playerAvatar);
                         this.card.elo = data.f32();
                         this.loggedIn = true;
 

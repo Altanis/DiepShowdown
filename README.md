@@ -16,8 +16,8 @@ Currently using an SVG of every tank.
 - [ ] UI for teambuilding.
     - [x] Create menu of all current teams.
     - [x] Create menu for tanks.
-    - [ ] Create info for tank (ability, movepool, etc)
-    - [ ] Save teams. 
+    - [x] Create info for tank (ability, movepool, etc)
+    - [x] Save teams. 
 - [ ] UI for battling.
 - [ ] Creating sprites, movesets, abilities, etc. for tanks.
 - [ ] Create a battle system.

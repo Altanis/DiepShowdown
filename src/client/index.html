@@ -1,161 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name=”viewport” content=”width=device-width, initial-scale=1.0″>
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	
-	<title>DiepShowdown</title>
+    <head>
+        <meta charset="UTF-8">
+        <meta name=”viewport” content=”width=device-width, initial-scale=1.0″>
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>DiepShowdown</title>
+        <style>
+            @font-face {
+                font-family: 'Material Icons';
+                font-style: normal;
+                font-weight: 400;
+                src: url(https://fonts.gstatic.com/s/materialicons/v128/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2) format('woff2');
+            }
 
-	<style>
-		@font-face {
-			font-family: 'Material Icons';
-			font-style: normal;
-			font-weight: 400;
-			src: url(https://fonts.gstatic.com/s/materialicons/v128/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2) format('woff2');
-		}
-
-		.material-icons {
-			font-family: 'Material Icons';
-			font-weight: normal;
-			font-style: normal;
-			font-size: 24px;
-			line-height: 1;
-			letter-spacing: normal;
-			text-transform: none;
-			display: inline-block;
-			white-space: nowrap;
-			word-wrap: normal;
-			direction: ltr;
-			font-feature-settings: 'liga';
-			-webkit-font-feature-settings: 'liga';
-			-webkit-font-smoothing: antialiased;
-		}
-	</style>
-	
-  	<script src="/client/bincoder.js"></script>
-
-	<script src="/data/Moves.js"></script>
-	<script src="/data/Abilities.js"></script>
-
-	<link rel="stylesheet" href="/client/style.css">
-	<link rel="icon" href="/client/img/favicon.png">
-</head>
-<body>
-	<div class="backgroundImage"></div>
-	<div id="mainMenu" class="container">
-		<div class="column">
-			<div class="battleMenu">
-				<form>
-					<p>Team:</p>
-					<button type="button" id="teamSelector" class="bigButton" onclick="()=>{}">No teams created. Go to <b>Teambuilder</b>.</button>
-					<button id="battle" class="bigButton"><b>BATTLE!</b></button>
-				</form>
-			</div>
-			<div class="teambuilder" style="padding-top: 50%;">
-				<button id="teambuilder" class="bigButton">Teambuilder</button>
-			</div>
-		</div>
-		<div class="column">
-			<div class="loginMenu" style="display: flex; align-items: center; justify-content: center;">
-				<form>
-					<p>Login/Register:</p>
-					<input placeholder="Username" id="username" class="bigButton">
-					<input type="password" placeholder="Password" id="password" class="bigButton">
-					<span id="picker">Color: <input type="color" id="colorpicker" value="#000000"></span>
-					<div class="buttonActions" style="display: flex; align-items: center; justify-content: center; width: 100%;">
-						<button type="button" id="login" class="smallButton">Log In</button>
-						<button type="button" id="register" class="smallButton">Register</button>
-					</div>
-
-					<a>Change Profile:</a>
-					<input id="changeUsername" placeholder="Change Username" class="bigButton">
-					<input type="password" id="changePassword" placeholder="Change Password" class="bigButton">
-					<div class="buttonActions" style="display: flex; align-items: center; justify-content: center; width: 100%;">
-						<button type="button" id="changeUN" class="smallButton">Change Username</button>
-						<button type="button" id="changePW" class="smallButton">Change Password</button>
-						<button type="button" id="changeColor" class="smallButton">Change Color</button>
-					</div>
-				</form>
-			</div>
-			<div class="accountInfo" style="background: linear-gradient(to bottom,#edf2f8,#d7e3ec); border-radius: 20px; height: 40%;">
-				<img id="playerAvatar" align="right" width="200" height="200" style="display: none; transform: rotate(45deg);">
-				<form>
-					<span style="display: table; margin: 0 auto; font-size: 48px;">Trainer Card</span>
-          			<p id="placeholder" style="text-align: center; font-style: italic;">Please log in to get your account data.</p>
-					<p id="usernameInfo" class="trainerInfo"></p>
-					<p id="trainerID" class="trainerInfo"></p>
-					<p id="hoursPlayed" class="trainerInfo"></p>
-					<p id="joinDate" class="trainerInfo"></p>
-          			<p id="elo" class="trainerInfo"></p>
-				</form>
-			</div>
-		</div>
-		<div class="column">
-			<p>Global Chat:</p>
-			<div id="chat" class="globalChat">
-				<p style="font-size: 24px; font-weight: bold; text-align: center;">Please be respectful.</p>
-			</div>
-			<input placeholder="Please log in to send messages!" id="chatBox" class="bigButton" disabled>
-		</div>
-	</div>
-	<div id="teamBuilder" class="container">
-		<div id="allTeams" style="display: none;">
-			<button type="button" id="allTeamsBack" class="miniButton"><i class="material-icons">&#xe317;</i> Back</button>
-			<button type="button" id="createTeam" class="miniButton"><i class="material-icons">&#xe147;</i> New Team</button>
-			<p>All teams:</p>
-		</div>
-	
-		<div id="teamBuild" style="display: none;">
-			<button type="button" id="teamBuildBack" class="miniButton"><i class="material-icons">&#xe317;</i> Back</button>
-			<button type="button" id="addTank" class="miniButton"><i class="material-icons">&#xe147;</i> Add Tank</button>
-			<div id="currentTanks">
-				<i>you have no tanks in your team git gud lol</i>
-			</div>
-		</div>
-	
-		<div id="chooseTank" style="display: none;">
-			<button type="button" id="chooseTankBack" class="miniButton"><i class="material-icons">&#xe317;</i> Back</button><br>
-			<div class="allTanks" id="allTanks">
-				<ul id="tanks" style="display: inline-block;"></ul>
-			</div>
-		</div>
-	
-		<div id="tankBuild" style="display: none;">
-			<button type="button" id="tankBuildBack" class="miniButton"><i class="material-icons">&#xe317;</i> Back</button>
-			<div id="tankInfo" class="tankInfo" style="display: flex; width: 100%; padding: 2%;">
-				<img id="tankSprite" align="left" width="200" height="200">
-				<!-- <div class="nickname" style="font-weight: bold;"> To be added at a later date.
-					<p>Nickname:</p>
-					<input id="tankNickname" class="miniButton" placeholder="Nickname" maxlength="18">
-				</div> !-->
-				<div style="font-weight: bold; flex-grow: 1;">
-					<p>Level:</p>
-					<input id="tankLevel" class="miniButton" placeholder="100" maxlength="3">
-				</div>
-				<div style="font-weight: bold; flex-grow: 1; display: inline-grid;">
-					<p>Moveset:</p>
-					<input id="move1" class="move bigButton" placeholder="Move 1">
-					<input id="move2" class="move bigButton" placeholder="Move 2">
-					<input id="move3" class="move bigButton" placeholder="Move 3">
-					<input id="move4" class="move bigButton" placeholder="Move 4">
-				</div>
-			</div>
-			</div>
-			<div id="movesetWrapper" style="display: none; padding-top: 1%;">
-				<div id="movesetContainer" class="allTanks"></div>
-			</div>
-		</div>
-	</div>
-	
-	<div id="overlay" class="overlay container">
-		<div id="modal" style="background-color: #FFFFFF; border-radius: 20px; height: 50%; width: 50%; z-index: 11;">
-			<p style="color: black; font-size: 48px;">Connecting...</p>
-			<p style="color: black; font-size: 24px;">Please wait as we connect to our servers...</p>
-		</div>
-	</div>
-	
-	<script src="/data/Tanks.js" defer></script> <!-- Low priority execution. Loads after every other script tag.-->
-	<script src="/client/bundle.js" defer></script>
-</body>
+            .material-icons {
+                font-family: 'Material Icons';
+                font-weight: normal;
+                font-style: normal;
+                font-size: 24px;
+                line-height: 1;
+                letter-spacing: normal;
+                text-transform: none;
+                display: inline-block;
+                white-space: nowrap;
+                word-wrap: normal;
+                direction: ltr;
+                font-feature-settings: 'liga';
+                -webkit-font-feature-settings: 'liga';
+                -webkit-font-smoothing: antialiased;
+            }
+        </style>
+        <script src="/client/bincoder.js"></script>
+        <script src="/data/Moves.js"></script>
+        <script src="/data/Abilities.js"></script>
+        <link rel="stylesheet" href="/client/style.css">
+        <link rel="icon" href="/client/img/favicon.png">
+    </head>
+    <body>
+        <div class="backgroundImage"></div>
+        <div id="mainMenu" class="container">
+            <div class="column">
+                <div class="battleMenu">
+                    <form>
+                        <p>Team:</p>
+                        <button type="button" id="teamSelector" class="bigButton" onclick="()=>{}">No teams created. Go to <b>Teambuilder</b>. </button>
+                        <button id="battle" class="bigButton">
+                            <b>BATTLE!</b>
+                        </button>
+                    </form>
+                </div>
+                <div class="teambuilder" style="padding-top: 50%;">
+                    <button id="teambuilder" class="bigButton">Teambuilder</button>
+                </div>
+            </div>
+            <div class="column">
+                <div class="loginMenu" style="display: flex; align-items: center; justify-content: center;">
+                    <form>
+                        <p>Login/Register:</p>
+                        <input placeholder="Username" id="username" class="bigButton">
+                        <input type="password" placeholder="Password" id="password" class="bigButton">
+                        <span id="picker">Color: <input type="color" id="colorpicker" value="#000000">
+                        </span>
+                        <div class="buttonActions" style="display: flex; align-items: center; justify-content: center; width: 100%;">
+                            <button type="button" id="login" class="smallButton">Log In</button>
+                            <button type="button" id="register" class="smallButton">Register</button>
+                        </div>
+                        <a>Change Profile:</a>
+                        <input id="changeUsername" placeholder="Change Username" class="bigButton">
+                        <input type="password" id="changePassword" placeholder="Change Password" class="bigButton">
+                        <div class="buttonActions" style="display: flex; align-items: center; justify-content: center; width: 100%;">
+                            <button type="button" id="changeUN" class="smallButton">Change Username</button>
+                            <button type="button" id="changePW" class="smallButton">Change Password</button>
+                            <button type="button" id="changeColor" class="smallButton">Change Color</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="accountInfo" style="background: linear-gradient(to bottom,#edf2f8,#d7e3ec); border-radius: 20px; height: 40%;">
+                    <img id="playerAvatar" align="right" width="200" height="200" style="display: none; transform: rotate(45deg);">
+                    <form>
+                        <span style="display: table; margin: 0 auto; font-size: 48px;">Trainer Card</span>
+                        <p id="placeholder" style="text-align: center; font-style: italic;">Please log in to get your account data.</p>
+                        <p id="usernameInfo" class="trainerInfo"></p>
+                        <p id="trainerID" class="trainerInfo"></p>
+                        <p id="hoursPlayed" class="trainerInfo"></p>
+                        <p id="joinDate" class="trainerInfo"></p>
+                        <p id="elo" class="trainerInfo"></p>
+                    </form>
+                </div>
+            </div>
+            <div class="column">
+                <p>Global Chat:</p>
+                <div id="chat" class="globalChat">
+                    <p style="font-size: 24px; font-weight: bold; text-align: center;">Please be respectful.</p>
+                </div>
+                <input placeholder="Please log in to send messages!" id="chatBox" class="bigButton" disabled>
+            </div>
+        </div>
+        <div id="teamBuilder" class="container">
+            <div id="allTeams" style="display: none;">
+                <button type="button" id="allTeamsBack" class="miniButton">
+                    <i class="material-icons">&#xe317;</i> Back </button>
+                <button type="button" id="createTeam" class="miniButton">
+                    <i class="material-icons">&#xe147;</i> New Team </button>
+                <p>All teams:</p>
+                <div id="teamContainer">
+                    
+                </div>
+            </div>
+            <div id="teamBuild" style="display: none;">
+                <button type="button" id="teamBuildBack" class="miniButton">
+                    <i class="material-icons">&#xe317;</i> Back </button>
+                <button type="button" id="addTank" class="miniButton">
+                    <i class="material-icons">&#xe147;</i> Add Tank </button>
+                <div id="currentTanks">
+                    <i>you have no tanks in your team git gud lol</i>
+                </div>
+            </div>
+            <div id="chooseTank" style="display: none;">
+                <button type="button" id="chooseTankBack" class="miniButton">
+                    <i class="material-icons">&#xe317;</i> Back </button>
+                <br>
+                <div class="allTanks" id="allTanks">
+                    <ul id="tanks" style="display: inline-block;"></ul>
+                </div>
+            </div>
+            <div id="tankBuild" style="display: none;">
+                <button type="button" id="tankBuildBack" class="miniButton">
+                    <i class="material-icons">&#xe317;</i> Back </button>
+                <div id="tankInfo" class="tankInfo" style="display: flex; width: 100%; padding: 2%;">
+                    <img id="tankSprite" align="left" width="200" height="200">
+                    <!-- <div class="nickname" style="font-weight: bold;"> To be added at a later date.
+					<p>Nickname:</p><input id="tankNickname" class="miniButton" placeholder="Nickname" maxlength="18"></div> !-->
+                    <div style="font-weight: bold; flex-grow: 1;">
+                        <p>Level:</p>
+                        <input id="tankLevel" class="miniButton" placeholder="100" maxlength="3">
+                    </div>
+                    <div style="font-weight: bold; flex-grow: 1; display: inline-grid;">
+                        <p>Moveset:</p>
+                        <input id="move1" class="move bigButton" placeholder="Move 1">
+                        <input id="move2" class="move bigButton" placeholder="Move 2">
+                        <input id="move3" class="move bigButton" placeholder="Move 3">
+                        <input id="move4" class="move bigButton" placeholder="Move 4">
+                    </div>
+                </div>
+				<div id="movesetContainer" class="allTanks" style="margin-top: 1%"></div>
+            </div>
+            </div>
+        </div>
+        </div>
+        <div id="overlay" class="overlay container">
+            <div id="modal" style="background-color: #FFFFFF; border-radius: 20px; height: 50%; width: 50%; z-index: 11;">
+                <p style="color: black; font-size: 48px;">Connecting...</p>
+                <p style="color: black; font-size: 24px;">Please wait as we connect to our servers...</p>
+            </div>
+        </div>
+        <script src="/data/Tanks.js" defer></script>
+        <!-- Low priority execution. Loads after every other script tag.-->
+        <script src="/client/bundle.js" defer></script>
+    </body>
 </html>
