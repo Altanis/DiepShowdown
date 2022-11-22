@@ -22,7 +22,7 @@ const files = {
 };
 
 console.log('DiepShowdown: LOADING...');
-console.log('===============');
+console.log('==================');
 
 for (let [file] of Object.entries(files)) {
     const data = fs.readFileSync(file);
@@ -32,7 +32,7 @@ for (let [file] of Object.entries(files)) {
     console.log(`Loaded file (${file}).`);
 }
 
-console.log('===============');
+console.log('==================');
 
 const server = http.createServer((req, res) => {
     // Request handlers:
