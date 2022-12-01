@@ -182,6 +182,7 @@
                             this.elements[`move${idx}`].value = move.name;
                             currTank.moveset[idx - 1] = +id; // ensurance in the event moveset[idx - 1] === null
                             player.TeamManger.save();
+                            for (const child of movesetContainer.children) child.style.display = "flex";
                         });
 
                         movesetContainer.appendChild(li);
