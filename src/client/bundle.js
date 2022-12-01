@@ -26,28 +26,158 @@
     const setItem = (id, value) => localStorage.setItem(id, value);
     const removeItem = id => localStorage.removeItem(id);
 
-    const TeamManager = class {
-        constructor() {
-            this.teams = getItem('teams') ? JSON.parse(getItem('teams')) : {};
-            this.pointer = null;
-            this.selectedTeam = null; 
+    const TeamRenderer = class { // As opposed to TeamManager, this renders teams instead of saving them.
+        
+        /** U P L O A D  T A N K S */
+        #createListElement({ name, sprite }) {
+            const li = document.createElement('li');
+            li.classList.add('li');
+
+            const img = document.createElement('img');
+            img.src = `img/svgs/tanks.svg#${sprite}`;
+            img.width = 50;
+            img.height = 50;
+
+            const span = document.createElement('span');
+            span.classList.add('name');
+            span.textContent = name;
+
+            li.appendChild(img);
+            li.appendChild(span);
+
+            return li;
         }
 
-        createTeam() {
-            this.pointer = Date.now();
-            this.teams[this.pointer] = this.selectedTeam = {};
-            this.save();
+        #uploadMoves() {
+            const { name, sprite, moveset } = tank;
+            for (const id of moveset) {
+                // INCOMPLETE!!!!!
+            }
         }
 
-        addEntry(key, value) {
-            /**
-             * Format: { tankID: { moveset: Array<String>, level: Integer, nickname: String } }
-             */
-            this.selectedTeam[key] = value;
-            this.save();
+        #handleClick(id, tank) {
+            const { tankSprite, movesetContainer } = player.elements;
+
+            const currTank = player.TeamManger.currentTeam[id] = {
+                moveset: [],
+                level: 100,
+                nickname: ''
+            };
+
+            movesetContainer.innerHTML = '';
+            player.view++;
+
+            // handle nickname
+            tankSprite.src = `img/svgs/tanks.svg#${tank.sprite}`;
+
+            this.#uploadMoves(tank);
         }
 
-        save() { setItem('teams', JSON.stringify(this.teams)); }
+        #render() {
+            for (const [id, tank] of Object.entries(window.Tanks)) {
+                const li = this.#createListElement(tank);
+                li.addEventListener('click', this.#handleClick(id, tank));
+            }
+        }
+
+        uploadTanks() {
+            // TOOD: Make this more OOP-based and remove functional patterns
+            // -- DYNAMICALLY UPLOAD TANKS -- //
+            for (const [id, tank] of Object.entries(window.Tanks)) {
+                li.addEventListener('click', () => {
+                    const currTank = player.TeamManger.currentTeam[id] = {
+                        moveset: [],
+                        level: 100,
+                        nickname: '',
+                    };
+                    
+                    movesetContainer.innerHTML = '';
+                    player.view++;
+
+                    // tankNickname.placeholder = name;
+                    tankSprite.src = `img/svgs/tanks.svg#${sprite}`;
+
+                    // TODO: make more OOP-based
+                    for (const id of moveset) {
+                        const move = window.Moves[id];
+
+                        const li = document.createElement('li');
+                        li.style.display = "flex";
+                        li.style.width = li.style.height = "auto";
+
+                        const movname = document.createElement('p');
+                        const movecat = document.createElement('p');
+                        const movpower = document.createElement('p');
+                        const movdesc = document.createElement('p');
+
+                        movname.textContent = move.name;
+                        movecat.textContent = move.type;
+                        movpower.textContent = move.power || '--';
+                        movdesc.textContent = move.description;
+
+                        movname.classList.add("col", "movname");
+                        movecat.classList.add("col", "movecat");
+                        movpower.classList.add("col", "movpower");
+                        movdesc.classList.add("col", "movdesc");
+
+                        li.appendChild(movname);
+                        li.appendChild(movecat);
+                        li.appendChild(movpower);
+                        li.appendChild(movdesc);
+
+                        for (let i = 5; i-- > 1;) {
+                            const input = player.elements[`move${i}`];
+                            input.addEventListener('input', event => {
+                                currTank.moveset[i - 1] = null;
+
+                                const content = event.target.value.toLowerCase().replaceAll(' ', '');
+                                if (content) {
+                                    for (const child of movesetContainer.children) {
+                                        child.style.display = child.children[0].innerText.toLowerCase().replaceAll(' ', '').includes(content) ? 'flex' : 'none'; 
+                                    }
+                                } else {
+                                    for (const child of movesetContainer.children) child.style.display = 'flex';
+                                }
+                            });
+                        }
+
+                        li.addEventListener('click', () => {
+                            const idx = currTank.moveset.indexOf(null) + 1 || currTank.moveset.push(+id);
+                            player.elements[`move${idx}`].value = move.name;
+                            currTank.moveset[idx - 1] = +id; // ensurance in the event moveset[idx - 1] === null
+                            player.TeamManger.save();
+                            for (const child of movesetContainer.children) child.style.display = "flex";
+                        });
+
+                        movesetContainer.appendChild(li);
+                    }
+                });
+
+                tanks.appendChild(li);
+            }
+        }
+
+        uploadTeams() {
+            const teamContainer = player.elements.teamContainer;
+            teamContainer.innerHTML = '';
+
+            for (const [id, team] of Object.entries(player.TeamManger.teams)) {
+                const li = document.createElement('li');
+                li.classList.add('li');
+
+                const span = document.createElement('span');
+                span.classList.add('name');
+                span.textContent = id;
+
+                li.appendChild(span);
+                li.addEventListener('click', () => {
+                    player.TeamManger.pointer = id;
+                    player.view++;
+                });
+
+                teamContainer.appendChild(li);
+            }
+        }
     }
 
     const ElementManager = class {
@@ -55,7 +185,6 @@
 
         constructor(elements) {
             this.elements = {};
-            this.TeamManager = new TeamManager();
 
             this._view = 0;
             Object.defineProperty(this, 'view', {
@@ -93,126 +222,6 @@
                     this.elements[info.name].addEventListener(k, cb.bind(this));
                 }
             };
-        }
-
-        uploadTanks() {
-            // TOOD: Make this more OOP-based and remove functional patterns
-            // -- DYNAMICALLY UPLOAD TANKS -- //
-            for (const [id, tank] of Object.entries(window.Tanks)) {
-                const { name, sprite, moveset } = tank; // More will be referenced as time comes.
-                const { 
-                    tankSprite,
-                    movesetContainer,
-                    tanks,
-                } = this.elements;
-
-                const li = document.createElement('li');
-                li.classList.add('li');
-
-                const img = document.createElement('img');
-                img.src = `img/svgs/tanks.svg#${sprite}`;
-                img.width = 50;
-                img.height = 50;
-
-                const span = document.createElement('span');
-                span.classList.add('name');
-                span.textContent = name;
-
-                li.appendChild(img);
-                li.appendChild(span);
-                li.addEventListener('click', () => {
-                    const currTank = player.TeamManger.currentTeam[id] = {
-                        moveset: [],
-                        level: 100,
-                        nickname: '',
-                    };
-                    
-                    movesetContainer.innerHTML = '';
-                    this.view++;
-
-                    // tankNickname.placeholder = name;
-                    tankSprite.src = `img/svgs/tanks.svg#${sprite}`;
-
-                    // TODO: make more OOP-based
-                    for (const id of moveset) {
-                        const move = window.Moves[id];
-
-                        const li = document.createElement('li');
-                        li.style.display = "flex";
-                        li.style.width = li.style.height = "auto";
-
-                        const movname = document.createElement('p');
-                        const movecat = document.createElement('p');
-                        const movpower = document.createElement('p');
-                        const movdesc = document.createElement('p');
-
-                        movname.textContent = move.name;
-                        movecat.textContent = move.type;
-                        movpower.textContent = move.power || '--';
-                        movdesc.textContent = move.description;
-
-                        movname.classList.add("col", "movname");
-                        movecat.classList.add("col", "movecat");
-                        movpower.classList.add("col", "movpower");
-                        movdesc.classList.add("col", "movdesc");
-
-                        li.appendChild(movname);
-                        li.appendChild(movecat);
-                        li.appendChild(movpower);
-                        li.appendChild(movdesc);
-
-                        for (let i = 5; i-- > 1;) {
-                            const input = this.elements[`move${i}`];
-                            input.addEventListener('input', event => {
-                                currTank.moveset[i - 1] = null;
-
-                                const content = event.target.value.toLowerCase().replaceAll(' ', '');
-                                if (content) {
-                                    for (const child of movesetContainer.children) {
-                                        child.style.display = child.children[0].innerText.toLowerCase().replaceAll(' ', '').includes(content) ? 'flex' : 'none'; 
-                                    }
-                                } else {
-                                    for (const child of movesetContainer.children) child.style.display = 'flex';
-                                }
-                            });
-                        }
-
-                        li.addEventListener('click', () => {
-                            const idx = currTank.moveset.indexOf(null) + 1 || currTank.moveset.push(+id);
-                            this.elements[`move${idx}`].value = move.name;
-                            currTank.moveset[idx - 1] = +id; // ensurance in the event moveset[idx - 1] === null
-                            player.TeamManger.save();
-                            for (const child of movesetContainer.children) child.style.display = "flex";
-                        });
-
-                        movesetContainer.appendChild(li);
-                    }
-                });
-
-                tanks.appendChild(li);
-            }
-        }
-
-        uploadTeams() {
-            const teamContainer = this.elements.teamContainer;
-            teamContainer.innerHTML = '';
-
-            for (const [id, team] of Object.entries(player.TeamManger.teams)) {
-                const li = document.createElement('li');
-                li.classList.add('li');
-
-                const span = document.createElement('span');
-                span.classList.add('name');
-                span.textContent = id;
-
-                li.appendChild(span);
-                li.addEventListener('click', () => {
-                    player.TeamManger.pointer = id;
-                    this.view++;
-                });
-
-                teamContainer.appendChild(li);
-            }
         }
 
         changeView(view) {
